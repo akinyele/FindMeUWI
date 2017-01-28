@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_find_me"
     android:layout_width="match_parent"
@@ -10,8 +11,46 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.android.comp3901.findmeuwi.FindMe">
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:inputType="text|textNoSuggestions|textPersonName"
+        android:ems="10"
+        android:id="@+id/classSearch"
+        android:hint="What class are you looking for?"
+        android:layout_alignParentStart="true"
+        tools:ignore="RelativeOverlap"
+        android:layout_toStartOf="@+id/findBtn" />
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:id="@+id/mapFragment"
+        android:layout_below="@+id/classSearch"
+        android:layout_alignParentStart="true" />
+
+    <ToggleButton
+        android:text="ToggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/toggleButton3"
+        style="@android:style/Widget.Holo.Button.Toggle"
+        android:textOff="@string/location_off"
+        android:textOn="@string/location_on"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="toggleLocations"/>
+
+    <Button
+        android:text="Find"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/findBtn"
+        android:onClick="geoLocate"
+        style="@android:style/Widget.Material.Button.Colored"
+        android:elevation="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>
