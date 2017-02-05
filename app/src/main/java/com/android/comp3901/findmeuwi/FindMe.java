@@ -2,6 +2,7 @@ package com.android.comp3901.findmeuwi;
 
 import android.app.Dialog;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
@@ -54,6 +55,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     GoogleApiClient mGoogleApiClient;
     Marker marker;
     DB_Helper dbHelper;
+    Room destination, start, known;
 
 
 
@@ -67,7 +69,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_me);
-        dbHelper = new DB_Helper(this); //Creating databases
+       dbHelper = new DB_Helper(this); //Creating databases
 
         if (googleServicesCheck()) {
             Toast.makeText(this, "Perfect!!", Toast.LENGTH_LONG).show();
@@ -142,23 +144,37 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         // UpperRight LatLng 18.006363, -76.748434
         // LowerLet Latlng  18.003429, -76.750615
 
-        try {
 
-            List<android.location.Address> list = gc.getFromLocationName(clss, 1);
-           // List<android.location.Address> list = gc.getFromLocationName(clss, 1, 18.003429, -76.750615, 18.006363, -76.748434); //bounds searches to Science and Technology
-            android.location.Address address = list.get(0);
-            String locality = address.getLocality();
-            clss = locality;
-            Toast.makeText(this, locality + " is here", Toast.LENGTH_LONG).show();
+        Cursor res = dbHelper.findClasses(clss);
+        if( res.getCount() == 0){
+           // show message "no results found in class database"
+            Toast.makeText(this, "Could not find " + clss , Toast.LENGTH_LONG).show();
 
-            double lat = address.getLatitude();
-            double lng = address.getLongitude();
-            goToLocation(lat, lng);
-        }catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(this, " Could not find " + clss , Toast.LENGTH_LONG).show();
-
+            return ;
+        } else if(res.getCount() > 1){
+            // more than one possible classes found. Create method to let them choose
+            return ;
+        } else {
+            // create the room
+            res.moveToFirst();
+            destination = new Room(res.getString(1));
+            destination.setLat(res.getDouble(2));
+            destination.setLng(res.getDouble(3));
         }
+
+
+//            List<android.location.Address> list = gc.getFromLocationName(clss, 1);
+//            List<android.location.Address> list = gc.getFromLocationName(clss, 1, 18.003429, -76.750615, 18.006363, -76.748434); //bounds searches to Science and Technology
+//            android.location.Address address = list.get(0);
+//            String locality = address.getLocality();
+//            clss = locality;
+
+            Toast.makeText(this, destination.getRmName() + " is here", Toast.LENGTH_LONG).show();
+
+            double lat = destination.getLat();
+            double lng = destination.getLng();
+
+            goToLocation(lat, lng);
 
 
     }

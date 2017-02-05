@@ -9,13 +9,14 @@ import java.util.Locale;
  * Created by Akinyele on 1/29/2017.
  */
 
-public class Room extends Address {
+public class Room  {
     /**
      * Constructs a new Address object set to the given Locale and with all
      * other fields initialized to null or false.
      *
      * @param locale
      */
+    private  final String rmName;
     private double mLatitude;
     private double mLongitude;
     private List<String> Description;
@@ -25,8 +26,8 @@ public class Room extends Address {
     //private string imageName;
 
 
-    public Room(Locale locale) {
-        super(locale);
+    public Room(String rmName) {
+        this.rmName = rmName;
     }
 
 
@@ -48,5 +49,39 @@ public class Room extends Address {
     }
 
 
+    public double getFloor() {
+        return floor;
+    }
 
+    public void setFloor(double floor) {
+        this.floor = floor;
+    }
+
+    public boolean isKnown() {
+        return known;
+    }
+
+    public void setKnown(boolean known) {
+        this.known = known;
+    }
+
+    public double getFamiliarity() {
+        return familiarity;
+    }
+
+    public void setFamiliarity(double familiarity) {
+        this.familiarity = familiarity;
+    }
+
+    public List<String> getDescription() {
+        return Description;
+    }
+
+    public void setDescription(List<String> description) {
+        Description = description;
+    }
+
+    public String getRmName() {
+        return rmName;
+    }
 }

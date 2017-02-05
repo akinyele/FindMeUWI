@@ -1,6 +1,7 @@
 package com.android.comp3901.findmeuwi;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -11,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DB_Helper extends SQLiteOpenHelper{
 
 
-    public static final String DATABASE_NAME = "findme";
+    public static final String DATABASE_NAME = "findme.db";
 
     // Database Room table variable.
     public static final String ROOM_TABLE = "room_data";
@@ -48,17 +49,26 @@ public class DB_Helper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
 
             //SLT2
-            String InserRooms = "insert into " + ROOM_TABLE+ "values( " +
-                                "'SLT 2', 18.0051221, -76.7497594, 'in front of slt 2 , Next to the  Deans Office', 1 , 0, True, 0)" ;
-            db.execSQL("create database " + ROOM_TABLE + "( " +
-                            "ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                            RT_NAME + "TEXT," +
-                            RT_LAT + "INTEGER," +
-                            RT_LONG + "INTEGER," +
-                            RT_DESC + "BLOB," +
-                            RT_FLOOR + "INTEGER," +
-                            RT_KNOWN + "STRING," +
-                            RT_FAM + "INTEGER ) ");
+            String InsertRooms = "INSERT INTO " + ROOM_TABLE + "(" +RT_NAME +", "+RT_LAT+", "+RT_LONG+", "+RT_DESC+", "+RT_FLOOR+",  "+RT_KNOWN+", "+RT_FAM+" )" +
+                    //          Name, Lat, Lng, Description, Floor, Known, Familiarity
+                                " VALUES ('SLT 2', 18.0051221, -76.7497594, 'in front of slt 2 , Next to the  Deans Office', 1, 'True', 0)" ;
+        // db.execSQL("INSERT INTO " + TABLE_DATUM+ "(NAME, A, B, SCALEFACTOR, FEASTING ) VALUES ('WGS 84', 6378137, 6356752.314, 0.9996, 500000)");
+
+
+        db.execSQL(       " CREATE TABLE IF NOT EXISTS  " + ROOM_TABLE + " (" +
+                            " ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            RT_NAME + " TEXT, " +
+                            RT_LAT + " REAL, " +
+                            RT_LONG + " REAL, " +
+                            RT_DESC + " TEXT, " +
+                            RT_FLOOR + " REAL, " +
+                            RT_KNOWN + " TEXT, " +
+                            RT_FAM + " REAL ); ");
+
+//      db.execSQL( "INSERT INTO " + ROOM_TABLE + "( name, latitude, longitude, description, floor, known, familiarity )" +
+//                        " VALUES ('SLT 2', 18.0051221, -76.7497594, 'in front of slt 2 , Next to the  Deans Office', 1, 'True', 0)");
+        db.execSQL(InsertRooms);
+
     }
 
     @Override
@@ -66,8 +76,16 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         db.execSQL("DROP TABLE IF EXIST " + ROOM_TABLE +
                     "");
-
         onCreate(db);
+    }
 
+
+    public Cursor findClasses( String rm ){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery( "SELECT * FROM " + ROOM_TABLE + " WHERE LOWER("+ RT_NAME + ") like LOWER('"+ rm +"') ;", null);
+
+        Cursor res2 = db.rawQuery( "SELECT * FROM " + ROOM_TABLE +" ;", null);
+
+        return res2;
     }
 }
