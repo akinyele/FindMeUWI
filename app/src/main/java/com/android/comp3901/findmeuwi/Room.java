@@ -9,13 +9,15 @@ import java.util.Locale;
  * Created by Akinyele on 1/29/2017.
  */
 
-public class Room  {
+public class Room  extends Vertex{
     /**
      * Constructs a new Address object set to the given Locale and with all
      * other fields initialized to null or false.
      *
      * @param locale
      */
+
+    private final String id;
     private  final String rmName;
     private double mLatitude;
     private double mLongitude;
@@ -26,8 +28,12 @@ public class Room  {
     //private string imageName;
 
 
-    public Room(String rmName) {
+    public Room(String id, String rmName, double mLatitude, double mLongitude) {
+        super(id, rmName, mLatitude, mLatitude);
         this.rmName = rmName;
+        this.id = id;
+        this.mLatitude = mLatitude;
+        this.mLongitude = mLongitude;
     }
 
 
@@ -83,5 +89,10 @@ public class Room  {
 
     public String getRmName() {
         return rmName;
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 }

@@ -35,14 +35,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import android.support.v4.app.FragmentActivity;
 
+import android.support.v4.app.FragmentActivity;
 
 
 import java.io.IOException;
@@ -56,7 +57,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     Marker marker;
     DB_Helper dbHelper;
     Room destination, start, known;
-
+    UiSettings mUiSettings;
 
 
     public void createRooms() throws IOException {
@@ -64,12 +65,12 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_me);
-       dbHelper = new DB_Helper(this); //Creating databases
+        dbHelper = new DB_Helper(this); //Creating databases
+        dbHelper.generateRooms();
 
         if (googleServicesCheck()) {
             Toast.makeText(this, "Perfect!!", Toast.LENGTH_LONG).show();
@@ -120,6 +121,9 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
+        mUiSettings = mGoogleMap.getUiSettings();
+
+
         goToLocation(18.005072, -76.749544);
     }
 
@@ -133,33 +137,35 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     }
 
     /*
-     *   Method used to look up classes on the Campus
+     *   This is the Method used to look up classes on the Campus by utilizing the search bar provided.
+     *   It will get search through the database of class rooms and and create a destination object.
      */
     public void geoLocate(View view) throws IOException {
 
         EditText et = (EditText) findViewById(R.id.classSearch);
         String clss = et.getText().toString();
 
-        Geocoder gc = new Geocoder(this);
+        //Geocoder gc = new Geocoder(this);
         // UpperRight LatLng 18.006363, -76.748434
         // LowerLet Latlng  18.003429, -76.750615
 
 
         Cursor res = dbHelper.findClasses(clss);
-        if( res.getCount() == 0){
-           // show message "no results found in class database"
-            Toast.makeText(this, "Could not find " + clss , Toast.LENGTH_LONG).show();
+        if (res.getCount() == 0) {
+            // show message "no results found in class database"
+            Toast.makeText(this, "Could not find " + clss, Toast.LENGTH_LONG).show();
 
-            return ;
-        } else if(res.getCount() > 1){
+            return;
+        } else if (res.getCount() > 1) {
             // more than one possible classes found. Create method to let them choose
-            return ;
+            Toast.makeText(this, " Select a Class", Toast.LENGTH_LONG).show();
+            return;
         } else {
             // create the room
             res.moveToFirst();
-            destination = new Room(res.getString(1));
-            destination.setLat(res.getDouble(2));
-            destination.setLng(res.getDouble(3));
+            destination = new Room(res.getString(0), res.getString(0), res.getDouble(1), res.getDouble(2));
+
+
         }
 
 
@@ -169,12 +175,13 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 //            String locality = address.getLocality();
 //            clss = locality;
 
-            Toast.makeText(this, destination.getRmName() + " is here", Toast.LENGTH_LONG).show();
 
-            double lat = destination.getLat();
-            double lng = destination.getLng();
+        double lat = destination.getLat();
+        double lng = destination.getLng();
 
-            goToLocation(lat, lng);
+        Toast.makeText(this, destination.getRmName() + " is here", Toast.LENGTH_LONG).show();
+
+        goToLocation(lat, lng);
 
 
     }
@@ -186,49 +193,69 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void toggleLocations(View view){
+    public void toggleLocations(View view) {
 
-        boolean checked = ((ToggleButton)view).isChecked();
-        if(checked){
+        boolean checked = ((ToggleButton) view).isChecked();
+        if (checked) {
             useMyLocation();
             Toast.makeText(this, "Getting Your Location", Toast.LENGTH_LONG).show();
 
-        }else{
-            mGoogleApiClient.disconnect();
+        } else {
+            if (mGoogleApiClient != null)
+                mGoogleApiClient.disconnect();
+
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            mGoogleMap.setMyLocationEnabled(false);
             goToLocation(18.005072, -76.749544);
-
-
         }
+
     }
 
     public void useMyLocation() {
 
-//        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // TODO: Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            return;
-//        }
-//        mGoogleMap.setMyLocationEnabled(true);
-        mGoogleApiClient =  new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, this)
-                .build();
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
 
+        mGoogleMap.setMyLocationEnabled(true);          //Enables google tracking.
+        mUiSettings.setMyLocationButtonEnabled(false);  //Disable the google compass button.
+
+
+
+        if(mGoogleApiClient == null){
+            mGoogleApiClient =  new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(Places.GEO_DATA_API)
+                    .addApi(Places.PLACE_DETECTION_API)
+                    .enableAutoManage(this, this)
+                    .build();
+        }
         mGoogleApiClient.connect();
-
-
 
     }
 
+
+    /*
+        Handles  the maps type switching
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mapTypeNone:
@@ -252,8 +279,11 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         return super.onOptionsItemSelected(item);
     }
 
-    LocationRequest mLocationRequest;
 
+    /*
+        Handling of the locations services and tracking
+     */
+    LocationRequest mLocationRequest;
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = LocationRequest.create();
@@ -272,13 +302,12 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
-
-
     }
 
     @Override
     public void onConnectionSuspended(int i) {
         Toast.makeText(this, "Location Lost", Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -297,8 +326,8 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll,18);
             mGoogleMap.animateCamera(update);
             //Toast.makeText(this, "Located", Toast.LENGTH_LONG).show();
-
         }
+
     }
 
     public void addMarker(LatLng ll, String title, String snip){
