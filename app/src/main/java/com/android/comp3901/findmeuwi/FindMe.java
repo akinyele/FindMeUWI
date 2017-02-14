@@ -70,7 +70,13 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_me);
         dbHelper = new DB_Helper(this); //Creating databases
-        dbHelper.generateRooms();
+        dbHelper.generateDB();
+
+        try {
+            dbHelper.writeToSD(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if (googleServicesCheck()) {
             Toast.makeText(this, "Perfect!!", Toast.LENGTH_LONG).show();
@@ -123,8 +129,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         mGoogleMap = googleMap;
         mUiSettings = mGoogleMap.getUiSettings();
 
-
-        goToLocation(18.005072, -76.749544);
+         goToLocation(18.005072, -76.749544);
     }
 
     /*
@@ -163,9 +168,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         } else {
             // create the room
             res.moveToFirst();
-            destination = new Room(res.getString(0), res.getString(0), res.getDouble(1), res.getDouble(2));
-
-
+            destination = new Room(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3));
         }
 
 
