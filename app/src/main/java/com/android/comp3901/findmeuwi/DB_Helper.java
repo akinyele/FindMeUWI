@@ -126,7 +126,6 @@ public class DB_Helper extends SQLiteOpenHelper{
         return ;
     }
 
-
     public void generateRooms(){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -227,6 +226,16 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
+        vertices.put(V_ID,"Department of Mathematics");
+        vertices.put(V_NAME, "Department of Mathematics");
+        vertices.put(V_LAT,  18.004853);
+        vertices.put(V_LONG, -76.749616);
+        vertices.put(V_TYPE , "Building");
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+
 //        vertices.put(V_ID,  );
 //        vertices.put(V_NAME,  );
 //        vertices.put(V_LAT,  );
@@ -244,6 +253,17 @@ public class DB_Helper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues edges = new ContentValues();
 
+        edges.put(E_SOURCE, "C5");
+        edges.put(E_DESTINATION, "CA");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "CA");
+        edges.put(E_DESTINATION, "C5");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
 
         edges.put(E_SOURCE, "CA");
         edges.put(E_DESTINATION, "CB");
@@ -251,22 +271,47 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(EDGES_TABLE,null,edges);
         edges.clear();
 
-
         edges.put(E_SOURCE, "CB");
         edges.put(E_DESTINATION, "CA");
         edges.put(E_WEIGHT,1);
         db.insert(EDGES_TABLE,null,edges);
         edges.clear();
 
+        edges.put(E_SOURCE, "Department of Mathematics");
+        edges.put(E_DESTINATION, "CB");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
 
+        edges.put(E_SOURCE, "CB");
+        edges.put(E_DESTINATION, "Department of Mathematics");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
 
+        edges.put(E_SOURCE, "Department of Mathematics");
+        edges.put(E_DESTINATION, "SLT 1");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
 
-//        edges.put(E_SOURCE, "");
-//        edges.put(E_DESTINATION, "");
-//        edges.put(E_WEIGHT, );
-//        db.insert(EDGES_TABLE,null,edges);
-//        edges.clear();
+        edges.put(E_SOURCE, "SLT 1");
+        edges.put(E_DESTINATION, "Department of Mathematics");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
 
+        edges.put(E_SOURCE, "SLT 1");
+        edges.put(E_DESTINATION, "SLT 2");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SLT 2");
+        edges.put(E_DESTINATION, "SLT 1");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
 
      db.close();
     }
