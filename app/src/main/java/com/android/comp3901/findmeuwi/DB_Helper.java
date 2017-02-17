@@ -280,6 +280,25 @@ public class DB_Helper extends SQLiteOpenHelper{
         return res;
     }
 
+    public Cursor getVertices(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM " + VERTICES_TABLE + " WHERE 1 ", null);
+
+        res.moveToFirst();
+        return res;
+    }
+
+
+    public  Cursor getEdges(){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM " + EDGES_TABLE + " WHERE 1 ", null);
+
+        res.moveToFirst();
+        return res;
+
+    }
+
 
 
 
@@ -288,8 +307,7 @@ public class DB_Helper extends SQLiteOpenHelper{
     /*
         For debugging purposes to get database.
      */
-
-    public void writeToSD(Context context) throws IOException {
+     public void writeToSD(Context context) throws IOException {
         File sd = Environment.getExternalStorageDirectory();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {

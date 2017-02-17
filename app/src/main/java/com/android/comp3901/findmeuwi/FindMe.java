@@ -47,7 +47,9 @@ import android.support.v4.app.FragmentActivity;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class FindMe extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -60,11 +62,16 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     UiSettings mUiSettings;
 
 
+
+
     public void createRooms() throws IOException {
 
     }
 
 
+    /*
+    **   Method that get call when the Gmaps object is first created.
+    **/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -347,6 +354,10 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
          marker = mGoogleMap.addMarker(option);
 
     }
+
+
+
+
 
 
 
