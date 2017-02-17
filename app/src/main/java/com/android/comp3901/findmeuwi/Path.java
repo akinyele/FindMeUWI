@@ -21,6 +21,14 @@ public class Path {
     private List<Vertex> nodes;
     private List<Edge> edges;
     DB_Helper dbHelper;
+
+    public Path(DB_Helper db){
+
+        this.dbHelper = db;
+
+    }
+
+
     /*
         Uses the dijkstra to generates the shortest path
      */
@@ -41,7 +49,8 @@ public class Path {
             Vertex Locations = new Vertex(verticesDB.getString(0),
                     verticesDB.getString(1),
                     verticesDB.getDouble(2),
-                    verticesDB.getDouble(3));
+                    verticesDB.getDouble(3),
+                    verticesDB.getString(4));
             nodes.add(Locations);
             vertices.put(verticesDB.getString(0), Locations);
             verticesDB.moveToNext();
@@ -50,10 +59,10 @@ public class Path {
         //creates a edge for each value in the database
         while (!edgesDB.isAfterLast()){
 
-            Edge lane = new Edge(edgesDB.getString(0),
+            Edge lane = new Edge(edgesDB.getString(0) + " -> " + edgesDB.getString(0),
+                    vertices.get(edgesDB.getString(0)),
                     vertices.get(edgesDB.getString(1)),
-                    vertices.get(edgesDB.getString(2)),
-                    (int) edgesDB.getDouble(3));
+                    (int) edgesDB.getDouble(2));
 
 
             edges.add(lane);
@@ -68,7 +77,6 @@ public class Path {
         dijkstra.execute(vertices.get(src));
 
         LinkedList<Vertex> path = dijkstra.getPath(vertices.get(dest));
-
 
 
 

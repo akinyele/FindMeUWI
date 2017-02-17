@@ -53,4 +53,13 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true" />
 
+    <Button
+        android:text="Get Path"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/toggleButton3"
+        android:layout_alignStart="@+id/findBtn"
+        android:id="@+id/getPath"
+        android:onClick="getPath" />
+
 </RelativeLayout>

@@ -3,14 +3,12 @@ package com.android.comp3901.findmeuwi;
 import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,14 +19,9 @@ import android.widget.ToggleButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.AddPlaceRequest;
-import com.google.android.gms.location.places.GeoDataApi;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,26 +33,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-
-import android.support.v4.app.FragmentActivity;
-
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
 
 public class FindMe extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     GoogleMap mGoogleMap;
     GoogleApiClient mGoogleApiClient;
+    UiSettings mUiSettings;
+
     Marker marker;
     DB_Helper dbHelper;
     Room destination, start, known;
-    UiSettings mUiSettings;
+    Vertex source;
+
+    Path path;
+    LinkedList<Vertex> route;
 
 
 
@@ -77,7 +67,10 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_me);
         dbHelper = new DB_Helper(this); //Creating databases
+        path = new Path(dbHelper);
         dbHelper.generateDB();
+
+
 
         try {
             dbHelper.writeToSD(this);
@@ -158,15 +151,12 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         String clss = et.getText().toString();
 
         //Geocoder gc = new Geocoder(this);
-        // UpperRight LatLng 18.006363, -76.748434
-        // LowerLet Latlng  18.003429, -76.750615
 
 
         Cursor res = dbHelper.findClasses(clss);
         if (res.getCount() == 0) {
             // show message "no results found in class database"
             Toast.makeText(this, "Could not find " + clss, Toast.LENGTH_LONG).show();
-
             return;
         } else if (res.getCount() > 1) {
             // more than one possible classes found. Create method to let them choose
@@ -174,8 +164,8 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
             return;
         } else {
             // create the room
-            res.moveToFirst();
             destination = new Room(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3));
+            addMarker(destination.getLat(), destination.getLng(), destination.getRmName(), destination.getId());
         }
 
 
@@ -197,6 +187,27 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     }
 
 
+    /*
+        This Method Performs the Dijkstras algorithm on the graph for the current source and destination selected.
+     */
+    public void getPath(View view) {
+
+        // Dummy source value for tessting purposes.
+        source = new Vertex("Department of Mathematics", "Department of Mathematics", 18.004853, -76.749616, "Building");
+
+        if (source.getId() == null) {
+            Toast.makeText(this, "NO Source", Toast.LENGTH_LONG).show();
+            return;
+        } else if (destination.getId() == null) {
+            Toast.makeText(this, "No Destination selected", Toast.LENGTH_LONG).show();
+            return;
+        } else {
+            route = path.getPath(source.getId(), destination.getId());
+
+            Toast.makeText(this, "Path to " + destination.getRmName() + " found.", Toast.LENGTH_LONG).show();
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.map_menu, menu);
@@ -204,7 +215,6 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     }
 
     public void toggleLocations(View view) {
-
         boolean checked = ((ToggleButton) view).isChecked();
         if (checked) {
             useMyLocation();
@@ -229,6 +239,8 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         }
 
     }
+
+
 
     public void useMyLocation() {
 
@@ -340,18 +352,21 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
     }
 
-    public void addMarker(LatLng ll, String title, String snip){
+    public void addMarker(Double lat, Double lng, String title, String snip){
 
         if(marker != null ){
             marker.remove();
         }
+
+        LatLng ll = new LatLng(lat, lng);
 
         MarkerOptions option = new MarkerOptions()
                                 .title(title)
                                 .snippet(snip)
                         //      .icon(BitmapDescriptorFactory.fromResource(R.))
                                 .position(ll);
-         marker = mGoogleMap.addMarker(option);
+
+        marker = mGoogleMap.addMarker(option);
 
     }
 

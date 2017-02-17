@@ -1,9 +1,6 @@
 package com.android.comp3901.findmeuwi;
 
-import android.location.Address;
-
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Akinyele on 1/29/2017.
@@ -29,7 +26,7 @@ public class Room  extends Vertex{
 
 
     public Room(String id, String rmName, double mLatitude, double mLongitude) {
-        super(id, rmName, mLatitude, mLatitude);
+        super(id, rmName, mLatitude, mLatitude, "ROOM");
         this.rmName = rmName;
         this.id = id;
         this.mLatitude = mLatitude;

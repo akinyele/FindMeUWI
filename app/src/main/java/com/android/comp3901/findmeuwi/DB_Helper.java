@@ -20,7 +20,7 @@ import java.nio.channels.FileChannel;
 
 public class DB_Helper extends SQLiteOpenHelper{
 
-    public static final Integer DATABASE_VERSION = 8;
+    public static final Integer DATABASE_VERSION = 9;
     public static final String DATABASE_NAME = "findme.db";
     private static String DB_PATH = "";
 
@@ -107,6 +107,7 @@ public class DB_Helper extends SQLiteOpenHelper{
                     "PRIMARY KEY ("+E_DESTINATION+","+E_SOURCE+") );");
 
         db.execSQL(InsertRooms);
+
     }
 
     @Override
@@ -318,10 +319,11 @@ public class DB_Helper extends SQLiteOpenHelper{
 
 
     public Cursor findClasses( String rm ){
-        SQLiteDatabase db = this.getWritableDatabase();
+         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery( "SELECT * FROM " + ROOM_TABLE + " WHERE LOWER("+ RT_NAME + ") like LOWER('%"+ rm +"%') " +
                 "OR  LOWER("+ RT_ID + ") like LOWER('%"+ rm +"%');", null);
 
+        res.moveToFirst();
         return res;
     }
 
@@ -332,7 +334,6 @@ public class DB_Helper extends SQLiteOpenHelper{
         res.moveToFirst();
         return res;
     }
-
 
     public  Cursor getEdges(){
 

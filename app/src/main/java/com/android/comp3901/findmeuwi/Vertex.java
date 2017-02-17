@@ -8,6 +8,8 @@ package com.android.comp3901.findmeuwi;
 public class Vertex {
     final private String id;
     final private String name;
+    final private String type;
+
     final private double lat;
     final private double lng;
 
@@ -18,13 +20,15 @@ public class Vertex {
      */
 
 
-    public Vertex(String id, String name, double lat, double lng) {
+    public Vertex(String id, String name, double lat, double lng, String Type) {
         this.id = id;
         this.name = name;
         this.lat = lat;
         this.lng = lng;
+        this.type = Type;
 
     }
+
 
 
 
@@ -65,5 +69,9 @@ public class Vertex {
 
     public double getLng() {
         return lng;
+    }
+
+    public String getType() {
+        return type;
     }
 }
