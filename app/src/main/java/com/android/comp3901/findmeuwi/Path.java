@@ -21,6 +21,7 @@ public class Path {
     private List<Vertex> nodes;
     private List<Edge> edges;
     DB_Helper dbHelper;
+    private Graph graph;
 
     public Path(DB_Helper db){
 
@@ -36,6 +37,7 @@ public class Path {
 
         nodes = new ArrayList<Vertex>();
         edges = new ArrayList<Edge>();
+
         HashMap<String,Vertex> vertices = new HashMap<String,Vertex>();
 
 
@@ -71,7 +73,9 @@ public class Path {
         }
 
 
-        Graph graph = new Graph(nodes,edges);
+        graph = new Graph(nodes,edges);
+
+
         DijkstraAlgorithm  dijkstra = new DijkstraAlgorithm(graph);
 
         dijkstra.execute(vertices.get(src));
@@ -85,5 +89,19 @@ public class Path {
 
         return path;
     }
+
+
+
+
+
+
+    public List<Vertex> getNodes(){
+        return nodes;
+    }
+
+    public List<Edge> getEdges(){
+        return edges;
+    }
+
 
 }
