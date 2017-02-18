@@ -364,7 +364,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
      */
     public void getPath(View view) {
 
-        // Dummy source value for tessting purposes.
+        // Dummy source value for testing purposes.
         source = new Vertex("Department of Mathematics", "Department of Mathematics", 18.004853, -76.749616, "Building");
 
         if (source.getId() == null) {
@@ -399,12 +399,16 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         }
 
         PolylineOptions  options = new PolylineOptions()
-                                    .width(3)
+                                    .width(5)
                                     .addAll(pnts)
-                                    .color(Color.GREEN);
+                                    .color(Color.GREEN)
+                                    ;
 
         line = mGoogleMap.addPolyline(options);
+
     }
+
+
 
 
 
