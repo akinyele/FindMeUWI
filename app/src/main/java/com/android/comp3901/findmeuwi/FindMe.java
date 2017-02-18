@@ -38,8 +38,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
 
 public class FindMe extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -50,6 +53,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
     Marker marker;
     DB_Helper dbHelper;
+    LinkedList<Polyline> graphLines;
     Room destination, start, known;
     Vertex source;
 
@@ -73,8 +77,11 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_me);
         dbHelper = new DB_Helper(this); //Creating databases
-        path = new Path(dbHelper);
-        dbHelper.generateDB();
+
+        path = new Path(dbHelper); //Initialises path object which creates graph
+
+
+        dbHelper.generateDB(); //populate database with values (needs to be in the BD_Helper class)
 
 
 
@@ -134,8 +141,9 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         mUiSettings = mGoogleMap.getUiSettings();
+        displayGraph(); // Display
 
-         goToLocation(18.005072, -76.749544);
+        goToLocation(18.005072, -76.749544);
     }
 
     /*
@@ -367,10 +375,10 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         // Dummy source value for testing purposes.
         source = new Vertex("Department of Mathematics", "Department of Mathematics", 18.004853, -76.749616, "Building");
 
-        if (source.getId() == null) {
+        if (source == null) {
             Toast.makeText(this, "NO Source", Toast.LENGTH_LONG).show();
             return;
-        } else if (destination.getId() == null) {
+        } else if (destination == null) {
             Toast.makeText(this, "No Destination selected", Toast.LENGTH_LONG).show();
             return;
         } else {
@@ -394,17 +402,51 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         LinkedList<LatLng> pnts = new LinkedList<>();
 
         for( int i = 0; i<route.size(); i++ ){
-            LatLng  ll =  new LatLng( route.get(i).getLat(),route.get(i).getLng());
+            LatLng  ll =  route.get(i).getLL();
             pnts.add(ll);
         }
 
         PolylineOptions  options = new PolylineOptions()
-                                    .width(5)
+                                    .width(10)
                                     .addAll(pnts)
+
                                     .color(Color.GREEN)
                                     ;
 
         line = mGoogleMap.addPolyline(options);
+
+    }
+
+
+
+    public void displayGraph(){
+
+        List<Edge> edges =  path.getEdges();
+        List<Vertex> vertices = path.getNodes();
+        HashMap<String, Vertex> vertexHashMap = path.getVertices();
+        Polyline lane;
+        Vertex v1,v2;
+        graphLines = new LinkedList<>();
+
+
+
+        for(Edge edge: edges){
+
+
+            v1 = vertexHashMap.get(edge.getSource().getId());
+            v2 = vertexHashMap.get(edge.getDestination().getId());
+
+
+            PolylineOptions options = new PolylineOptions()
+                    .color(0x33606060)
+                    .width(25)
+                    .add(v1.getLL(),v2.getLL());
+
+            lane =  mGoogleMap.addPolyline(options);
+            graphLines.add(lane);
+
+
+        }
 
     }
 

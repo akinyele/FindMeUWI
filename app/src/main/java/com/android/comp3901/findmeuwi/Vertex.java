@@ -1,6 +1,8 @@
 package com.android.comp3901.findmeuwi;
 
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by Akinyele on 2/10/2017.
  */
@@ -70,6 +72,12 @@ public class Vertex {
     public double getLng() {
         return lng;
     }
+
+    public LatLng getLL(){
+
+        return new LatLng(getLat(),getLng());
+    }
+
 
     public String getType() {
         return type;
