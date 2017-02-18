@@ -92,9 +92,6 @@ public class Path {
 
 
 
-
-
-
     public List<Vertex> getNodes(){
         return nodes;
     }
