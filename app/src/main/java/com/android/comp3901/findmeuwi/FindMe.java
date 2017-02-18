@@ -3,6 +3,7 @@ package com.android.comp3901.findmeuwi;
 import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,10 +33,14 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class FindMe extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -50,6 +55,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
     Path path;
     LinkedList<Vertex> route;
+    Polyline line;
 
 
 
@@ -187,26 +193,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     }
 
 
-    /*
-        This Method Performs the Dijkstras algorithm on the graph for the current source and destination selected.
-     */
-    public void getPath(View view) {
 
-        // Dummy source value for tessting purposes.
-        source = new Vertex("Department of Mathematics", "Department of Mathematics", 18.004853, -76.749616, "Building");
-
-        if (source.getId() == null) {
-            Toast.makeText(this, "NO Source", Toast.LENGTH_LONG).show();
-            return;
-        } else if (destination.getId() == null) {
-            Toast.makeText(this, "No Destination selected", Toast.LENGTH_LONG).show();
-            return;
-        } else {
-            route = path.getPath(source.getId(), destination.getId());
-
-            Toast.makeText(this, "Path to " + destination.getRmName() + " found.", Toast.LENGTH_LONG).show();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -369,6 +356,59 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         marker = mGoogleMap.addMarker(option);
 
     }
+
+
+
+    /*
+        This Method Performs the Dijkstras algorithm on the graph for the current source and destination selected.
+     */
+    public void getPath(View view) {
+
+        // Dummy source value for tessting purposes.
+        source = new Vertex("Department of Mathematics", "Department of Mathematics", 18.004853, -76.749616, "Building");
+
+        if (source.getId() == null) {
+            Toast.makeText(this, "NO Source", Toast.LENGTH_LONG).show();
+            return;
+        } else if (destination.getId() == null) {
+            Toast.makeText(this, "No Destination selected", Toast.LENGTH_LONG).show();
+            return;
+        } else {
+            route = path.getPath(source.getId(), destination.getId());
+
+            Toast.makeText(this, "Path to " + destination.getRmName() + " found.", Toast.LENGTH_LONG).show();
+        }
+
+        drawPath(route);
+    }
+
+    /*
+     * Draws a path with the provided the set of vertices
+     */
+    public void drawPath(LinkedList<Vertex> route){
+
+        if(line != null)
+            line.remove();
+
+        route.size();
+        LinkedList<LatLng> pnts = new LinkedList<>();
+
+        for( int i = 0; i<route.size(); i++ ){
+            LatLng  ll =  new LatLng( route.get(i).getLat(),route.get(i).getLng());
+            pnts.add(ll);
+        }
+
+        PolylineOptions  options = new PolylineOptions()
+                                    .width(3)
+                                    .addAll(pnts)
+                                    .color(Color.GREEN);
+
+        line = mGoogleMap.addPolyline(options);
+    }
+
+
+
+
 
 
 
