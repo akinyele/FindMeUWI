@@ -65,6 +65,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
      }
+    //aids1234
 
 //    public DB_Helper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
 //        super(context, name, factory, version, errorHandler);
