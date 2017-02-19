@@ -22,24 +22,18 @@ public class Path {
     private List<Edge> edges;
     DB_Helper dbHelper;
     private Graph graph;
-
-    public Path(DB_Helper db){
-
-        this.dbHelper = db;
-
-    }
+    HashMap<String,Vertex> vertices;
 
 
     /*
-        Uses the dijkstra to generates the shortest path
+        Constructor methods which initializes and creates all the vertices and edges.
      */
-    public LinkedList<Vertex>   getPath(String src, String dest) {
+    public Path(DB_Helper db){
 
-        nodes = new ArrayList<Vertex>();
-        edges = new ArrayList<Edge>();
-
-        HashMap<String,Vertex> vertices = new HashMap<String,Vertex>();
-
+        this.nodes = new ArrayList<Vertex>();
+        this.edges = new ArrayList<Edge>();
+        this.vertices = new HashMap<String,Vertex>();
+        this.dbHelper = db;
 
         Cursor verticesDB = dbHelper.getVertices();
         Cursor edgesDB = dbHelper.getEdges();
@@ -66,15 +60,18 @@ public class Path {
                     vertices.get(edgesDB.getString(1)),
                     (int) edgesDB.getDouble(2));
 
-
             edges.add(lane);
             edgesDB.moveToNext();
-
         }
 
+        this.graph = new Graph(nodes,edges);
+    }
 
-        graph = new Graph(nodes,edges);
 
+    /*
+        Uses the dijkstra to generates the shortest path
+     */
+    public LinkedList<Vertex>   getPath(String src, String dest) {
 
         DijkstraAlgorithm  dijkstra = new DijkstraAlgorithm(graph);
 
@@ -82,18 +79,17 @@ public class Path {
 
         LinkedList<Vertex> path = dijkstra.getPath(vertices.get(dest));
 
-
-
         assertNotNull(path);
         assertTrue(path.size() > 0);
 
         return path;
     }
 
+    public HashMap<String,Vertex> getVertices(){ return vertices; };
 
-
-
-
+    public Graph getGraph(){
+        return graph;
+    }
 
     public List<Vertex> getNodes(){
         return nodes;
