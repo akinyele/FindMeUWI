@@ -31,10 +31,13 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+
 
 
 import java.io.IOException;
@@ -144,6 +147,14 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         displayGraph(); // Display
 
         goToLocation(18.005072, -76.749544);
+
+        boolean success = googleMap.setMapStyle(new MapStyleOptions(getResources()
+                .getString(R.string.style_esperanto))); //Changes the way how the map looks
+
+        if (!success) {
+            Toast.makeText(this,"Style parsing failed.",Toast.LENGTH_LONG ).show();
+        }
+
     }
 
     /*
