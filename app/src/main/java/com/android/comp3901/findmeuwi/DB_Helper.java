@@ -158,6 +158,108 @@ public class DB_Helper extends SQLiteOpenHelper{
         rooms.clear();
 
 
+//        rooms.put(RT_ID,"SLT 2");
+//        rooms.put(RT_NAME,"Science Lecture Theatre 2");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"SLT 3 ");
+//        rooms.put(RT_NAME,"Science Lecture Theatre 3");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID," C2");
+//        rooms.put(RT_NAME," Chemistry Lecture Theatre 2");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"C3 ");
+//        rooms.put(RT_NAME,"Chemistry Lecture Theatre 3");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"C4 ");
+//        rooms.put(RT_NAME,"Chemistry Lecture Theatre 4");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"C6 ");
+//        rooms.put(RT_NAME,"Chemistry Lecture Theatre 6");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"C7 ");
+//        rooms.put(RT_NAME,"Chemistry Lecture Theatre 7");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"CHEPHY ");
+//        rooms.put(RT_NAME,"Chem/Phys Lecture Theatre");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"COMPLR ");
+//        rooms.put(RT_NAME,"Computing Lecture Room");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,3 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+
+
+
+
 //        rooms.put(RT_ID,"");
 //        rooms.put(RT_NAME,"");
 //        rooms.put(RT_LAT, );
