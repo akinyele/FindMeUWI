@@ -266,8 +266,138 @@ public class DB_Helper extends SQLiteOpenHelper{
 //        rooms.put(RT_FAM,0 );
 //        db.insert(ROOM_TABLE,null, rooms);
 //        rooms.clear();
-
-
+//
+//        rooms.put(RT_ID,"CPGR ");
+//        rooms.put(RT_NAME,"Computing Post-Graduate Room");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID," CR1 ");
+//        rooms.put(RT_NAME,"Computer Science Tutorial Room 1");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID," CR2");
+//        rooms.put(RT_NAME,"Computer Science Tutorial Room 2");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"NGR-LRA  ");
+//        rooms.put(RT_NAME,"Engineering Lecture Room A ");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"NGR-LRB ");
+//        rooms.put(RT_NAME,"Engineering Lecture Room B");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"NGR-LRC ");
+//        rooms.put(RT_NAME,"Engineering Lecture Room C");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID," IFLT ");
+//        rooms.put(RT_NAME,"Inter-Faculty Lecture Theatre");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID," VIRLAB");
+//        rooms.put(RT_NAME,"Virtual Computer Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID," MLT1");
+//        rooms.put(RT_NAME,"Math Lecture Theatre 1");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"ML2 ");
+//        rooms.put(RT_NAME,"Math Lecture Theatre 2");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"ML3 ");
+//        rooms.put(RT_NAME,"Math Lecture Theatre 3");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"MLAB ");
+//        rooms.put(RT_NAME,"Math Computer Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
 
 
 //        rooms.put(RT_ID,"");
