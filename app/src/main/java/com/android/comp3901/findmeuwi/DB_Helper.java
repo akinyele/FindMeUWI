@@ -184,7 +184,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 //        rooms.put(RT_LAT, );
 //        rooms.put(RT_LONG, );
 //        rooms.put(RT_DESC, "");
-//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_FLOOR,2 );
 //        rooms.put(RT_KNOWN,0 );
 //        rooms.put(RT_FAM,0 );
 //        db.insert(ROOM_TABLE,null, rooms);
@@ -195,7 +195,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 //        rooms.put(RT_LAT, );
 //        rooms.put(RT_LONG, );
 //        rooms.put(RT_DESC, "");
-//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_FLOOR,2 );
 //        rooms.put(RT_KNOWN,0 );
 //        rooms.put(RT_FAM,0 );
 //        db.insert(ROOM_TABLE,null, rooms);
@@ -398,6 +398,295 @@ public class DB_Helper extends SQLiteOpenHelper{
 //        rooms.put(RT_FAM,0 );
 //        db.insert(ROOM_TABLE,null, rooms);
 //        rooms.clear();
+//
+//        rooms.put(RT_ID,"ACL ");
+//        rooms.put(RT_NAME,"Analytical Chemistry Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"BLT ");
+//        rooms.put(RT_NAME,"FST Biology Lecture Theatre");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID," C06P");
+//        rooms.put(RT_NAME,"Preliminary Chemistry Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID," CHETR1");
+//        rooms.put(RT_NAME,"Chemistry Tutorial Room 1");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"CHETR2 ");
+//        rooms.put(RT_NAME,"Chemistry Tutorial Room 2");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,3 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"DLSADB  ");
+//        rooms.put(RT_NAME,"DLS Advanced Biology Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"DLSAQU ");
+//        rooms.put(RT_NAME,"DLS Aquatic Sciences Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"DLSCOM ");
+//        rooms.put(RT_NAME,"DLS Computer Room");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"DLSENT ");
+//        rooms.put(RT_NAME,"DLS Entomology Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"DLSFOR ");
+//        rooms.put(RT_NAME,"DLS Forestry Eco Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID," DLSINT");
+//        rooms.put(RT_NAME,"DLS Introductory Lab 13");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"DLSLB2  ");
+//        rooms.put(RT_NAME,"DLS Lab 2");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"DLSLB3 ");
+//        rooms.put(RT_NAME,"DLS Lab 3");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID," DLSLB4");
+//        rooms.put(RT_NAME,"DLS Lab 4");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID," DLSPBL");
+//        rooms.put(RT_NAME,"DLS preliminary Biology Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID," DLSPHY");
+//        rooms.put(RT_NAME,"DLS Physiolog Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"ECNFRM ");
+//        rooms.put(RT_NAME,"Electronics Conference Room");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"DLSSM1 ");
+//        rooms.put(RT_NAME,"DLS Seminar Room 1");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"DLSSM4 ");
+//        rooms.put(RT_NAME,"DLS Seminar Room 4");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"DLSSM5 ");
+//        rooms.put(RT_NAME,"DLS Seminar Room 5");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"DLSSM6 ");
+//        rooms.put(RT_NAME,"DLS Seminar Room 6");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"DLSSM7 ");
+//        rooms.put(RT_NAME,"DLS Seminar Room 7");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID," DLSSM8");
+//        rooms.put(RT_NAME,"DLS Seminar Room 8");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID," EL2LAB");
+//        rooms.put(RT_NAME,"Electronics Conference Room");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"NGR-S-L ");
+//        rooms.put(RT_NAME," Soils Laboratory");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"FCL ");
+//        rooms.put(RT_NAME,"Food Chemistry Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+
+
+
 
 
 //        rooms.put(RT_ID,"");
