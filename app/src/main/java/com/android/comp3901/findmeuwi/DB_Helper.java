@@ -996,7 +996,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.clear();
 
         vertices.put(V_ID,"PHYS-D");
-        vertices.put(V_NAME,"PHYS-D(PHYSICS LECTURE ROOM D" );
+        vertices.put(V_NAME,"PHYSICS LECTURE ROOM D" );
         vertices.put(V_LAT,18.005132 );
         vertices.put(V_LONG,-76.750145 );
         vertices.put(V_TYPE ,"ROOM" );
