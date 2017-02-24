@@ -136,8 +136,8 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         rooms.put(RT_ID,"C5");
         rooms.put(RT_NAME,"Chemistry Lecture Theatre");
-        rooms.put(RT_LAT, 18.004490);
-        rooms.put(RT_LONG,-76.750003);
+        rooms.put(RT_LAT, 18.004506);
+        rooms.put(RT_LONG,-76.749995);
         rooms.put(RT_DESC, "Description");
         rooms.put(RT_FLOOR, 1 );
         rooms.put(RT_KNOWN, 0 );
@@ -147,8 +147,8 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         rooms.put(RT_ID,"SLT 1");
         rooms.put(RT_NAME,"Science Lecture Theatre 1");
-        rooms.put(RT_LAT, 18.005166);
-        rooms.put(RT_LONG, -76.749909 );
+        rooms.put(RT_LAT, 18.005178);
+        rooms.put(RT_LONG, -76.749861 );
         rooms.put(RT_DESC, "Description");
         rooms.put(RT_FLOOR, 1);
         rooms.put(RT_KNOWN,0 );
@@ -157,27 +157,27 @@ public class DB_Helper extends SQLiteOpenHelper{
         rooms.clear();
 
 
-//        rooms.put(RT_ID,"SLT 2");
-//        rooms.put(RT_NAME,"Science Lecture Theatre 2");
-//        rooms.put(RT_LAT, );
-//        rooms.put(RT_LONG, );
-//        rooms.put(RT_DESC, "");
-//        rooms.put(RT_FLOOR,1 );
-//        rooms.put(RT_KNOWN,0 );
-//        rooms.put(RT_FAM,0 );
-//        db.insert(ROOM_TABLE,null, rooms);
-//        rooms.clear();
-//
-//        rooms.put(RT_ID,"SLT 3 ");
-//        rooms.put(RT_NAME,"Science Lecture Theatre 3");
-//        rooms.put(RT_LAT, );
-//        rooms.put(RT_LONG, );
-//        rooms.put(RT_DESC, "");
-//        rooms.put(RT_FLOOR,1 );
-//        rooms.put(RT_KNOWN,0 );
-//        rooms.put(RT_FAM,0 );
-//        db.insert(ROOM_TABLE,null, rooms);
-//        rooms.clear();
+        rooms.put(RT_ID,"SLT 2");
+        rooms.put(RT_NAME,"Science Lecture Theatre 2");
+        rooms.put(RT_LAT,18.005209 );
+        rooms.put(RT_LONG,-76.749750 );
+        rooms.put(RT_DESC, "Description");
+        rooms.put(RT_FLOOR,1 );
+        rooms.put(RT_KNOWN,0 );
+        rooms.put(RT_FAM,0 );
+        db.insert(ROOM_TABLE,null, rooms);
+        rooms.clear();
+
+        rooms.put(RT_ID,"SLT 3 ");
+        rooms.put(RT_NAME,"Science Lecture Theatre 3");
+        rooms.put(RT_LAT,18.005384 );
+        rooms.put(RT_LONG,-76.750077 );
+        rooms.put(RT_DESC, "Description");
+        rooms.put(RT_FLOOR,1 );
+        rooms.put(RT_KNOWN,0 );
+        rooms.put(RT_FAM,0 );
+        db.insert(ROOM_TABLE,null, rooms);
+        rooms.clear();
 //
 //        rooms.put(RT_ID," C2");
 //        rooms.put(RT_NAME," Chemistry Lecture Theatre 2");
@@ -200,50 +200,40 @@ public class DB_Helper extends SQLiteOpenHelper{
 //        rooms.put(RT_FAM,0 );
 //        db.insert(ROOM_TABLE,null, rooms);
 //        rooms.clear();
-//
-//        rooms.put(RT_ID,"C4 ");
-//        rooms.put(RT_NAME,"Chemistry Lecture Theatre 4");
-//        rooms.put(RT_LAT, );
-//        rooms.put(RT_LONG, );
-//        rooms.put(RT_DESC, "");
-//        rooms.put(RT_FLOOR,1 );
-//        rooms.put(RT_KNOWN,0 );
-//        rooms.put(RT_FAM,0 );
-//        db.insert(ROOM_TABLE,null, rooms);
-//        rooms.clear();
-//
-//        rooms.put(RT_ID,"C6 ");
-//        rooms.put(RT_NAME,"Chemistry Lecture Theatre 6");
-//        rooms.put(RT_LAT, );
-//        rooms.put(RT_LONG, );
-//        rooms.put(RT_DESC, "");
-//        rooms.put(RT_FLOOR,1 );
-//        rooms.put(RT_KNOWN,0 );
-//        rooms.put(RT_FAM,0 );
-//        db.insert(ROOM_TABLE,null, rooms);
-//        rooms.clear();
-//
-//        rooms.put(RT_ID,"C7 ");
-//        rooms.put(RT_NAME,"Chemistry Lecture Theatre 7");
-//        rooms.put(RT_LAT, );
-//        rooms.put(RT_LONG, );
-//        rooms.put(RT_DESC, "");
-//        rooms.put(RT_FLOOR,1 );
-//        rooms.put(RT_KNOWN,0 );
-//        rooms.put(RT_FAM,0 );
-//        db.insert(ROOM_TABLE,null, rooms);
-//        rooms.clear();
-//
-//        rooms.put(RT_ID,"CHEPHY ");
-//        rooms.put(RT_NAME,"Chem/Phys Lecture Theatre");
-//        rooms.put(RT_LAT, );
-//        rooms.put(RT_LONG, );
-//        rooms.put(RT_DESC, "");
-//        rooms.put(RT_FLOOR,1 );
-//        rooms.put(RT_KNOWN,0 );
-//        rooms.put(RT_FAM,0 );
-//        db.insert(ROOM_TABLE,null, rooms);
-//        rooms.clear();
+
+
+        rooms.put(RT_ID,"C6 ");
+        rooms.put(RT_NAME,"Chemistry Lecture Theatre 6");
+        rooms.put(RT_LAT,18.004673 );
+        rooms.put(RT_LONG,-76.749995 );
+        rooms.put(RT_DESC, "Description");
+        rooms.put(RT_FLOOR,1 );
+        rooms.put(RT_KNOWN,0 );
+        rooms.put(RT_FAM,0 );
+        db.insert(ROOM_TABLE,null, rooms);
+        rooms.clear();
+
+        rooms.put(RT_ID,"C7 ");
+        rooms.put(RT_NAME,"Chemistry Lecture Theatre 7");
+        rooms.put(RT_LAT,18.004734 );
+        rooms.put(RT_LONG,-76.749913 );
+        rooms.put(RT_DESC, "Description");
+        rooms.put(RT_FLOOR,1 );
+        rooms.put(RT_KNOWN,0 );
+        rooms.put(RT_FAM,0 );
+        db.insert(ROOM_TABLE,null, rooms);
+        rooms.clear();
+
+        rooms.put(RT_ID,"CHEPHY ");
+        rooms.put(RT_NAME,"Chem/Phys Lecture Theatre");
+        rooms.put(RT_LAT,18.004370 );
+        rooms.put(RT_LONG,-76.749152);
+        rooms.put(RT_DESC, "Description");
+        rooms.put(RT_FLOOR,1 );
+        rooms.put(RT_KNOWN,0 );
+        rooms.put(RT_FAM,0 );
+        db.insert(ROOM_TABLE,null, rooms);
+        rooms.clear();
 //
 //        rooms.put(RT_ID,"COMPLR ");
 //        rooms.put(RT_NAME,"Computing Lecture Room");
@@ -256,16 +246,16 @@ public class DB_Helper extends SQLiteOpenHelper{
 //        db.insert(ROOM_TABLE,null, rooms);
 //        rooms.clear();
 
-//        rooms.put(RT_ID,"COMPLAB ");
-//        rooms.put(RT_NAME,"Computer Lab Lab 1");
-//        rooms.put(RT_LAT, );
-//        rooms.put(RT_LONG, );
-//        rooms.put(RT_DESC, "");
-//        rooms.put(RT_FLOOR,1 );
-//        rooms.put(RT_KNOWN,0 );
-//        rooms.put(RT_FAM,0 );
-//        db.insert(ROOM_TABLE,null, rooms);
-//        rooms.clear();
+        rooms.put(RT_ID,"COMPLAB ");
+        rooms.put(RT_NAME,"Computer Lab Lab 1");
+        rooms.put(RT_LAT,18.005132 );
+        rooms.put(RT_LONG,-76.750145 );
+        rooms.put(RT_DESC, "Description");
+        rooms.put(RT_FLOOR,1 );
+        rooms.put(RT_KNOWN,0 );
+        rooms.put(RT_FAM,0 );
+        db.insert(ROOM_TABLE,null, rooms);
+        rooms.clear();
 //
 //        rooms.put(RT_ID,"CPGR ");
 //        rooms.put(RT_NAME,"Computing Post-Graduate Room");
@@ -278,27 +268,27 @@ public class DB_Helper extends SQLiteOpenHelper{
 //        db.insert(ROOM_TABLE,null, rooms);
 //        rooms.clear();
 //
-//        rooms.put(RT_ID," CR1 ");
-//        rooms.put(RT_NAME,"Computer Science Tutorial Room 1");
-//        rooms.put(RT_LAT, );
-//        rooms.put(RT_LONG, );
-//        rooms.put(RT_DESC, "");
-//        rooms.put(RT_FLOOR,1 );
-//        rooms.put(RT_KNOWN,0 );
-//        rooms.put(RT_FAM,0 );
-//        db.insert(ROOM_TABLE,null, rooms);
-//        rooms.clear();
-//
-//        rooms.put(RT_ID," CR2");
-//        rooms.put(RT_NAME,"Computer Science Tutorial Room 2");
-//        rooms.put(RT_LAT, );
-//        rooms.put(RT_LONG, );
-//        rooms.put(RT_DESC, "");
-//        rooms.put(RT_FLOOR,1 );
-//        rooms.put(RT_KNOWN,0 );
-//        rooms.put(RT_FAM,0 );
-//        db.insert(ROOM_TABLE,null, rooms);
-//        rooms.clear();
+        rooms.put(RT_ID," CR1 ");
+        rooms.put(RT_NAME,"Computer Science Tutorial Room 1");
+        rooms.put(RT_LAT,18.005032 );
+        rooms.put(RT_LONG,-76.750159 );
+        rooms.put(RT_DESC, "Description");
+        rooms.put(RT_FLOOR,1 );
+        rooms.put(RT_KNOWN,0 );
+        rooms.put(RT_FAM,0 );
+        db.insert(ROOM_TABLE,null, rooms);
+        rooms.clear();
+
+        rooms.put(RT_ID," CR2");
+        rooms.put(RT_NAME,"Computer Science Tutorial Room 2");
+        rooms.put(RT_LAT,18.005068 );
+        rooms.put(RT_LONG,-76.750106 );
+        rooms.put(RT_DESC, "Description");
+        rooms.put(RT_FLOOR,1 );
+        rooms.put(RT_KNOWN,0 );
+        rooms.put(RT_FAM,0 );
+        db.insert(ROOM_TABLE,null, rooms);
+        rooms.clear();
 //
 //        rooms.put(RT_ID,"NGR-LRA  ");
 //        rooms.put(RT_NAME,"Engineering Lecture Room A ");
@@ -685,7 +675,171 @@ public class DB_Helper extends SQLiteOpenHelper{
 //        db.insert(ROOM_TABLE,null, rooms);
 //        rooms.clear();
 
+//        rooms.put(RT_ID,"GENPHY");
+//        rooms.put(RT_NAME,"General Physics Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "Description");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"GGCLAB");
+//        rooms.put(RT_NAME,"Geography/Geology Computer Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "Description");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//
+//        rooms.put(RT_ID,"GGLAB1");
+//        rooms.put(RT_NAME,"Laboratory 1");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "Description");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"GGLAB2");
+//        rooms.put(RT_NAME,"Laboratory 2");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "Description");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"GGLAB3");
+//        rooms.put(RT_NAME,"Laboratory 3");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "Description");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"GGLAB4");
+//        rooms.put(RT_NAME,"Laboratory 4");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "Description");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"GGTUTR");
+//        rooms.put(RT_NAME,"Geography/Geology Tutorial Room");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "Description");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"PCL");
+//        rooms.put(RT_NAME,"Physical Chemsitry Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "Description");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"PHYS-A");
+//        rooms.put(RT_NAME,"Physics Lecture Room A");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "Description");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"PHYS-B");
+//        rooms.put(RT_NAME,"Physics Lecture Room B");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "Description");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"PHYS-C");
+//        rooms.put(RT_NAME,"Physics Lecture Room C");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "Description");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
 
+        rooms.put(RT_ID,"PHYS-D");
+        rooms.put(RT_NAME,"Physics Lecture Room D");
+        rooms.put(RT_LAT,18.004503 );
+        rooms.put(RT_LONG,-76.749008 );
+        rooms.put(RT_DESC, "Description");
+        rooms.put(RT_FLOOR,1 );
+        rooms.put(RT_KNOWN,0 );
+        rooms.put(RT_FAM,0 );
+        db.insert(ROOM_TABLE,null, rooms);
+        rooms.clear();
+
+//        rooms.put(RT_ID,"PHYTUT");
+//        rooms.put(RT_NAME,"Physics Tutorial Room");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "Description");
+//        rooms.put(RT_FLOOR,2 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"PREPHY");
+//        rooms.put(RT_NAME,"Preliminary Physics Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "Description");
+//        rooms.put(RT_FLOOR,1 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
+//
+//        rooms.put(RT_ID,"SOLARB");
+//        rooms.put(RT_NAME,"Solar Lab");
+//        rooms.put(RT_LAT, );
+//        rooms.put(RT_LONG, );
+//        rooms.put(RT_DESC, "Description");
+//        rooms.put(RT_FLOOR,3 );
+//        rooms.put(RT_KNOWN,0 );
+//        rooms.put(RT_FAM,0 );
+//        db.insert(ROOM_TABLE,null, rooms);
+//        rooms.clear();
 
 
 
@@ -714,8 +868,8 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         vertices.put(V_ID, "SLT 2"  );
         vertices.put(V_NAME, "Science Lecture Theatre 2" );
-        vertices.put(V_LAT, 18.0051221 );
-        vertices.put(V_LONG, -76.7497594);
+        vertices.put(V_LAT, 18.005209 );
+        vertices.put(V_LONG, -76.749750);
         vertices.put(V_TYPE, "ROOM");
 
         db.insert(VERTICES_TABLE,null,vertices);
@@ -723,8 +877,8 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         vertices.put(V_ID, "SLT 1");
         vertices.put(V_NAME, "Science Lecture Theatre 1" );
-        vertices.put(V_LAT,  18.005166);
-        vertices.put(V_LONG, -76.749909);
+        vertices.put(V_LAT,  18.005178);
+        vertices.put(V_LONG, -76.749861);
         vertices.put(V_TYPE , "ROOM" );
 
         db.insert(VERTICES_TABLE,null,vertices);
@@ -732,8 +886,8 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         vertices.put(V_ID, "C5" );
         vertices.put(V_NAME, "Chemistry Lecture Theatre" );
-        vertices.put(V_LAT, 18.004490);
-        vertices.put(V_LONG, -76.750003);
+        vertices.put(V_LAT, 18.004506);
+        vertices.put(V_LONG, -76.749995);
         vertices.put(V_TYPE ,"ROOM" );
 
         db.insert(VERTICES_TABLE,null,vertices);
@@ -761,14 +915,103 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         vertices.put(V_ID,"Department of Mathematics");
         vertices.put(V_NAME, "Department of Mathematics");
-        vertices.put(V_LAT,  18.004853);
-        vertices.put(V_LONG, -76.749616);
+        vertices.put(V_LAT,  18.004790);
+        vertices.put(V_LONG, -76.749598);
         vertices.put(V_TYPE , "Building");
 
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
+        vertices.put(V_ID,"SLT3"  );
+        vertices.put(V_NAME,"Science Lecture Theatre 3"  );
+        vertices.put(V_LAT,18.005384  );
+        vertices.put(V_LONG,-76.750077   );
+        vertices.put(V_TYPE ,"ROOM" );
 
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"C7"  );
+        vertices.put(V_NAME,"C7 Chemistry Lecture Theatre"  );
+        vertices.put(V_LAT, 18.4734 );
+        vertices.put(V_LONG, -76749913  );
+        vertices.put(V_TYPE ,"ROOM" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"C6"  );
+        vertices.put(V_NAME,"C6 Chemistry Lecture Theatre"  );
+        vertices.put(V_LAT,18.004673  );
+        vertices.put(V_LONG, -76.749995  );
+        vertices.put(V_TYPE ,"ROOM" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"COMLAB"  );
+        vertices.put(V_NAME,"Computer Science Lab Building"  );
+        vertices.put(V_LAT, 18.005242 );
+        vertices.put(V_LONG, -76.750182  );
+        vertices.put(V_TYPE ,"Building" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"CR1"  );
+        vertices.put(V_NAME,"Computer Science Tutorial Room 1"  );
+        vertices.put(V_LAT,18.005032  );
+        vertices.put(V_LONG, -76.750106  );
+        vertices.put(V_TYPE ,"ROOM" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"CR2 "  );
+        vertices.put(V_NAME,"Computer Science Tutorial Room 2"  );
+        vertices.put(V_LAT,18.005068  );
+        vertices.put(V_LONG, -76.750106  );
+        vertices.put(V_TYPE ,"ROOM" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+
+        vertices.put(V_ID,"CHEPHY");
+        vertices.put(V_NAME,"Chem/Phys Lecture Theatre" );
+        vertices.put(V_LAT,18.004370  );
+        vertices.put(V_LONG,-76.749152   );
+        vertices.put(V_TYPE ,"ROOM" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"COMLABR");
+        vertices.put(V_NAME,"Computer Science Lab Room" );
+        vertices.put(V_LAT,18.005132 );
+        vertices.put(V_LONG,-76.750145 );
+        vertices.put(V_TYPE ,"ROOM" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"PHYS-D");
+        vertices.put(V_NAME,"PHYS-D(PHYSICS LECTURE ROOM D" );
+        vertices.put(V_LAT,18.005132 );
+        vertices.put(V_LONG,-76.750145 );
+        vertices.put(V_TYPE ,"ROOM" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+
+
+
+
+
+
+
+//
 //        vertices.put(V_ID,  );
 //        vertices.put(V_NAME,  );
 //        vertices.put(V_LAT,  );
