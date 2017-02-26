@@ -20,7 +20,7 @@ import java.nio.channels.FileChannel;
 
 public class DB_Helper extends SQLiteOpenHelper{
 
-    public static final Integer DATABASE_VERSION = 9;
+    public static final Integer DATABASE_VERSION = 10;
     public static final String DATABASE_NAME = "findme.db";
     private static String DB_PATH = "";
 
@@ -120,6 +120,9 @@ public class DB_Helper extends SQLiteOpenHelper{
     }
 
 
+    /*
+     *Generates all the initial database values
+     */
     public void generateDB(){
         generateRooms();
         generateEdges();
@@ -127,6 +130,9 @@ public class DB_Helper extends SQLiteOpenHelper{
         return ;
     }
 
+    /*
+     * Generate rooms
+     */
     public void generateRooms(){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -869,6 +875,9 @@ public class DB_Helper extends SQLiteOpenHelper{
         return ;
     }
 
+    /*
+     * Generate Vertices
+     */
     public void generateVertices(){
 
         // 18.004678, -76.749723 CA
@@ -1091,6 +1100,9 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.close();
     }
 
+    /*
+     * Generate Edges
+     */
     public void generateEdges(){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1103,31 +1115,13 @@ public class DB_Helper extends SQLiteOpenHelper{
         edges.clear();
 
         edges.put(E_SOURCE, "CA");
-        edges.put(E_DESTINATION, "C5");
-        edges.put(E_WEIGHT, 1);
-        db.insert(EDGES_TABLE,null,edges);
-        edges.clear();
-
-        edges.put(E_SOURCE, "CA");
         edges.put(E_DESTINATION, "CB");
-        edges.put(E_WEIGHT,1);
-        db.insert(EDGES_TABLE,null,edges);
-        edges.clear();
-
-        edges.put(E_SOURCE, "CB");
-        edges.put(E_DESTINATION, "CA");
         edges.put(E_WEIGHT,1);
         db.insert(EDGES_TABLE,null,edges);
         edges.clear();
 
         edges.put(E_SOURCE, "Department of Mathematics");
         edges.put(E_DESTINATION, "CB");
-        edges.put(E_WEIGHT, 1);
-        db.insert(EDGES_TABLE,null,edges);
-        edges.clear();
-
-        edges.put(E_SOURCE, "CB");
-        edges.put(E_DESTINATION, "Department of Mathematics");
         edges.put(E_WEIGHT, 1);
         db.insert(EDGES_TABLE,null,edges);
         edges.clear();
@@ -1138,11 +1132,6 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(EDGES_TABLE,null,edges);
         edges.clear();
 
-        edges.put(E_SOURCE, "SLT 1");
-        edges.put(E_DESTINATION, "Department of Mathematics");
-        edges.put(E_WEIGHT, 1);
-        db.insert(EDGES_TABLE,null,edges);
-        edges.clear();
 
         edges.put(E_SOURCE, "SLT 1");
         edges.put(E_DESTINATION, "SLT 2");
@@ -1150,13 +1139,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(EDGES_TABLE,null,edges);
         edges.clear();
 
-        edges.put(E_SOURCE, "SLT 2");
-        edges.put(E_DESTINATION, "SLT 1");
-        edges.put(E_WEIGHT, 1);
-        db.insert(EDGES_TABLE,null,edges);
-        edges.clear();
 
-     db.close();
+        db.close();
     }
 
 

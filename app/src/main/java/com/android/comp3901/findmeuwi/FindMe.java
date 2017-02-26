@@ -144,12 +144,13 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         mUiSettings = mGoogleMap.getUiSettings();
-        displayGraph(); // Display
+        displayGraph(); // Display the edges
 
         goToLocation(18.005072, -76.749544);
 
         boolean success = googleMap.setMapStyle(new MapStyleOptions(getResources()
-                .getString(R.string.style_esperanto))); //Changes the way how the map looks
+                                                    .getString(R.string.style_icyBlue ))); //Changes the way how the map looks
+
 
         if (!success) {
             Toast.makeText(this,"Style parsing failed.",Toast.LENGTH_LONG ).show();
@@ -214,15 +215,26 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
 
 
+    /*
+        Creates a option menu in the side bar that provides extra settings
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.map_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+
+
+    /*
+        Provides the google API tracking services
+     */
     public void toggleLocations(View view) {
+
+        // Uses check box to tell when user want to user there location.
         boolean checked = ((ToggleButton) view).isChecked();
         if (checked) {
+            //provide some method that Uses user Location as starting point.
             useMyLocation();
             Toast.makeText(this, "Getting Your Location", Toast.LENGTH_LONG).show();
 
@@ -231,7 +243,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
                 mGoogleApiClient.disconnect();
 
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
+                //   TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -358,6 +370,10 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
     }
 
+
+    /*
+        Method that add a marker to the map.
+     */
     public void addMarker(Double lat, Double lng, String title, String snip){
 
         if(marker != null ){
@@ -387,6 +403,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         source = new Vertex("Department of Mathematics", "Department of Mathematics", 18.004853, -76.749616, "Building");
 
         if (source == null) {
+            // ask them to select a starting point
             Toast.makeText(this, "NO Source", Toast.LENGTH_LONG).show();
             return;
         } else if (destination == null) {
@@ -430,6 +447,9 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
 
 
+    /*
+     * Displays all the edges in the graph.
+     */
     public void displayGraph(){
 
         List<Edge> edges =  path.getEdges();
@@ -450,7 +470,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
             PolylineOptions options = new PolylineOptions()
                     .color(0x33606060)
-                    .width(25)
+                    .width(20)
                     .add(v1.getLL(),v2.getLL());
 
             lane =  mGoogleMap.addPolyline(options);

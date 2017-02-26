@@ -21,6 +21,7 @@ public class Path {
     private List<Vertex> nodes;
     private List<Edge> edges;
     DB_Helper dbHelper;
+
     private Graph graph;
     HashMap<String,Vertex> vertices;
 
@@ -42,11 +43,14 @@ public class Path {
         //creates a vertex object for the values in the database
         while (!verticesDB.isAfterLast()) {
 
+
             Vertex Locations = new Vertex(verticesDB.getString(0),
                     verticesDB.getString(1),
                     verticesDB.getDouble(2),
                     verticesDB.getDouble(3),
                     verticesDB.getString(4));
+
+            //Places the create vertex into a list and a HashMap
             nodes.add(Locations);
             vertices.put(verticesDB.getString(0), Locations);
             verticesDB.moveToNext();
@@ -55,12 +59,22 @@ public class Path {
         //creates a edge for each value in the database
         while (!edgesDB.isAfterLast()){
 
-            Edge lane = new Edge(edgesDB.getString(0) + " -> " + edgesDB.getString(0),
+
+            //creates the same edge twice, for going foward and one for going backwards
+            Edge lane1 = new Edge(edgesDB.getString(0) + " -> " + edgesDB.getString(0),
                     vertices.get(edgesDB.getString(0)),
                     vertices.get(edgesDB.getString(1)),
                     (int) edgesDB.getDouble(2));
 
-            edges.add(lane);
+            Edge lane2 = new Edge(edgesDB.getString(0) + " -> " + edgesDB.getString(0),
+                    vertices.get(edgesDB.getString(1)),
+                    vertices.get(edgesDB.getString(0)),
+                    (int) edgesDB.getDouble(2));
+
+
+
+            edges.add(lane1);
+            edges.add(lane2);
             edgesDB.moveToNext();
         }
 
