@@ -19,6 +19,7 @@ public class Path {
 
     // Used in Path Finding method
     private List<Vertex> nodes;
+    private static List<Vertex> connectedNodes;
     private List<Edge> edges;
     DB_Helper dbHelper;
 
@@ -32,6 +33,7 @@ public class Path {
     public Path(DB_Helper db){
 
         this.nodes = new ArrayList<Vertex>();
+        this.connectedNodes = new ArrayList<Vertex>();
         this.edges = new ArrayList<Edge>();
         this.vertices = new HashMap<String,Vertex>();
         this.dbHelper = db;
@@ -71,7 +73,8 @@ public class Path {
                     vertices.get(edgesDB.getString(0)),
                     (int) edgesDB.getDouble(2));
 
-
+            connectedNodes.add(vertices.get(edgesDB.getString(0)));
+            connectedNodes.add(vertices.get(edgesDB.getString(1)));
 
             edges.add(lane1);
             edges.add(lane2);
@@ -93,6 +96,8 @@ public class Path {
 
         LinkedList<Vertex> path = dijkstra.getPath(vertices.get(dest));
 
+
+
         assertNotNull(path);
         assertTrue(path.size() > 0);
 
@@ -104,6 +109,8 @@ public class Path {
     public Graph getGraph(){
         return graph;
     }
+
+    public List getCNodes() {   return  connectedNodes; }
 
     public List<Vertex> getNodes(){
         return nodes;
