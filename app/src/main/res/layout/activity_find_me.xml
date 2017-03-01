@@ -21,7 +21,7 @@
         android:text="ToggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/toggleButton3"
+        android:id="@+id/locationToggle"
         style="@android:style/Widget.Holo.Button.Toggle"
         android:textOff="@string/location_off"
         android:textOn="@string/location_on"
@@ -49,11 +49,11 @@
         android:inputType="text|textPersonName"
         android:ems="10"
         android:id="@+id/getSource"
-        android:hint="Choose starting point"
+        android:hint="Choose a starting point."
         android:fontFamily="sans-serif"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/toggleButton3" />
+        android:layout_toStartOf="@+id/locationToggle" />
 
     <Button
         android:text="Find"

@@ -44,8 +44,9 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 
-
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -62,14 +63,14 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     Marker startMarker, destMarker, marker;
     DB_Helper dbHelper;
     LinkedList<Polyline> graphLines;
-    Room destination ;
-    Vertex source,start,known;
+    Room destination;
+    Vertex source;
+    static Vertex start;
+    Vertex known;
 
-    Path path;
+    static Path path;
     LinkedList<Vertex> route;
     Polyline line;
-
-
 
 
     public void createRooms() throws IOException {
@@ -90,7 +91,6 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
 
         dbHelper.generateDB(); //populate database with values (needs to be in the BD_Helper class)
-
 
 
         try {
@@ -141,7 +141,6 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     }
 
 
-
     /*
      * Function that tells the map what to do when its ready
      *
@@ -155,11 +154,11 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         goToLocation(18.005072, -76.749544);
 
         boolean success = googleMap.setMapStyle(new MapStyleOptions(getResources()
-                                                    .getString(R.string.style_icyBlue ))); //Changes the way how the map looks
+                .getString(R.string.style_icyBlue))); //Changes the way how the map looks
 
 
         if (!success) {
-            Toast.makeText(this,"Style parsing failed.",Toast.LENGTH_LONG ).show();
+            Toast.makeText(this, "Style parsing failed.", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -175,9 +174,8 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     }
 
 
-
     /*
-        Handles  the maps type switching
+     *  Handles  the maps type switching
      */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -201,7 +199,6 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     /*
@@ -249,13 +246,14 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
     }
 
+
     /*
         This methods should search through the vertex table
         and find a the starting point based of where the user
         selected in the text field.
         It takes it utilizes the text filed @getSource to search through the database.
      */
-    public boolean setSource(){
+    public boolean setSource() {
 
         EditText text = (EditText) findViewById(R.id.getSource);
         String startText = text.getText().toString();
@@ -276,10 +274,9 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
             // create the starting node
             start = new Vertex(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3), "TEMP");
 
-            addMarker(start.getLat(), start.getLng(), start.getName(), start.getId() , 1 );
+            addMarker(start.getLat(), start.getLng(), start.getName(), start.getId(), 1);
 
         }
-
 
 
         return true;
@@ -288,7 +285,49 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
 
     /*
-     *  Provides the google API tracking services
+     *  This methods gets the distance vertex that the user is closest to it utilises the Harversine Formula(https://en.wikipedia.org/wiki/Haversine_formula)
+     */
+
+    public static double rad(double x) {
+        return x * Math.PI / 180;
+    }
+
+    public static Vertex find_closest_marker(Location location) {
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
+        double R = 6371; // radius of earth in km
+        ArrayList<Double> distances = new ArrayList();
+        List<Vertex> points = path.getCNodes(); // uses nodes that are connected to an edge
+
+        Integer closest = -1;
+
+        for (int i = 0; i < points.size(); i++) {
+
+            Double mlat = points.get(i).getLat();
+            Double mlng = points.get(i).getLng();
+            Double dLat = rad(mlat - lat);
+            Double dLong = rad(mlng - lng);
+            Double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(rad(lat)) * Math.cos(rad(lat)) * Math.sin(dLong / 2) * Math.sin(dLong / 2);
+            Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            Double d = R * c;
+            distances.add(d);
+
+            if (closest == -1 || d < distances.get(closest)) {
+                closest = i;
+            }
+        }
+
+        start = points.get(closest);
+        return start;
+    }
+
+
+    /*
+     * This methods is called when the toggle button is click.
+     * If enabled the location services is used  and the user location is used as starting point
+     * It also Provides the google API tracking services
+     *
      */
     public void toggleLocations(View view) {
 
@@ -298,22 +337,22 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
         if (checked) {
 
-            if( isLocationEnabled(this)){
+            if (isLocationEnabled(this)) {
                 //provide some method that Uses user Location as starting point.
                 useMyLocation();
                 Toast.makeText(this, "Getting Your Location", Toast.LENGTH_LONG).show();
 
                 // Disable the text field when he user has locations connected
-                View getSource = findViewById( R.id.getSource);
+                EditText getSource = (EditText) findViewById(R.id.getSource);
+                getSource.setHint("YOUR LOCATION");
+                getSource.getText().clear();
                 getSource.setFocusable(false);
 
-            }
-            else{
+            } else {
                 Toast.makeText(this, "Please turn Locations on", Toast.LENGTH_LONG).show();
-                ((ToggleButton) view).setChecked( false);
+                ((ToggleButton) view).setChecked(false);
 
             }
-
 
 
         } else {
@@ -334,7 +373,8 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
             mGoogleMap.setMyLocationEnabled(false);
             goToLocation(18.005072, -76.749544);
 
-            View getSource = findViewById( R.id.getSource);
+            EditText getSource = (EditText) findViewById(R.id.getSource);
+            getSource.setHint("Choose a Starting point");
             getSource.setFocusableInTouchMode(true);
 
         }
@@ -349,7 +389,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         int locationMode = 0;
         String locationProviders;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             try {
                 locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
 
@@ -360,14 +400,13 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
             return locationMode != Settings.Secure.LOCATION_MODE_OFF;  // Return true if the location services is turn on
 
-        }else{
+        } else {
             locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             return !TextUtils.isEmpty(locationProviders);
         }
 
 
     }
-
 
 
     /*
@@ -389,8 +428,8 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         mGoogleMap.setMyLocationEnabled(true);          //Enables google tracking.
         mUiSettings.setMyLocationButtonEnabled(false);  //Disable the google compass button.
 
-        if(mGoogleApiClient == null){
-            mGoogleApiClient =  new GoogleApiClient.Builder(this)
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(LocationServices.API)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
@@ -403,17 +442,16 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     }
 
 
-
     /*
-        Method that adds a marker to the map.
+     *  Method that adds a marker to the map.
      */
-    public void addMarker(Double lat, Double lng, String title, String snip, Integer type){
+    public void addMarker(Double lat, Double lng, String title, String snip, Integer type) {
 
         LatLng ll = new LatLng(lat, lng);
 
 
-        if(type == 1){
-            if(startMarker != null )
+        if (type == 1) {
+            if (startMarker != null)
                 startMarker.remove();
 
             MarkerOptions option = new MarkerOptions()
@@ -425,8 +463,8 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
             startMarker = mGoogleMap.addMarker(option);
 
-        }else if(type == 2 ){
-            if( destMarker !=null )
+        } else if (type == 2) {
+            if (destMarker != null)
                 destMarker.remove();
 
             MarkerOptions option = new MarkerOptions()
@@ -439,29 +477,41 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
             destMarker = mGoogleMap.addMarker(option);
 
 
-        }else{
+        } else {
 
 
         }
 
 
-
-
-
-
-
-
     }
-
 
 
     /*
         This Method Performs the Dijkstras algorithm on the graph for the current source and destination selected.
      */
-
     public void getPath(View view) {
 
-        Boolean isSourceSet = setSource();
+        Boolean mylocation = ((ToggleButton) findViewById(R.id.locationToggle)).isChecked();
+        Boolean isSourceSet;
+
+        if (mylocation) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            find_closest_marker(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient));
+            isSourceSet = true;
+        }else{
+            isSourceSet = setSource();
+        }
+
+
 
         // Dummy source value for testing purposes.
 
@@ -560,6 +610,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         Handling of the locations services and tracking
      */
     LocationRequest mLocationRequest;
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
