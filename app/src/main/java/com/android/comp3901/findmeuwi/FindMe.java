@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -59,7 +60,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
 
     GoogleMap mGoogleMap;
     GoogleApiClient mGoogleApiClient;
@@ -95,9 +96,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
         dbHelper.generateDB(); //populate database with values (needs to be in the BD_Helper class)
 
-
-
-        try {
+        try {// writes database to sd card for debugging purposes.
             dbHelper.writeToSD(this.getActivity());
         } catch (IOException e) {
             e.printStackTrace();
@@ -105,7 +104,45 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
 
 
-        return inflater.inflate(R.layout.activity_find_me, container, false);
+        //Creates the fragment view.
+        View view = inflater.inflate(R.layout.activity_find_me, container, false);
+
+        // Sets the on click listener for the fragment elements.
+        Button find = (Button)view.findViewById(R.id.findBtn);
+        find.setOnClickListener(this);
+        Button path = (Button)view.findViewById(R.id.getPath);
+        path.setOnClickListener(this);
+        ToggleButton location = (ToggleButton)view.findViewById(R.id.locationToggle);
+        location.setOnClickListener(this);
+
+        return view;
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+        //Handles each on click method for a button.
+        switch (v.getId()){
+            case R.id.findBtn:
+                try {
+                    geoLocate(v);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.getPath:
+                getPath(v);
+                break;
+            case R.id.locationToggle:
+                toggleLocations(v);
+                break;
+            default:
+                break;
+
+        }
+
+
     }
 
 
@@ -454,7 +491,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                     .addOnConnectionFailedListener(this)
                     .addApi(Places.GEO_DATA_API)
                     .addApi(Places.PLACE_DETECTION_API)
-                    .enableAutoManage((FragmentActivity)this.getContext(), this)
+                    .enableAutoManage((FragmentActivity)this.getActivity(), this)
                     .build();
         }
         mGoogleApiClient.connect();
@@ -680,11 +717,6 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         }
 
     }
-
-
-
-
-
 
 
 
