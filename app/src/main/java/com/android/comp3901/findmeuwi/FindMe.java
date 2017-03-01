@@ -1,6 +1,7 @@
 package com.android.comp3901.findmeuwi;
 
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -11,12 +12,16 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -54,7 +59,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class FindMe extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     GoogleMap mGoogleMap;
     GoogleApiClient mGoogleApiClient;
@@ -78,46 +83,60 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     }
 
 
-    /*
-    **   Method that get call when the Gmaps object is first created.
-    **/
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_find_me);
-        dbHelper = new DB_Helper(this); //Creating databases
 
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+
+        super.onCreate(savedInstanceState);
+        dbHelper = new DB_Helper(this.getActivity()); //Creating databases
         path = new Path(dbHelper); //Initialises path object which creates graph
 
 
         dbHelper.generateDB(); //populate database with values (needs to be in the BD_Helper class)
 
 
+
         try {
-            dbHelper.writeToSD(this);
+            dbHelper.writeToSD(this.getActivity());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+
+
+        return inflater.inflate(R.layout.activity_find_me, container, false);
+    }
+
+
+
+
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+
         if (googleServicesCheck()) {
-            Toast.makeText(this, "Perfect!!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity() , "Perfect!!", Toast.LENGTH_LONG).show();
             initMap();
-            try {
-                createRooms();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                //Create Rooms
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         } else {
 
         }
 
     }
 
+
     /*
     ** Initializes Map Fragment;
     **/
     private void initMap() {
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+        MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
         mapFragment.getMapAsync(this);
     }
 
@@ -128,14 +147,14 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     public boolean googleServicesCheck() {
 
         GoogleApiAvailability api = GoogleApiAvailability.getInstance();
-        int isAvailable = api.isGooglePlayServicesAvailable(this);
+        int isAvailable = api.isGooglePlayServicesAvailable(this.getActivity());
         if (isAvailable == ConnectionResult.SUCCESS) {
             return true;
         } else if (api.isUserResolvableError(isAvailable)) {
-            Dialog dialog = api.getErrorDialog(this, isAvailable, 0);
+            Dialog dialog = api.getErrorDialog(this.getActivity(), isAvailable, 0);
             dialog.show();
         } else {
-            Toast.makeText(this, "Cant connect to play services", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(), "Cant connect to play services", Toast.LENGTH_LONG).show();
         }
         return false;
     }
@@ -158,7 +177,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
 
         if (!success) {
-            Toast.makeText(this, "Style parsing failed.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(), "Style parsing failed.", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -167,11 +186,11 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     /*
         Creates a option menu in the side bar that provides extra settings
      */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.map_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.map_menu, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
 
     /*
@@ -217,17 +236,17 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
      */
     public void geoLocate(View view) throws IOException {
 
-        EditText et = (EditText) findViewById(R.id.classSearch);
+        EditText et = (EditText) getView().findViewById(R.id.classSearch);
         String clss = et.getText().toString();
 
         Cursor res = dbHelper.findClasses(clss);
         if (res.getCount() == 0) {
             // show message "no results found in class database"
-            Toast.makeText(this, "Could not find " + clss, Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(), "Could not find " + clss, Toast.LENGTH_LONG).show();
             return;
         } else if (res.getCount() > 1) {
             // more than one possible classes found. Create method to let them choose
-            Toast.makeText(this, " Select a Class", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(), " Select a Class", Toast.LENGTH_LONG).show();
             return;
         } else {
             // create the room
@@ -239,7 +258,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         double lat = destination.getLat();
         double lng = destination.getLng();
 
-        Toast.makeText(this, destination.getRmName() + " is here", Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getActivity(), destination.getRmName() + " is here", Toast.LENGTH_LONG).show();
 
         goToLocation(lat, lng);
 
@@ -255,7 +274,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
      */
     public boolean setSource() {
 
-        EditText text = (EditText) findViewById(R.id.getSource);
+        EditText text = (EditText) getView().findViewById(R.id.getSource);
         String startText = text.getText().toString();
 
 
@@ -263,12 +282,12 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
         if (res.getCount() == 0) {
             // show message "no results found in places database"
-            Toast.makeText(this, "Could not find " + startText, Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(), "Could not find " + startText, Toast.LENGTH_LONG).show();
             return false;
         } else if (res.getCount() > 1) {
             // more than one possible starting point found found. Create method to let them choose
 
-            Toast.makeText(this, "Please select one these Rooms to start from.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(), "Please select one these Rooms to start from.", Toast.LENGTH_LONG).show();
             return false;
         } else {
             // create the starting node
@@ -337,19 +356,19 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
         if (checked) {
 
-            if (isLocationEnabled(this)) {
+            if (isLocationEnabled(this.getActivity())) {
                 //provide some method that Uses user Location as starting point.
                 useMyLocation();
-                Toast.makeText(this, "Getting Your Location", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.getActivity(), "Getting Your Location", Toast.LENGTH_LONG).show();
 
                 // Disable the text field when he user has locations connected
-                EditText getSource = (EditText) findViewById(R.id.getSource);
+                EditText getSource = (EditText) getView().findViewById(R.id.getSource);
                 getSource.setHint("YOUR LOCATION");
                 getSource.getText().clear();
                 getSource.setFocusable(false);
 
             } else {
-                Toast.makeText(this, "Please turn Locations on", Toast.LENGTH_LONG).show();
+                Toast.makeText(this.getActivity(), "Please turn Locations on", Toast.LENGTH_LONG).show();
                 ((ToggleButton) view).setChecked(false);
 
             }
@@ -359,7 +378,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
             if (mGoogleApiClient != null)
                 mGoogleApiClient.disconnect();
 
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 //   TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -373,7 +392,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
             mGoogleMap.setMyLocationEnabled(false);
             goToLocation(18.005072, -76.749544);
 
-            EditText getSource = (EditText) findViewById(R.id.getSource);
+            EditText getSource = (EditText) getView().findViewById(R.id.getSource);
             getSource.setHint("Choose a Starting point");
             getSource.setFocusableInTouchMode(true);
 
@@ -414,7 +433,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
      */
     public void useMyLocation() {
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -429,13 +448,13 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         mUiSettings.setMyLocationButtonEnabled(false);  //Disable the google compass button.
 
         if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
+            mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity())
                     .addApi(LocationServices.API)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(Places.GEO_DATA_API)
                     .addApi(Places.PLACE_DETECTION_API)
-                    .enableAutoManage(this, this)
+                    .enableAutoManage((FragmentActivity)this.getContext(), this)
                     .build();
         }
         mGoogleApiClient.connect();
@@ -491,11 +510,11 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
      */
     public void getPath(View view) {
 
-        Boolean mylocation = ((ToggleButton) findViewById(R.id.locationToggle)).isChecked();
+        Boolean mylocation = ((ToggleButton) getView().findViewById(R.id.locationToggle)).isChecked();
         Boolean isSourceSet;
 
         if (mylocation) {
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -520,16 +539,16 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
         if (!isSourceSet) {
             // ask them to select a starting point
-            Toast.makeText(this, "NO Source", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(), "NO Source", Toast.LENGTH_LONG).show();
             return;
         } else if (destination == null) {
-            Toast.makeText(this, "No Destination selected", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(), "No Destination selected", Toast.LENGTH_LONG).show();
             return;
         } else {
 
             route = path.getPath(start.getId(), destination.getId());
 
-            Toast.makeText(this, "Path to " + destination.getRmName() + " found.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(), "Path to " + destination.getRmName() + " found.", Toast.LENGTH_LONG).show();
         }
 
         drawPath(route);
@@ -619,7 +638,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(1000);
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -637,14 +656,14 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
 
     @Override
     public void onConnectionSuspended(int i) {
-        Toast.makeText(this, "Location Lost", Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getActivity(), "Location Lost", Toast.LENGTH_LONG).show();
 
 
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(this, "Couldn't receive your location", Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getActivity(), "Couldn't receive your location", Toast.LENGTH_LONG).show();
 
     }
 
@@ -652,7 +671,7 @@ public class FindMe extends AppCompatActivity implements OnMapReadyCallback, Goo
     public void onLocationChanged(Location location) {
 
         if(location == null){
-            Toast.makeText(this, "Cant get current Location", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getActivity(), "Cant get current Location", Toast.LENGTH_LONG).show();
         }else {
             LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll,18);
