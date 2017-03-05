@@ -1244,6 +1244,14 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
+        vertices.put(V_ID,"NGRM-WS");
+        vertices.put(V_NAME,"Mechanical Engineering Workshop");
+        vertices.put(V_LAT,18.005130 );
+        vertices.put(V_LONG,-76.748741);
+        vertices.put(V_TYPE ,"ROOM" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
 
         vertices.put(V_ID,"DLSADB"  );
         vertices.put(V_NAME,"DLS Advanced Biology Lab"  );
