@@ -19,27 +19,24 @@ public class Path {
 
     // Used in Path Finding method
     private List<Vertex> nodes;
+    private static List<Vertex> connectedNodes;
     private List<Edge> edges;
     DB_Helper dbHelper;
+
     private Graph graph;
-
-    public Path(DB_Helper db){
-
-        this.dbHelper = db;
-
-    }
+    HashMap<String,Vertex> vertices;
 
 
     /*
-        Uses the dijkstra to generates the shortest path
+        Constructor methods which initializes and creates all the vertices and edges.
      */
-    public LinkedList<Vertex>   getPath(String src, String dest) {
+    public Path(DB_Helper db){
 
-        nodes = new ArrayList<Vertex>();
-        edges = new ArrayList<Edge>();
-
-        HashMap<String,Vertex> vertices = new HashMap<String,Vertex>();
-
+        this.nodes = new ArrayList<Vertex>();
+        this.connectedNodes = new ArrayList<Vertex>();
+        this.edges = new ArrayList<Edge>();
+        this.vertices = new HashMap<String,Vertex>();
+        this.dbHelper = db;
 
         Cursor verticesDB = dbHelper.getVertices();
         Cursor edgesDB = dbHelper.getEdges();
@@ -48,11 +45,14 @@ public class Path {
         //creates a vertex object for the values in the database
         while (!verticesDB.isAfterLast()) {
 
+
             Vertex Locations = new Vertex(verticesDB.getString(0),
                     verticesDB.getString(1),
                     verticesDB.getDouble(2),
                     verticesDB.getDouble(3),
                     verticesDB.getString(4));
+
+            //Places the create vertex into a list and a HashMap
             nodes.add(Locations);
             vertices.put(verticesDB.getString(0), Locations);
             verticesDB.moveToNext();
@@ -61,20 +61,34 @@ public class Path {
         //creates a edge for each value in the database
         while (!edgesDB.isAfterLast()){
 
-            Edge lane = new Edge(edgesDB.getString(0) + " -> " + edgesDB.getString(0),
+
+            //creates the same edge twice, for going foward and one for going backwards
+            Edge lane1 = new Edge(edgesDB.getString(0) + " -> " + edgesDB.getString(0),
                     vertices.get(edgesDB.getString(0)),
                     vertices.get(edgesDB.getString(1)),
                     (int) edgesDB.getDouble(2));
 
+            Edge lane2 = new Edge(edgesDB.getString(0) + " -> " + edgesDB.getString(0),
+                    vertices.get(edgesDB.getString(1)),
+                    vertices.get(edgesDB.getString(0)),
+                    (int) edgesDB.getDouble(2));
 
-            edges.add(lane);
+            connectedNodes.add(vertices.get(edgesDB.getString(0)));
+            connectedNodes.add(vertices.get(edgesDB.getString(1)));
+
+            edges.add(lane1);
+            edges.add(lane2);
             edgesDB.moveToNext();
-
         }
 
+        this.graph = new Graph(nodes,edges);
+    }
 
-        graph = new Graph(nodes,edges);
 
+    /*
+        Uses the dijkstra to generates the shortest path
+     */
+    public LinkedList<Vertex>   getPath(String src, String dest) {
 
         DijkstraAlgorithm  dijkstra = new DijkstraAlgorithm(graph);
 
@@ -90,10 +104,13 @@ public class Path {
         return path;
     }
 
+    public HashMap<String,Vertex> getVertices(){ return vertices; };
 
+    public Graph getGraph(){
+        return graph;
+    }
 
-
-
+    public List getCNodes() {   return  connectedNodes; }
 
     public List<Vertex> getNodes(){
         return nodes;
