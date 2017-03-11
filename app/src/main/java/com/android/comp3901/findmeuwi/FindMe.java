@@ -61,7 +61,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
-
+    //Dev2
     GoogleMap mGoogleMap;
     GoogleApiClient mGoogleApiClient;
     UiSettings mUiSettings;
@@ -496,6 +496,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         }
         mGoogleApiClient.connect();
     }
+
 
 
     /*
