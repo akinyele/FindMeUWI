@@ -900,7 +900,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(ROOM_TABLE,null, rooms);
         rooms.clear();
 
-        rooms.put(RT_ID," EL3LAB");
+        rooms.put(RT_ID,"EL3LAB");
         rooms.put(RT_NAME,"Level 3 Electronics Lab");
         rooms.put(RT_LAT,18.004718 );
         rooms.put(RT_LONG,-76.750202 );
@@ -1656,9 +1656,141 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
+        //Nodes for Stairs
 
+        vertices.put(V_ID,"ICLS"  );
+        vertices.put(V_NAME,"Inorganic Chem lab Stairs"  );
+        vertices.put(V_LAT,18.004045  );
+        vertices.put(V_LONG,-76.749508   );
+        vertices.put(V_TYPE ,"STAIRS" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"C2C3S "  );
+        vertices.put(V_NAME,"Stairs to C2 and C3 "  );
+        vertices.put(V_LAT,18.004351  );
+        vertices.put(V_LONG,-76.749682   );
+        vertices.put(V_TYPE ,"STAIRS" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"PPLS "  );
+        vertices.put(V_NAME,"Prelim Physics Lab Stairs"  );
+        vertices.put(V_LAT,18.004817  );
+        vertices.put(V_LONG,-76.748844   );
+        vertices.put(V_TYPE ,"STAIRS" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"PES "  );
+        vertices.put(V_NAME,"Phys-E Stairs "  );
+        vertices.put(V_LAT,18.005134  );
+        vertices.put(V_LONG,-76.749063   );
+        vertices.put(V_TYPE ,"STAIRS" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"GS "  );
+        vertices.put(V_NAME,"Geo Stairs "  );
+        vertices.put(V_LAT,18.006064  );
+        vertices.put(V_LONG,-76.748764   );
+        vertices.put(V_TYPE ,"STAIRS" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"PS1 "  );
+        vertices.put(V_NAME,"Physics Stairs 1 "  );
+        vertices.put(V_LAT,18.005490  );
+        vertices.put(V_LONG,-76.749112  );
+        vertices.put(V_TYPE ,"STAIRS" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"PS2 "  );
+        vertices.put(V_NAME,"Physics Stairs 2"  );
+        vertices.put(V_LAT,18.005490  );
+        vertices.put(V_LONG,-76.749112   );
+        vertices.put(V_TYPE ,"STAIRS" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"ACLS "  );
+        vertices.put(V_NAME,"Analytical Chem Lab stairs "  );
+        vertices.put(V_LAT,18.004793  );
+        vertices.put(V_LONG,-76.749818   );
+        vertices.put(V_TYPE ,"STAIRS" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"ES "  );
+        vertices.put(V_NAME,"Engineering Stairs "  );
+        vertices.put(V_LAT,18.004757  );
+        vertices.put(V_LONG,-76.750148   );
+        vertices.put(V_TYPE ,"STAIRS" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"CSS1 "  );
+        vertices.put(V_NAME,"Comp Sci Stairs 1 "  );
+        vertices.put(V_LAT,18.005790 );
+        vertices.put(V_LONG,-76.749984 );
+        vertices.put(V_TYPE ,"STAIRS" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"CSS2 "  );
+        vertices.put(V_NAME,"Comp Sci Stairs 2 "  );
+        vertices.put(V_LAT,18.005790  );
+        vertices.put(V_LONG,-76.749984   );
+        vertices.put(V_TYPE ,"STAIRS" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"SR3S "  );
+        vertices.put(V_NAME,"Seminar Room 3 Stairs "  );
+        vertices.put(V_LAT,18.006633  );
+        vertices.put(V_LONG,-76.750082   );
+        vertices.put(V_TYPE ,"STAIRS" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"SR1S "  );
+        vertices.put(V_NAME,"Seminar Room 1 Stairs "  );
+        vertices.put(V_LAT,18.006049  );
+        vertices.put(V_LONG,-76.760576   );
+        vertices.put(V_TYPE ,"STAIRS" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+
+        //Unimportant nodes
+
+
+
+//        vertices.put(V_ID," "  );
+//        vertices.put(V_NAME," "  );
+//        vertices.put(V_LAT,  );
+//        vertices.put(V_LONG,   );
+//        vertices.put(V_TYPE ,"Unimportant Node" );
 //
-//
+//        db.insert(VERTICES_TABLE,null,vertices);
+//        vertices.clear();
+
+
+
 //        vertices.put(V_ID,  );
 //        vertices.put(V_NAME,  );
 //        vertices.put(V_LAT,  );
@@ -1667,8 +1799,8 @@ public class DB_Helper extends SQLiteOpenHelper{
 //
 //        db.insert(VERTICES_TABLE,null,vertices);
 //        vertices.clear();
-
-        db.close();
+//
+//        db.close();
     }
 
     /*
