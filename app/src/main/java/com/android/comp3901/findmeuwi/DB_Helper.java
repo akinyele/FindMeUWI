@@ -1775,19 +1775,274 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
+        vertices.put(V_ID,"EL2S "  );
+        vertices.put(V_NAME,"Electronics Lab 2 Stairs "  );
+        vertices.put(V_LAT,18.004621  );
+        vertices.put(V_LONG,-76.748864   );
+        vertices.put(V_TYPE ,"STAIRS" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+
 
         //Unimportant nodes
 
 
 
+        vertices.put(V_ID,"SJ0 "  );
+        vertices.put(V_NAME,"Spine Junction 0 "  );
+        vertices.put(V_LAT,18.004442  );
+        vertices.put(V_LONG,-76.749224   );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"SJ1 "  );
+        vertices.put(V_NAME,"Spine Junction "  );
+        vertices.put(V_LAT,18.004466  );
+        vertices.put(V_LONG,-76.749309   );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"LSJ "  );
+        vertices.put(V_NAME,"Lower Spine Junction "  );
+        vertices.put(V_LAT,18.004423  );
+        vertices.put(V_LONG,-76.749354   );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"SJ2 "  );
+        vertices.put(V_NAME,"Spine Junction 2 "  );
+        vertices.put(V_LAT,18.004590  );
+        vertices.put(V_LONG,-76.749407   );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"SJ3 "  );
+        vertices.put(V_NAME,"Spine Junction 3 "  );
+        vertices.put(V_LAT,18.004894  );
+        vertices.put(V_LONG,-76.749652   );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"SJ4 "  );
+        vertices.put(V_NAME,"Spine Junction 4 "  );
+        vertices.put(V_LAT,18.005195  );
+        vertices.put(V_LONG,-76.749814   );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"SJ5 "  );
+        vertices.put(V_NAME,"Spine Junction 5 "  );
+        vertices.put(V_LAT,18.005456  );
+        vertices.put(V_LONG,-76.749957   );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"SJ6 "  );
+        vertices.put(V_NAME,"Spine Junction 6 "  );
+        vertices.put(V_LAT,18.005576  );
+        vertices.put(V_LONG,-76.750006   );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"SJ 7 "  );
+        vertices.put(V_NAME,"Spine Junction 7 "  );
+        vertices.put(V_LAT,18.005753  );
+        vertices.put(V_LONG,-76.750102   );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"SJ8 "  );
+        vertices.put(V_NAME,"Spine Junction 8 "  );
+        vertices.put(V_LAT,18.005832  );
+        vertices.put(V_LONG,-76.750142   );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"SJ9 "  );
+        vertices.put(V_NAME,"Spine Junction9 "  );
+        vertices.put(V_LAT,18.005951  );
+        vertices.put(V_LONG,-76.750204   );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"SJ10 "  );
+        vertices.put(V_NAME,"Spine Junction 10 "  );
+        vertices.put(V_LAT,18.006084  );
+        vertices.put(V_LONG,-76.750290   );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"PN0 "  );
+        vertices.put(V_NAME,"Physics Node "  );
+        vertices.put(V_LAT,18.004648 );
+        vertices.put(V_LONG,-76.748900  );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"PN1 "  );
+        vertices.put(V_NAME,"Physics Node "  );
+        vertices.put(V_LAT,18.004584 );
+        vertices.put(V_LONG,-76.748831  );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"PN2 "  );
+        vertices.put(V_NAME,"Physics Node "  );
+        vertices.put(V_LAT,18.004774 );
+        vertices.put(V_LONG,-76.748758  );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"PN3 "  );
+        vertices.put(V_NAME,"Physics Node "  );
+        vertices.put(V_LAT,18.004853 );
+        vertices.put(V_LONG,-76.748781  );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"PN4 "  );
+        vertices.put(V_NAME,"Physics Node "  );
+        vertices.put(V_LAT,18.004858 );
+        vertices.put(V_LONG,-76.748841  );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"PN5 "  );
+        vertices.put(V_NAME,"Physics Node "  );
+        vertices.put(V_LAT,18.004987 );
+        vertices.put(V_LONG,-76.748917  );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"CN0 "  );
+        vertices.put(V_NAME,"Chemistry Node 0 "  );
+        vertices.put(V_LAT,18.004393 );
+        vertices.put(V_LONG,-76.749705  );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"CN1 "  );
+        vertices.put(V_NAME,"Chemistry Node 1 "  );
+        vertices.put(V_LAT,18.004376 );
+        vertices.put(V_LONG,-76.749724  );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"CJ0 "  );
+        vertices.put(V_NAME,"Chemistry Junction 0 "  );
+        vertices.put(V_LAT,18.004332 );
+        vertices.put(V_LONG,-76.749740  );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"CJ1 "  );
+        vertices.put(V_NAME,"Chemistry Junction 1 "  );
+        vertices.put(V_LAT,18.004183 );
+        vertices.put(V_LONG,-76.749923  );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"CPN0 "  );
+        vertices.put(V_NAME,"Chem/Phys Node 0 "  );
+        vertices.put(V_LAT,18.004307 );
+        vertices.put(V_LONG,-76.749212  );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"CPN1 "  );
+        vertices.put(V_NAME,"Chem/Phys Node 1 "  );
+        vertices.put(V_LAT,18.004101 );
+        vertices.put(V_LONG,-76.749350  );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"CPN2 "  );
+        vertices.put(V_NAME,"Chem/Phys Node 2 "  );
+        vertices.put(V_LAT,18.004127 );
+        vertices.put(V_LONG,-76.749384  );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"CPN3 "  );
+        vertices.put(V_NAME,"Chem/Phys Node 3 "  );
+        vertices.put(V_LAT,18.004161 );
+        vertices.put(V_LONG,-76.749398  );
+        vertices.put(V_TYPE ,"Unimportant Node" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
 //        vertices.put(V_ID," "  );
 //        vertices.put(V_NAME," "  );
-//        vertices.put(V_LAT,  );
-//        vertices.put(V_LONG,   );
+//        vertices.put(V_LAT,18. );
+//        vertices.put(V_LONG,-76.  );
 //        vertices.put(V_TYPE ,"Unimportant Node" );
 //
 //        db.insert(VERTICES_TABLE,null,vertices);
 //        vertices.clear();
+//
+//        vertices.put(V_ID," "  );
+//        vertices.put(V_NAME," "  );
+//        vertices.put(V_LAT,18. );
+//        vertices.put(V_LONG,-76.  );
+//        vertices.put(V_TYPE ,"Unimportant Node" );
+//
+//        db.insert(VERTICES_TABLE,null,vertices);
+//        vertices.clear();
+
+
 
 
 
