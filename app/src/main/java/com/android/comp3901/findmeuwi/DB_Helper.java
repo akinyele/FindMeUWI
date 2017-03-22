@@ -1158,7 +1158,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
-        vertices.put(V_ID,"Department of Computing"  );
+        vertices.put(V_ID,"DOC"  );
         vertices.put(V_NAME,"Department of Computing Building"  );
         vertices.put(V_LAT,18.005749  );
         vertices.put(V_LONG,-76.750067   );
@@ -1256,6 +1256,15 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006293  );
         vertices.put(V_LONG,-76.749763   );
         vertices.put(V_TYPE ,"ROOM" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"DLSEB"  );
+        vertices.put(V_NAME,"DLS Entomology Lab"  );
+        vertices.put(V_LAT,18.006255  );
+        vertices.put(V_LONG,-76.749714   );
+        vertices.put(V_TYPE ,"BUILDING" );
 
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
@@ -1521,7 +1530,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
-        vertices.put(V_ID,"Department of Mathematics");
+        vertices.put(V_ID,"DOM");
         vertices.put(V_NAME, "Department of Mathematics");
         vertices.put(V_LAT,  18.004790);
         vertices.put(V_LONG, -76.749598);
@@ -2179,8 +2188,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
-        vertices.put(V_ID,"MN1 "  );
-        vertices.put(V_NAME,"Math Node 1"  );
+        vertices.put(V_ID,"MN0 "  );
+        vertices.put(V_NAME,"Math Node 0"  );
         vertices.put(V_LAT,18.004875 );
         vertices.put(V_LONG,-76.749503  );
         vertices.put(V_TYPE ,"Unimportant Node" );
@@ -2188,8 +2197,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
-        vertices.put(V_ID,"MN2 "  );
-        vertices.put(V_NAME,"Math Node 2 "  );
+        vertices.put(V_ID,"MN1 "  );
+        vertices.put(V_NAME,"Math Node 1 "  );
         vertices.put(V_LAT,18.004924 );
         vertices.put(V_LONG,-76.749435  );
         vertices.put(V_TYPE ,"Unimportant Node" );
@@ -2197,8 +2206,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
-        vertices.put(V_ID,"MN3 "  );
-        vertices.put(V_NAME,"Math Node 3"  );
+        vertices.put(V_ID,"MN2 "  );
+        vertices.put(V_NAME,"Math Node 2"  );
         vertices.put(V_LAT,18.004965 );
         vertices.put(V_LONG,-76.749371  );
         vertices.put(V_TYPE ,"Unimportant Node" );
@@ -2457,6 +2466,337 @@ public class DB_Helper extends SQLiteOpenHelper{
         edges.put(E_WEIGHT, 1);
         db.insert(EDGES_TABLE,null,edges);
         edges.clear();
+
+        edges.put(E_SOURCE, "DOM");
+        edges.put(E_DESTINATION, "MN0 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "MN0");
+        edges.put(E_DESTINATION, "MLAB ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "MN0");
+        edges.put(E_DESTINATION, "MN1 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "MN1");
+        edges.put(E_DESTINATION, "MLT1 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "MN1");
+        edges.put(E_DESTINATION, "MLT2 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "MN1");
+        edges.put(E_DESTINATION, "MN2 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "MN2");
+        edges.put(E_DESTINATION, " MLT3");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "C5");
+        edges.put(E_DESTINATION, "CJ ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "CJ");
+        edges.put(E_DESTINATION, "CM ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "CM");
+        edges.put(E_DESTINATION, "DOM ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "CJ");
+        edges.put(E_DESTINATION, "ACLS ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "ACLS");
+        edges.put(E_DESTINATION, "CAN0 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "ACLS");
+        edges.put(E_DESTINATION, "CAN1 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "CAN2");
+        edges.put(E_DESTINATION, "ACL ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "CAN0");
+        edges.put(E_DESTINATION, "C7 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "C7");
+        edges.put(E_DESTINATION, "C6 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "C6");
+        edges.put(E_DESTINATION, "CHETR1 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "C6");
+        edges.put(E_DESTINATION, "CHETR2 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "DOM");
+        edges.put(E_DESTINATION, "SJ3 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ3");
+        edges.put(E_DESTINATION, "PEN2 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ3");
+        edges.put(E_DESTINATION, "NGR-LRA ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+
+        edges.put(E_SOURCE, "NGR-LRA");
+        edges.put(E_DESTINATION, "NGR-LRB");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "NGR-LRB");
+        edges.put(E_DESTINATION, "ES ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "ES");
+        edges.put(E_DESTINATION, "EL3 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ3");
+        edges.put(E_DESTINATION, "SJ4 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ4");
+        edges.put(E_DESTINATION, "SLT2 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ4");
+        edges.put(E_DESTINATION, "SLT1 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ4");
+        edges.put(E_DESTINATION, "SJ5 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ5");
+        edges.put(E_DESTINATION, "SJ6 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ6");
+        edges.put(E_DESTINATION, "NGR-Dra");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ5");
+        edges.put(E_DESTINATION, "SLT3 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SLT3");
+        edges.put(E_DESTINATION, "CS0 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "CS0");
+        edges.put(E_DESTINATION, "CS1 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "CS1");
+        edges.put(E_DESTINATION, "COMLABB ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "COMLABB");
+        edges.put(E_DESTINATION, "CS3 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "CS3");
+        edges.put(E_DESTINATION, "CS2 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "CS3");
+        edges.put(E_DESTINATION, "CS4 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "CS2");
+        edges.put(E_DESTINATION, "CR2 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "CS4");
+        edges.put(E_DESTINATION, "CR1 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "CS0");
+        edges.put(E_DESTINATION, "NGR-F-L ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "NGR-F-L");
+        edges.put(E_DESTINATION, "NGR-S-L ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ6");
+        edges.put(E_DESTINATION, "SJ7 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ7");
+        edges.put(E_DESTINATION, "DOC ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ7");
+        edges.put(E_DESTINATION, "SJ8 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ8");
+        edges.put(E_DESTINATION, "DLSLB2 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ8");
+        edges.put(E_DESTINATION, "SJ9 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "SJ9");
+        edges.put(E_DESTINATION, "DLSAQU ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "DLSAQU");
+        edges.put(E_DESTINATION, "AQ0 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "AQ0");
+        edges.put(E_DESTINATION, "AQ1 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "AQ1");
+        edges.put(E_DESTINATION, "AQ2 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "AQ2");
+        edges.put(E_DESTINATION, "AQ3 ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "AQ3");
+        edges.put(E_DESTINATION, "DLSEB ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE, "DLSEB");
+        edges.put(E_DESTINATION, "DLSENT ");
+        edges.put(E_WEIGHT, 1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+//        edges.put(E_SOURCE, "");
+//        edges.put(E_DESTINATION, " ");
+//        edges.put(E_WEIGHT, 1);
+//        db.insert(EDGES_TABLE,null,edges);
+//        edges.clear();
+
+//        edges.put(E_SOURCE, "");
+//        edges.put(E_DESTINATION, " ");
+//        edges.put(E_WEIGHT, 1);
+//        db.insert(EDGES_TABLE,null,edges);
+//        edges.clear();
 
 
         db.close();
