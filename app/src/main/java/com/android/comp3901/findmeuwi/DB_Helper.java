@@ -2457,36 +2457,36 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         ContentValues edges = new ContentValues();
 
-        edges.put(E_SOURCE, "C5");
-        edges.put(E_DESTINATION, "CA");
-        edges.put(E_WEIGHT, 1);
-        db.insert(EDGES_TABLE,null,edges);
-        edges.clear();
-
-        edges.put(E_SOURCE, "CA");
-        edges.put(E_DESTINATION, "CB");
-        edges.put(E_WEIGHT,1);
-        db.insert(EDGES_TABLE,null,edges);
-        edges.clear();
-
-        edges.put(E_SOURCE, "Department of Mathematics");
-        edges.put(E_DESTINATION, "CB");
-        edges.put(E_WEIGHT, 1);
-        db.insert(EDGES_TABLE,null,edges);
-        edges.clear();
-
-        edges.put(E_SOURCE, "Department of Mathematics");
-        edges.put(E_DESTINATION, "SLT 1");
-        edges.put(E_WEIGHT, 1);
-        db.insert(EDGES_TABLE,null,edges);
-        edges.clear();
-
-
-        edges.put(E_SOURCE, "SLT 1");
-        edges.put(E_DESTINATION, "SLT 2");
-        edges.put(E_WEIGHT, 1);
-        db.insert(EDGES_TABLE,null,edges);
-        edges.clear();
+//        edges.put(E_SOURCE, "C5");
+//        edges.put(E_DESTINATION, "CA");
+//        edges.put(E_WEIGHT, 1);
+//        db.insert(EDGES_TABLE,null,edges);
+//        edges.clear();
+//
+//        edges.put(E_SOURCE, "CA");
+//        edges.put(E_DESTINATION, "CB");
+//        edges.put(E_WEIGHT,1);
+//        db.insert(EDGES_TABLE,null,edges);
+//        edges.clear();
+//
+//        edges.put(E_SOURCE, "Department of Mathematics");
+//        edges.put(E_DESTINATION, "CB");
+//        edges.put(E_WEIGHT, 1);
+//        db.insert(EDGES_TABLE,null,edges);
+//        edges.clear();
+//
+//        edges.put(E_SOURCE, "Department of Mathematics");
+//        edges.put(E_DESTINATION, "SLT 1");
+//        edges.put(E_WEIGHT, 1);
+//        db.insert(EDGES_TABLE,null,edges);
+//        edges.clear();
+//
+//
+//        edges.put(E_SOURCE, "SLT 1");
+//        edges.put(E_DESTINATION, "SLT 2");
+//        edges.put(E_WEIGHT, 1);
+//        db.insert(EDGES_TABLE,null,edges);
+//        edges.clear();
 
         edges.put(E_SOURCE, "DOM");
         edges.put(E_DESTINATION, "MN0 ");
