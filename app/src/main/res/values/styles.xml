@@ -17,6 +17,28 @@
 
     </style>
 
+    <style name="MyButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="FullWidthEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:padding">20dp</item>
+        <item name="android:background">@null</item>
+        <item name="android:textSize">@dimen/abc_text_size_subhead_material</item>
+    </style>
+
+    <style name="MySwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">@color/Silver</item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">@color/DarkGray</item>
+    </style>
+
+
 
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >

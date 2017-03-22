@@ -74,6 +74,6 @@
         android:id="@+id/getPath"
         android:onClick="getPath"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_toStartOf="@+id/findBtn" />
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package com.android.comp3901.findmeuwi;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
@@ -15,10 +16,8 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +41,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -51,18 +49,12 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
-    //Dev2
-    GoogleMap mGoogleMap;
     GoogleApiClient mGoogleApiClient;
     UiSettings mUiSettings;
 
@@ -70,13 +62,22 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     DB_Helper dbHelper;
     LinkedList<Polyline> graphLines;
     Room destination;
-    Vertex source;
-    static Vertex start;
-    Vertex known;
-
-    static Path path;
+    Vertex source, known;
     LinkedList<Vertex> route;
     Polyline line;
+
+
+    MapMarker mMarkers;
+
+
+    static GoogleMap mGoogleMap;
+
+    static Vertex start;
+    static Path path;
+    static Activity instance;
+    static Activity  get(){ return instance;}
+
+
 
 
     public void createRooms() throws IOException {
@@ -88,13 +89,12 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        instance = this.getActivity();
 
         super.onCreate(savedInstanceState);
-        dbHelper = new DB_Helper(this.getActivity()); //Creating databases
-        path = new Path(dbHelper); //Initialises path object which creates graph
+        dbHelper =  DB_Helper.getInstance(); //Creating databases
 
-
-        dbHelper.generateDB(); //populate database with values (needs to be in the BD_Helper class)
+        //dbHelper.generateDB(); //populate database with values (needs to be in the BD_Helper class)
 
         try {// writes database to sd card for debugging purposes.
             dbHelper.writeToSD(this.getActivity());
@@ -110,8 +110,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         // Sets the on click listener for the fragment elements.
         Button find = (Button)view.findViewById(R.id.findBtn);
         find.setOnClickListener(this);
-        Button path = (Button)view.findViewById(R.id.getPath);
-        path.setOnClickListener(this);
+//        Button path = (Button)view.findViewById(R.id.getPath);
+//        path.setOnClickListener(this);
         ToggleButton location = (ToggleButton)view.findViewById(R.id.locationToggle);
         location.setOnClickListener(this);
 
@@ -203,10 +203,17 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        //Initialisations
+        path = new Path(dbHelper); //Initialises path object which creates graph
+
+
         mGoogleMap = googleMap;
         mUiSettings = mGoogleMap.getUiSettings();
-        displayGraph(); // Display the edges
+        mMarkers = MapMarker.getInstance();
 
+        displayGraph(); // Display the edges
+        displayIcons(); // Diplay the node icons
         goToLocation(18.005072, -76.749544);
 
         boolean success = googleMap.setMapStyle(new MapStyleOptions(getResources()
@@ -288,7 +295,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         } else {
             // create the room
             destination = new Room(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3));
-            addMarker(destination.getLat(), destination.getLng(), destination.getRmName(), destination.getId(), 2);
+            mMarkers.addMarker(destination.getLL(), destination.getRmName(), destination.getId(), 2);
         }
 
 
@@ -330,7 +337,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             // create the starting node
             start = new Vertex(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3), "TEMP");
 
-            addMarker(start.getLat(), start.getLng(), start.getName(), start.getId(), 1);
+            mMarkers.addMarker(start.getLL(), start.getName(), start.getId(), 1);
 
         }
 
@@ -338,50 +345,9 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         return true;
     }
 
-
-
-    /*
-     *  This methods gets the distance vertex that the user is closest to it utilises the Harversine Formula(https://en.wikipedia.org/wiki/Haversine_formula)
-     */
-
-    public static double rad(double x) {
-        return x * Math.PI / 180;
-    }
-
-    public static Vertex find_closest_marker(Location location) {
-        double lat = location.getLatitude();
-        double lng = location.getLongitude();
-        double R = 6371; // radius of earth in km
-        ArrayList<Double> distances = new ArrayList();
-        List<Vertex> points = path.getCNodes(); // uses nodes that are connected to an edge
-
-        Integer closest = -1;
-
-        for (int i = 0; i < points.size(); i++) {
-
-            Double mlat = points.get(i).getLat();
-            Double mlng = points.get(i).getLng();
-            Double dLat = rad(mlat - lat);
-            Double dLong = rad(mlng - lng);
-            Double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                    Math.cos(rad(lat)) * Math.cos(rad(lat)) * Math.sin(dLong / 2) * Math.sin(dLong / 2);
-            Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            Double d = R * c;
-            distances.add(d);
-
-            if (closest == -1 || d < distances.get(closest)) {
-                closest = i;
-            }
-        }
-
-        start = points.get(closest);
-        return start;
-    }
-
-
     /*
      * This methods is called when the toggle button is click.
-     * If enabled the location services is used  and the user location is used as starting point
+     * If enabled the location services is used  and the user's location is used as starting point
      * It also Provides the google API tracking services
      *
      */
@@ -466,7 +432,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
 
     /*
-     * Configures google maps to uses user location.
+     * Configures google maps to enable and use the user location.
      */
     public void useMyLocation() {
 
@@ -562,20 +528,13 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            find_closest_marker(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient));
+            Distance.find_closest_marker(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient));
             isSourceSet = true;
         }else{
             isSourceSet = setSource();
         }
 
-
-
-        // Dummy source value for testing purposes.
-
-        //start = new Vertex("Department of Mathematics", "Department of Mathematics", 18.004853, -76.749616, "Building");
-
-
-        if (!isSourceSet) {
+         if (!isSourceSet) {
             // ask them to select a starting point
             Toast.makeText(this.getActivity(), "NO Source", Toast.LENGTH_LONG).show();
             return;
@@ -628,6 +587,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
         List<Edge> edges =  path.getEdges();
         List<Vertex> vertices = path.getNodes();
+
         HashMap<String, Vertex> vertexHashMap = path.getVertices();
         Polyline lane;
         Vertex v1,v2;
@@ -639,6 +599,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
 
             v1 = vertexHashMap.get(edge.getSource().getId());
+
+
             v2 = vertexHashMap.get(edge.getDestination().getId());
 
 
@@ -657,10 +619,14 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     }
 
 
+    public void displayIcons(){
+        List<Edge> edges =  path.getEdges();
+        HashMap<String, Vertex> vertexHashMap = path.getVertices();
 
-
-
-
+        for( Vertex nodes: vertexHashMap.values()){
+            mMarkers.addIcon(nodes.getLL(),nodes.getName(),"Snip",nodes.getType());
+         }
+    }
 
 
     /*
@@ -668,13 +634,16 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
      */
     LocationRequest mLocationRequest;
 
+
+
+    // This gets called when the user location is picked upped
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
         //creates a location request object that gets the users location
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(1000);
+        mLocationRequest.setInterval(1000); //make a  request for the user's location every 1 second
 
         if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -692,6 +661,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
     }
 
+
+    // Methods that gets called when the user's location isn't available
     @Override
     public void onConnectionSuspended(int i) {
         Toast.makeText(this.getActivity(), "Location Lost", Toast.LENGTH_LONG).show();
@@ -699,12 +670,14 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
     }
 
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(this.getActivity(), "Couldn't receive your location", Toast.LENGTH_LONG).show();
 
     }
 
+    //When the user
     @Override
     public void onLocationChanged(Location location) {
 
@@ -718,6 +691,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         }
 
     }
+
+
 
 
 
@@ -752,3 +727,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
 
 }//End of FINDFME
+
+
+
+
+

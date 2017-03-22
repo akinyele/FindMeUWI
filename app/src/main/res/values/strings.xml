@@ -6,8 +6,8 @@
     <string name="map_type_terrain">Terrain</string>
     <string name="map_type_satellite">Satellite</string>
 
-    <string name="location_on">My Location </string>
-    <string name="location_off">My Location</string>
+    <string name="location_on">Location </string>
+    <string name="location_off">Location</string>
 
 
 

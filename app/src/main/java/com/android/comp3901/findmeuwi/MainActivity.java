@@ -14,8 +14,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.app.Fragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    FragmentManager fragmentManager = getFragmentManager();
+    Fragment mapFrag;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +30,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        fragmentManager.beginTransaction().replace(R.id.content_frame, new FindMe(), "mapFrag" ).commit();
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton route = (FloatingActionButton) findViewById(R.id.fbPath);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,6 +44,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivityForResult(intent, 1);
                 /*Snackbar.make(view, "Add landmark?", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
+            }
+        });
+        route.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                FindMe mapFrag = (FindMe) getFragmentManager().findFragmentByTag("mapFrag");
+
+                if(mapFrag.isAdded()){
+                    mapFrag.getPath(view);
+                }
+
             }
         });
 
@@ -46,8 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.content_frame, new FindMe()).commit();
+
     }
 
     @Override
@@ -66,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.map_menu, menu);
+
         return true;
     }
 
@@ -76,12 +100,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        mapFrag = fragmentManager.findFragmentByTag("mapFrag");
+
+        if(mapFrag.isAdded()){
+            mapFrag.onOptionsItemSelected(item);
         }
 
         return super.onOptionsItemSelected(item);
+
+
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
