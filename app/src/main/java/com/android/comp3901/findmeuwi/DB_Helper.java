@@ -20,7 +20,7 @@ import java.nio.channels.FileChannel;
 
 public class DB_Helper extends SQLiteOpenHelper{
 
-    public static final Integer DATABASE_VERSION = 10;
+    public static final Integer DATABASE_VERSION = 12;
     public static final String DATABASE_NAME = "findme.db";
     private static String DB_PATH = "";
 
@@ -61,10 +61,22 @@ public class DB_Helper extends SQLiteOpenHelper{
     public static final String B_region = "region";
 
 
-    public DB_Helper(Context context) {
+    private  static  DB_Helper instance;
+
+    private DB_Helper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
      }
+
+    public static synchronized DB_Helper getInstance(){
+
+        if(instance==null){
+            instance = new DB_Helper(FindMe.get());
+        }
+        return instance;
+    }
+
+
 
 //    public DB_Helper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
 //        super(context, name, factory, version, errorHandler);
@@ -74,10 +86,10 @@ public class DB_Helper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
 
 
-        //SLT2
-        String InsertRooms = "INSERT INTO " + ROOM_TABLE + "(" +RT_ID +", " +RT_NAME +", "+RT_LAT+", "+RT_LONG+", "+RT_DESC+", "+RT_FLOOR+",  "+RT_KNOWN+", "+RT_FAM+" )" +
-                    //          Name, Lat, Lng, Description, Floor, Known, Familiarity
-                    " VALUES ('SLT 2', 'Science Lecture Theatre 2', 18.0051221, -76.7497594, 'in front of slt 2 , Next to the  Deans Office', 1, 0 , 0) ";
+//        //SLT2
+//        String InsertRooms = "INSERT INTO " + ROOM_TABLE + "(" +RT_ID +", " +RT_NAME +", "+RT_LAT+", "+RT_LONG+", "+RT_DESC+", "+RT_FLOOR+",  "+RT_KNOWN+", "+RT_FAM+" )" +
+//                    //          Name, Lat, Lng, Description, Floor, Known, Familiarity
+//                    " VALUES ('SLT 2', 'Science Lecture Theatre 2', 18.0051221, -76.7497594, 'in front of slt 2 , Next to the  Deans Office', 1, 0 , 0) ";
 
         db.execSQL(" CREATE TABLE " + ROOM_TABLE + " ( " +
                     RT_ID + " TEXT, " +
@@ -106,7 +118,10 @@ public class DB_Helper extends SQLiteOpenHelper{
                     E_WEIGHT + " INTEGER, " +
                     "PRIMARY KEY ("+E_DESTINATION+","+E_SOURCE+") );");
 
-        db.execSQL(InsertRooms);
+        //db.execSQL(InsertRooms);
+
+
+        generateDB(db);
 
     }
 
@@ -123,19 +138,19 @@ public class DB_Helper extends SQLiteOpenHelper{
     /*
      *Generates all the initial database values
      */
-    public void generateDB(){
-        generateRooms();
-        generateEdges();
-        generateVertices();
+    public void generateDB(SQLiteDatabase db){
+
+        generateRooms(db);
+        generateEdges(db);
+        generateVertices(db);
         return ;
     }
 
     /*
      * Generate rooms
      */
-    public void generateRooms(){
+    public void generateRooms(SQLiteDatabase db){
 
-        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues rooms = new ContentValues();
 
         //" ('Chemistry Lecture Theatre', 18.004490, -76.750003, 'Description', 1 , 0 , 0) " +
@@ -935,7 +950,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 //        db.insert(ROOM_TABLE,null, rooms);
 //        rooms.clear();
 
-        db.close();
+        //db.close();
         return ;
     }
 
@@ -1380,9 +1395,17 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005859  );
         vertices.put(V_LONG,-76.749871   );
         vertices.put(V_TYPE,"ROOM " );
+        //db.close();
+        return ;
+    }
 
-        db.insert(VERTICES_TABLE,null,vertices);
-        vertices.clear();
+    /*
+     * Generate Vertices
+     */
+    public void generateVertices(SQLiteDatabase db){
+
+        ContentValues vertices = new ContentValues();
+
 
         vertices.put(V_ID,"DLSSM6 "  );
         vertices.put(V_NAME,"DLS Seminar Room 6 "  );
@@ -1799,16 +1822,14 @@ public class DB_Helper extends SQLiteOpenHelper{
 //
 //        db.insert(VERTICES_TABLE,null,vertices);
 //        vertices.clear();
-//
-//        db.close();
+
     }
 
     /*
      * Generate Edges
      */
-    public void generateEdges(){
+    public void generateEdges(SQLiteDatabase db){
 
-        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues edges = new ContentValues();
 
         edges.put(E_SOURCE, "C5");
@@ -1843,7 +1864,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         edges.clear();
 
 
-        db.close();
+       // db.close();
     }
 
 
@@ -1856,8 +1877,11 @@ public class DB_Helper extends SQLiteOpenHelper{
         return res;
     }
 
+
     public Cursor getVertices(){
+
         SQLiteDatabase db = this.getWritableDatabase();
+
         Cursor res = db.rawQuery("SELECT * FROM " + VERTICES_TABLE + " WHERE 1 ", null);
 
         res.moveToFirst();
