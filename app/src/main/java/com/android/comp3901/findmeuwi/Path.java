@@ -46,38 +46,47 @@ public class Path {
         while (!verticesDB.isAfterLast()) {
 
 
-            Vertex Locations = new Vertex(verticesDB.getString(0),
-                    verticesDB.getString(1),
-                    verticesDB.getDouble(2),
-                    verticesDB.getDouble(3),
-                    verticesDB.getString(4));
+            Vertex Locations = new Vertex(verticesDB.getString(0),  //Vid
+                    verticesDB.getString(1),                        //Vname
+                    verticesDB.getDouble(2),                        //latitude
+                    verticesDB.getDouble(3),                        //longtude
+                    verticesDB.getString(4));                       //type
 
             //Places the create vertex into a list and a HashMap
             nodes.add(Locations);
             vertices.put(verticesDB.getString(0), Locations);
+
             verticesDB.moveToNext();
         }
 
         //creates a edge for each value in the database
-        while (!edgesDB.isAfterLast()){
+        while ( !edgesDB.isAfterLast() ){
+
+           Vertex v1 = vertices.get(edgesDB.getString(0));
+           Vertex v2 =  vertices.get(edgesDB.getString(1));
 
 
             //creates the same edge twice, for going foward and one for going backwards
-            Edge lane1 = new Edge(edgesDB.getString(0) + " -> " + edgesDB.getString(0),
+            Edge lane1 = new Edge(edgesDB.getString(0) + " -> " + edgesDB.getString(1),
                     vertices.get(edgesDB.getString(0)),
                     vertices.get(edgesDB.getString(1)),
                     (int) edgesDB.getDouble(2));
 
-            Edge lane2 = new Edge(edgesDB.getString(0) + " -> " + edgesDB.getString(0),
+            Edge lane2 = new Edge(edgesDB.getString(1) + " -> " + edgesDB.getString(0),
                     vertices.get(edgesDB.getString(1)),
                     vertices.get(edgesDB.getString(0)),
                     (int) edgesDB.getDouble(2));
+
+
+
+
 
             connectedNodes.add(vertices.get(edgesDB.getString(0)));
             connectedNodes.add(vertices.get(edgesDB.getString(1)));
 
             edges.add(lane1);
             edges.add(lane2);
+
             edgesDB.moveToNext();
         }
 
