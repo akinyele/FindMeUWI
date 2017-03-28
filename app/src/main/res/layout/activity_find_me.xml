@@ -37,90 +37,75 @@
         <!--android:layout_alignParentTop="true"-->
         <!--android:layout_toStartOf="@+id/locationToggle" />-->
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="2.74"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
+        <AutoCompleteTextView
+            style="@style/FullWidthEditText"
+            android:id="@+id/getSource"
+            android:layout_width="274dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true">
+            android:dropDownVerticalOffset="5dp"
+            android:dropDownWidth="wrap_content"
+            android:inputType="textAutoComplete|textAutoCorrect"
+            android:textColor="#FFFFFF"
+            android:hint="starting point." />
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="286dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:orientation="horizontal"
-                android:layout_weight="0.92">
-
-                <EditText
-                    style="@style/FullWidthEditText"
-                    android:id="@+id/getSource"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="starting point." />
-            </android.support.design.widget.TextInputLayout>
-
-            <ToggleButton
-                android:text="ToggleButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/locationToggle"
-                style="@android:style/Widget.Holo.Button.Toggle"
-                android:textOff="@string/location_off"
-                android:textOn="@string/location_on"
-                android:onClick="toggleLocations"
-                android:checked="false"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_weight="1.90" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
+        <ToggleButton
+            android:text="ToggleButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="69dp"
-            android:layout_below="@+id/linearLayout9"
-            android:layout_alignParentStart="true">
+            android:id="@+id/locationToggle"
+            style="@android:style/Widget.Holo.Button.Toggle"
+            android:textOff="@string/location_off"
+            android:textOn="@string/location_on"
+            android:onClick="toggleLocations"
+            android:checked="false"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_weight="1" />
+    </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:orientation="horizontal"
-                android:layout_width="240dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignBottom="@+id/switchCompat2"
-                android:layout_weight="5.82">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="69dp"
+        android:layout_alignParentStart="true">
 
-                <EditText
-                    style="@style/FullWidthEditText"
-                    android:id="@+id/classSearch"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:hint="What room would you like to find?" />
 
-                <!--android:layout_below="@+id/classSearch"-->
-                    <!--android:layout_alignParentEnd="true" -->
 
-            </android.support.design.widget.TextInputLayout>
-
-            <Button
-                android:text="Find"
+            <AutoCompleteTextView
+                style="@style/FullWidthEditText"
+                android:id="@+id/classSearch"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/findBtn"
-                android:onClick="geoLocate"
-                android:elevation="0dp"
-                android:layout_gravity="top|right"
-                style="@style/Widget.AppCompat.Button.Borderless"/>/>
+                android:layout_height="64dp"
+                android:hint="What room would you like to find?" />
 
-        </LinearLayout>
-    </RelativeLayout>
+        <Button
+            android:text="Find"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/findBtn"
+            android:onClick="geoLocate"
+            android:elevation="0dp"
+            android:layout_gravity="top|right"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_weight="1" />
+
+        <!--android:layout_below="@+id/classSearch"-->
+                <!--android:layout_alignParentEnd="true" --><![CDATA[
+
+
+        />
+
+    ]]>
+    </LinearLayout>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -130,14 +115,6 @@
         android:layout_alignParentStart="true">
 
     </android.support.design.widget.CoordinatorLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="2.74"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"></LinearLayout>
 
     <!--<EditText-->
         <!--style="@style/FullWidthEditText"-->

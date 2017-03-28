@@ -21,6 +21,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -49,7 +51,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -66,6 +67,11 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     LinkedList<Vertex> route;
     Polyline line;
 
+    //Views
+    private AutoCompleteTextView getSourceView;
+    private AutoCompleteTextView classSearchView;
+
+
 
     MapMarker mMarkers;
 
@@ -75,14 +81,16 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     static Vertex start;
     static Path path;
     static Activity instance;
+
     static Activity  get(){ return instance;}
 
 
 
 
-    public void createRooms() throws IOException {
 
-    }
+//    public void createRooms() throws IOException {
+//
+//    }
 
 
 
@@ -92,7 +100,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         instance = this.getActivity();
 
         super.onCreate(savedInstanceState);
-        dbHelper =  DB_Helper.getInstance(); //Creating databases
+        dbHelper =  DB_Helper.getInstance(getActivity()); //Creating databases
 
         //dbHelper.generateDB(); //populate database with values (needs to be in the BD_Helper class)
 
@@ -104,16 +112,18 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
 
 
+
+
         //Creates the fragment view.
         View view = inflater.inflate(R.layout.activity_find_me, container, false);
 
         // Sets the on click listener for the fragment elements.
         Button find = (Button)view.findViewById(R.id.findBtn);
         find.setOnClickListener(this);
-//        Button path = (Button)view.findViewById(R.id.getPath);
-//        path.setOnClickListener(this);
+
         ToggleButton location = (ToggleButton)view.findViewById(R.id.locationToggle);
         location.setOnClickListener(this);
+
 
         return view;
     }
@@ -165,6 +175,11 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         } else {
 
         }
+
+
+        //SetAutocomplete TextViews
+        setTextViews();
+
 
     }
 
@@ -318,11 +333,13 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
      */
     public boolean setSource() {
 
-        EditText text = (EditText) getView().findViewById(R.id.getSource);
-        String startText = text.getText().toString();
 
+        String startText = getSourceView.getText().toString();
 
         Cursor res = dbHelper.findClasses(startText);
+
+
+
 
         if (res.getCount() == 0) {
             // show message "no results found in places database"
@@ -343,6 +360,26 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
 
         return true;
+    }
+
+    @NonNull
+    private void setTextViews() {
+
+        String[] roomSugg = dbHelper.roomList().toArray(new String[dbHelper.roomList().size()]);
+        ArrayAdapter<String> roomsArrayAdapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1, roomSugg);
+
+
+        getSourceView = (AutoCompleteTextView) getView().findViewById(R.id.getSource);
+        getSourceView.setThreshold(1);
+        getSourceView.setAdapter(roomsArrayAdapter);
+
+
+
+        classSearchView = (AutoCompleteTextView) getView().findViewById(R.id.classSearch);
+        classSearchView.setThreshold(1);
+        classSearchView.setAdapter(roomsArrayAdapter);
+
+        return ;
     }
 
     /*
@@ -514,7 +551,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
      */
     public void getPath(View view) {
 
-        Boolean mylocation = ((ToggleButton) getView().findViewById(R.id.locationToggle)).isChecked();
+        Boolean mylocation = ((ToggleButton) getView().findViewById(R.id.locationToggle)).isChecked(); //Finds out if user is using their location.
         Boolean isSourceSet;
 
         if (mylocation) {
@@ -528,7 +565,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            Distance.find_closest_marker(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient));
+            //MapMarker.startMarker
+            start = Distance.find_closest_marker(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient));
             isSourceSet = true;
         }else{
             isSourceSet = setSource();
