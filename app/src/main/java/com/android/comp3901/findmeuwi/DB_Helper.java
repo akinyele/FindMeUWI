@@ -20,7 +20,7 @@ import java.nio.channels.FileChannel;
 
 public class DB_Helper extends SQLiteOpenHelper{
 
-    public static final Integer DATABASE_VERSION = 26;
+    public static final Integer DATABASE_VERSION = 28;
     public static final String DATABASE_NAME = "findme.db";
     private static String DB_PATH = "";
 
