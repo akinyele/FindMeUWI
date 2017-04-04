@@ -9,6 +9,8 @@
     <string name="location_on">Location </string>
     <string name="location_off">Location</string>
 
+    <string name="app_label">FindMe</string>
+    <string name="search_hint">Find ROOM</string>
 
 
     <string name="title_activity_maps">SmartMap</string>
@@ -23,5 +25,6 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_navi">Navi</string>
+    <string name="action_search">Find Room</string>
 
 </resources>

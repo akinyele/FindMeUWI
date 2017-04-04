@@ -1,26 +1,40 @@
 package com.android.comp3901.findmeuwi;
 
 import android.app.FragmentManager;
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.ObbInfo;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.app.Fragment;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements SearchView.OnSuggestionListener, NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
 
     FragmentManager fragmentManager = getFragmentManager();
     Fragment mapFrag;
+    DB_Helper db_helper;
 
+    private SearchView searchView;
 
 
     @Override
@@ -30,8 +44,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fragmentManager.beginTransaction().replace(R.id.content_frame, new FindMe(), "mapFrag" ).commit();
 
+
+             fragmentManager.beginTransaction().replace(R.id.content_frame, new FindMe(), "mapFrag" ).commit();
+
+
+
+        db_helper = DB_Helper.getInstance(this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         FloatingActionButton route = (FloatingActionButton) findViewById(R.id.fbPath);
@@ -60,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -84,13 +106,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        getMenuInflater().inflate(R.menu.map_menu, menu);
+     //Inflate the menu; this adds items to the action bar if it is present.
+       getMenuInflater().inflate(R.menu.main, menu);
+       getMenuInflater().inflate(R.menu.map_menu, menu);
+//        getMenuInflater().inflate(R.menu.search,menu);
+//
+//        createSearchView(menu);
+//
+
 
         return true;
+    }
+
+    private void createSearchView(Menu menu) {
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        final SearchManager searchManager = (SearchManager)
+                getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(
+                new ComponentName(this, MainActivity.class)));
+
+
+        searchView.setOnSuggestionListener(this);
+        searchView.setIconifiedByDefault(false);
+
     }
 
     @Override
@@ -100,16 +145,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        mapFrag = fragmentManager.findFragmentByTag("mapFrag");
+        //mapFrag = fragmentManager.findFragmentByTag("mapFrag");
 
-        if(mapFrag.isAdded()){
-            mapFrag.onOptionsItemSelected(item);
+        FindMe findMeFrag = (FindMe) getFragmentManager().findFragmentByTag("mapFrag");
+
+
+
+        //Needs fixing
+
+
+        if(findMeFrag != null){
+
+            switch (item.getItemId()) {
+                case R.id.mapTypeNone:
+                    findMeFrag.onOptionsItemSelected(item);
+                    break;
+                case R.id.mapTypeNormal:
+                    findMeFrag.onOptionsItemSelected(item);
+                    break;
+                case R.id.mapTypeSatellite:
+                    findMeFrag.onOptionsItemSelected(item);
+                    break;
+                case R.id.mapTypeTerrain:
+                    findMeFrag.onOptionsItemSelected(item);
+                    break;
+                case R.id.mapTypeHybrid:
+                    findMeFrag.onOptionsItemSelected(item);
+                    break;
+                default:
+                    break;
+            }
+
         }
 
         return super.onOptionsItemSelected(item);
-
-
-
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -140,5 +209,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        TextView temp = (TextView) view;
+
+        Toast.makeText(this, temp.getText(), Toast.LENGTH_SHORT);
+    }
+
+
+    @Override
+    public boolean onSuggestionSelect(int position) {
+
+        Cursor cursor= searchView.getSuggestionsAdapter().getCursor();
+        cursor.moveToPosition(position);
+        String suggestion =cursor.getString(1);//2 is the index of col containing suggestion name.
+        searchView.setQuery(suggestion,true);//setting suggestion
+
+
+        return false;
+    }
+
+    @Override
+    public boolean onSuggestionClick(int position) {
+
+        Cursor cursor= searchView.getSuggestionsAdapter().getCursor();
+        cursor.moveToPosition(position);
+        String suggestion =cursor.getString(1);//2 is the index of col containing suggestion name.
+        searchView.setQuery(suggestion,true);//setting suggestion
+
+
+
+
+        Toast.makeText(this, ""+ suggestion ,Toast.LENGTH_SHORT);
+        return false;
     }
 }

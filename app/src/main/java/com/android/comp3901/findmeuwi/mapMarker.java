@@ -17,7 +17,7 @@ public class MapMarker {
 
     GoogleMap mGoogleMap;
     public static MapMarker instance;
-    Marker startMarker, destMarker, marker;
+    public static Marker startMarker, destMarker, marker;
     LinkedList<Marker> markers;
 
 

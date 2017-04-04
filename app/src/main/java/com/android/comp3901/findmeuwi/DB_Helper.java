@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.Build;
 import android.os.Environment;
 
@@ -12,7 +13,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Akinyele on 2/4/2017.
@@ -61,20 +65,26 @@ public class DB_Helper extends SQLiteOpenHelper{
     public static final String B_region ="region";
 
 
-    private  static  DB_Helper instance;
+    private Context mCxt;
+
+    private static DB_Helper mInstance = null;
+
+
+    public static synchronized DB_Helper getInstance(Context ctx){
+
+        if (mInstance == null) {
+            mInstance = new DB_Helper(ctx.getApplicationContext());
+        }
+        return mInstance;
+    }
+
 
     private DB_Helper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.mCxt = context;
 
-     }
-
-    public static synchronized DB_Helper getInstance(){
-
-        if(instance==null){
-            instance = new DB_Helper(FindMe.get());
-        }
-        return instance;
     }
+
 
 
 
@@ -2428,15 +2438,8 @@ public class DB_Helper extends SQLiteOpenHelper{
 //        vertices.clear();
 
 
+      vertices.clear();
 
-//        vertices.put(V_ID,  );
-//        vertices.put(V_NAME,  );
-//        vertices.put(V_LAT,  );
-//        vertices.put(V_LONG,   );
-//        vertices.put(V_TYPE , );
-//
-//        db.insert(VERTICES_TABLE,null,vertices);
-//        vertices.clear();
 
     }
 
@@ -2447,7 +2450,6 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         ContentValues edges = new ContentValues();
 
-//
         edges.put(E_SOURCE,"DOM");
         edges.put(E_DESTINATION,"MN0");
         edges.put(E_WEIGHT, 1);
@@ -2781,9 +2783,13 @@ public class DB_Helper extends SQLiteOpenHelper{
 
 
 
+
     }
 
 
+    /*
+     * Takes a string and query it for a room.
+     */
     public Cursor findClasses( String rm ){
          SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery( "SELECT * FROM " + ROOM_TABLE + " WHERE LOWER("+ RT_NAME + ") like LOWER('%"+ rm +"%') " +
@@ -2796,12 +2802,63 @@ public class DB_Helper extends SQLiteOpenHelper{
 
     public Cursor getVertices(){
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor res = db.rawQuery("SELECT * FROM " + VERTICES_TABLE + " WHERE 1 ", null);
 
         res.moveToFirst();
+        db.close();
         return res;
+    }
+
+
+    public Cursor getRooms(){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor res = db.rawQuery("SELECT * FROM " + ROOM_TABLE + " WHERE 1 ", null);
+
+        res.moveToFirst();
+        return res;
+    }
+
+
+//    public Cursor getBuildings(){
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        Cursor res = db.rawQuery("SELECT * FROM " + BUILDING_TABLE + " WHERE 1 ", null);
+//
+//        res.moveToFirst();
+//        return res;
+//    }
+
+
+
+
+    /*
+     *  This method returns a list of rooms IDs.
+     */
+    public ArrayList<String> roomList(){
+
+       ArrayList<String> rooms = new ArrayList<String>() ;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor roomsData =  getRooms();//db.query(ROOM_TABLE, null, null, null, null, null, null);
+
+        if(roomsData != null && roomsData.getCount()>0){
+            //roomsData.moveToFirst();
+
+            while (!roomsData.isAfterLast()){
+
+                String room = roomsData.getString(roomsData.getColumnIndex(RT_ID));
+
+                rooms.add(room);
+                roomsData.moveToNext();
+            }
+        }
+
+        roomsData.close();
+        return rooms;
     }
 
     public  Cursor getEdges(){
@@ -2815,12 +2872,8 @@ public class DB_Helper extends SQLiteOpenHelper{
     }
 
 
-
-
-
-
     /*
-        For debugging purposes to get database.
+     *   For debugging purposes to get database.
      */
      public void writeToSD(Context context) throws IOException {
         File sd = Environment.getExternalStorageDirectory();
