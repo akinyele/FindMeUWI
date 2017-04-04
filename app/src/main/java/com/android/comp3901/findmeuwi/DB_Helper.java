@@ -964,24 +964,24 @@ public class DB_Helper extends SQLiteOpenHelper{
         ContentValues vertices = new ContentValues();
 
 
-        vertices.put(V_ID, "CA");
-        vertices.put(V_NAME,"CA" );
-        vertices.put(V_LAT, 18.004678);
-        vertices.put(V_LONG, -76.749723);
-        vertices.put(V_TYPE ,"POINT");
-
-        db.insert(VERTICES_TABLE,null,vertices);
-        vertices.clear();
-
-
-        vertices.put(V_ID,"CB" );
-        vertices.put(V_NAME,"CB" );
-        vertices.put(V_LAT, 18.004879 );
-        vertices.put(V_LONG, -76.749702 );
-        vertices.put(V_TYPE ,"POINT");
-
-        db.insert(VERTICES_TABLE,null,vertices);
-        vertices.clear();
+//        vertices.put(V_ID, "CA");
+//        vertices.put(V_NAME,"CA" );
+//        vertices.put(V_LAT, 18.004678);
+//        vertices.put(V_LONG, -76.749723);
+//        vertices.put(V_TYPE ,"POINT");
+//
+//        db.insert(VERTICES_TABLE,null,vertices);
+//        vertices.clear();
+//
+//
+//        vertices.put(V_ID,"CB" );
+//        vertices.put(V_NAME,"CB" );
+//        vertices.put(V_LAT, 18.004879 );
+//        vertices.put(V_LONG, -76.749702 );
+//        vertices.put(V_TYPE ,"POINT");
+//
+//        db.insert(VERTICES_TABLE,null,vertices);
+//        vertices.clear();
 
         vertices.put(V_ID,"SLT1");
         vertices.put(V_NAME,"Science Lecture Theatre 1" );
@@ -1134,8 +1134,8 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         vertices.put(V_ID,"CR2"  );
         vertices.put(V_NAME,"Computer Science Tutorial Room 2"  );
-        vertices.put(V_LAT,18.005068);
-        vertices.put(V_LONG,-76.750106);
+        vertices.put(V_LAT,18.005028);
+        vertices.put(V_LONG,-76.750156);
         vertices.put(V_TYPE ,"ROOM" );
 
         db.insert(VERTICES_TABLE,null,vertices);
@@ -2264,16 +2264,6 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.clear();
 
 
-        //ERROR this vertext was left out change it a the lat lng
-        vertices.put(V_ID,"CAN2"  );
-        vertices.put(V_NAME,"Chem Analytical Node 2"  );
-        vertices.put(V_LAT,18.004777);
-        vertices.put(V_LONG,-76.749829 );
-        vertices.put(V_TYPE ,"Unimportant Node" );
-
-        db.insert(VERTICES_TABLE,null,vertices);
-        vertices.clear();
-
         vertices.put(V_ID,"CS0"  );
         vertices.put(V_NAME,"Computer Science 0"  );
         vertices.put(V_LAT,18.005352);
@@ -2410,16 +2400,16 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.clear();
 
         vertices.put(V_ID,"AQ2"  );
-        vertices.put(V_NAME," Aquatic Lab Node 2 "  );
-        vertices.put(V_LAT,18.006019 );
-        vertices.put(V_LONG,-76.749797  );
+        vertices.put(V_NAME," Aquatic Lab Node 2"  );
+        vertices.put(V_LAT,18.006019);
+        vertices.put(V_LONG,-76.749797);
         vertices.put(V_TYPE ,"Unimportant Node" );
 
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
         vertices.put(V_ID,"AQ3"  );
-        vertices.put(V_NAME," Aquatic Lab Node 3 "  );
+        vertices.put(V_NAME," Aquatic Lab Node 3"  );
         vertices.put(V_LAT,18.006100 );
         vertices.put(V_LONG,-76.749667  );
         vertices.put(V_TYPE ,"Unimportant Node" );
@@ -2457,37 +2447,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         ContentValues edges = new ContentValues();
 
-//        edges.put(E_SOURCE,"C5");
-//        edges.put(E_DESTINATION,"CA");
-//        edges.put(E_WEIGHT, 1);
-//        db.insert(EDGES_TABLE,null,edges);
-//        edges.clear();
 //
-//        edges.put(E_SOURCE,"CA");
-//        edges.put(E_DESTINATION,"CB");
-//        edges.put(E_WEIGHT,1);
-//        db.insert(EDGES_TABLE,null,edges);
-//        edges.clear();
-//
-//        edges.put(E_SOURCE,"Department of Mathematics");
-//        edges.put(E_DESTINATION,"CB");
-//        edges.put(E_WEIGHT, 1);
-//        db.insert(EDGES_TABLE,null,edges);
-//        edges.clear();
-//
-//        edges.put(E_SOURCE,"Department of Mathematics");
-//        edges.put(E_DESTINATION,"SLT 1");
-//        edges.put(E_WEIGHT, 1);
-//        db.insert(EDGES_TABLE,null,edges);
-//        edges.clear();
-//
-//
-//        edges.put(E_SOURCE,"SLT 1");
-//        edges.put(E_DESTINATION,"SLT 2");
-//        edges.put(E_WEIGHT, 1);
-//        db.insert(EDGES_TABLE,null,edges);
-//        edges.clear();
-
         edges.put(E_SOURCE,"DOM");
         edges.put(E_DESTINATION,"MN0");
         edges.put(E_WEIGHT, 1);
@@ -2566,7 +2526,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(EDGES_TABLE,null,edges);
         edges.clear();
 
-        edges.put(E_SOURCE,"CAN2");
+        edges.put(E_SOURCE,"CAN1");
         edges.put(E_DESTINATION,"ACL");
         edges.put(E_WEIGHT, 1);
         db.insert(EDGES_TABLE,null,edges);
