@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -56,11 +57,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
+
+    //Map Clients
     GoogleApiClient mGoogleApiClient;
     UiSettings mUiSettings;
-
-    Marker startMarker, destMarker, marker;
     DB_Helper dbHelper;
+
+
+    //Map Objects
+    Marker startMarker, destMarker, marker;
     LinkedList<Polyline> graphLines;
     Room destination;
     Vertex source, known;
@@ -93,6 +98,43 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 //    }
 
 
+    /*
+    ** Initializes Map Fragment;
+    **/
+    private void initMap() {
+        MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
+        mapFragment.getMapAsync(this);
+    }
+
+    /*
+     * Function that tells the map what to do when its ready
+     *
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        //Initialisations
+        path = new Path(dbHelper); //Initialises path object which creates graph
+
+
+        mGoogleMap = googleMap;
+        mUiSettings = mGoogleMap.getUiSettings();
+        mMarkers = MapMarker.getInstance();
+
+        displayGraph(); // Display the edges
+        displayIcons(); // Diplay the node icons
+        goToLocation(18.005072, -76.749544);
+
+        boolean success = googleMap.setMapStyle(new MapStyleOptions(getResources()
+                .getString(R.string.style_icyBlue))); //Changes the way how the map looks
+
+
+        if (!success) {
+            Toast.makeText(this.getActivity(), "Style parsing failed.", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -102,7 +144,6 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         super.onCreate(savedInstanceState);
         dbHelper =  DB_Helper.getInstance(getActivity()); //Creating databases
 
-        //dbHelper.generateDB(); //populate database with values (needs to be in the BD_Helper class)
 
         try {// writes database to sd card for debugging purposes.
             dbHelper.writeToSD(this.getActivity());
@@ -156,9 +197,6 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     }
 
 
-
-
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
@@ -166,31 +204,57 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         if (googleServicesCheck()) {
             Toast.makeText(this.getActivity() , "Perfect!!", Toast.LENGTH_LONG).show();
             initMap();
-//            try {
-//                //Create Rooms
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-        } else {
-
-        }
 
 
-        //SetAutocomplete TextViews
         setTextViews();
 
 
+       }
     }
 
 
     /*
-    ** Initializes Map Fragment;
-    **/
-    private void initMap() {
-        MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
-        mapFragment.getMapAsync(this);
+    This methods sets the text views.
+ */
+    @NonNull
+    private void setTextViews() {
+
+        String[] roomSugg = dbHelper.roomList().toArray(new String[dbHelper.roomList().size()]);
+        ArrayAdapter<String> roomsArrayAdapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1, roomSugg);
+
+
+        getSourceView = (AutoCompleteTextView) getView().findViewById(R.id.getSource);
+        getSourceView.setThreshold(1);
+        getSourceView.setAdapter(roomsArrayAdapter);
+
+        getSourceView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selected = (String) parent.getItemAtPosition(position);
+                setSource();
+                Toast.makeText(getActivity(),"Selected :" + selected, Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
+
+        classSearchView = (AutoCompleteTextView) getView().findViewById(R.id.classSearch);
+        classSearchView.setThreshold(1);
+        classSearchView.setAdapter(roomsArrayAdapter);
+
+        return ;
     }
+
+
+
+
+
 
 
     /*
@@ -211,45 +275,6 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         return false;
     }
 
-
-    /*
-     * Function that tells the map what to do when its ready
-     *
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-
-        //Initialisations
-        path = new Path(dbHelper); //Initialises path object which creates graph
-
-
-        mGoogleMap = googleMap;
-        mUiSettings = mGoogleMap.getUiSettings();
-        mMarkers = MapMarker.getInstance();
-
-        displayGraph(); // Display the edges
-        displayIcons(); // Diplay the node icons
-        goToLocation(18.005072, -76.749544);
-
-        boolean success = googleMap.setMapStyle(new MapStyleOptions(getResources()
-                .getString(R.string.style_icyBlue))); //Changes the way how the map looks
-
-
-        if (!success) {
-            Toast.makeText(this.getActivity(), "Style parsing failed.", Toast.LENGTH_LONG).show();
-        }
-
-    }
-
-
-    /*
-        Creates a option menu in the side bar that provides extra settings
-     */
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.map_menu, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
 
 
     /*
@@ -329,10 +354,9 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         This methods should search through the vertex table
         and find a the starting point based of where the user
         selected in the text field.
-        It takes it utilizes the text filed @getSource to search through the database.
+        It utilizes the text filed @getSource to search through the database.
      */
     public boolean setSource() {
-
 
         String startText = getSourceView.getText().toString();
 
@@ -362,25 +386,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         return true;
     }
 
-    @NonNull
-    private void setTextViews() {
 
-        String[] roomSugg = dbHelper.roomList().toArray(new String[dbHelper.roomList().size()]);
-        ArrayAdapter<String> roomsArrayAdapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1, roomSugg);
-
-
-        getSourceView = (AutoCompleteTextView) getView().findViewById(R.id.getSource);
-        getSourceView.setThreshold(1);
-        getSourceView.setAdapter(roomsArrayAdapter);
-
-
-
-        classSearchView = (AutoCompleteTextView) getView().findViewById(R.id.classSearch);
-        classSearchView.setThreshold(1);
-        classSearchView.setAdapter(roomsArrayAdapter);
-
-        return ;
-    }
 
     /*
      * This methods is called when the toggle button is click.
@@ -551,8 +557,10 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
      */
     public void getPath(View view) {
 
-        Boolean mylocation = ((ToggleButton) getView().findViewById(R.id.locationToggle)).isChecked(); //Finds out if user is using their location.
+        Boolean mylocation = ((ToggleButton) getView().findViewById(R.id.locationToggle)).isChecked(); //Finds out if user want to use their their location.
         Boolean isSourceSet;
+
+
 
         if (mylocation) {
             if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -588,6 +596,10 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
         drawPath(route);
     }
+
+
+
+
 
     /*
      * Draws a path with the provided the set of vertices

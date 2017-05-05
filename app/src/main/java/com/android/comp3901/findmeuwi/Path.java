@@ -95,7 +95,8 @@ public class Path {
 
 
     /*
-        Uses the dijkstra to generates the shortest path
+     * Uses the dijkstra to generates the shortest path
+     *
      */
     public LinkedList<Vertex>   getPath(String src, String dest) {
 

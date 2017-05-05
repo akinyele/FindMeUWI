@@ -10,9 +10,15 @@ import java.util.LinkedList;
 
 /**
  * Created by Kyzer on 3/20/2017.
+ *
+ * This class is used to manage the markers on the map. It handle the creations and displaying of the map markers.
+ * It holds the different types of markers used by the application.
+ *
+ *
  */
 
 public class MapMarker {
+
 
 
     GoogleMap mGoogleMap;
@@ -34,9 +40,6 @@ public class MapMarker {
 
         return  instance;
     }
-
-
-
 
 
     public void addMarker(LatLng ll, String title, String snip, Integer type) {
