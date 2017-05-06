@@ -28,18 +28,37 @@ public class Vertex {
         this.lat = lat;
         this.lng = lng;
         this.type = Type;
-
     }
 
 
 
 
-    public String getId() {
+    public final String getId() {
         return id;
     }
 
     public String getName() {
         return name;
+    }
+
+
+
+    public final double getLat() {
+        return lat;
+    }
+
+    public final double getLng() {
+        return lng;
+    }
+
+    public final LatLng getLL(){
+
+        return new LatLng(getLat(),getLng());
+    }
+
+
+    public final String getType() {
+        return type;
     }
 
 
@@ -65,21 +84,4 @@ public class Vertex {
         return name;
     }
 
-    public double getLat() {
-        return lat;
-    }
-
-    public double getLng() {
-        return lng;
-    }
-
-    public LatLng getLL(){
-
-        return new LatLng(getLat(),getLng());
-    }
-
-
-    public String getType() {
-        return type;
-    }
 }

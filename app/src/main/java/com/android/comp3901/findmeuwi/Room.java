@@ -14,50 +14,24 @@ public class Room  extends Vertex{
      * @param locale
      */
 
-    private final String id;
-    private  final String rmName;
-    private double mLatitude;
-    private double mLongitude;
     private List<String> Description;
-    private double floor;
+    private final double floor;
     private boolean known;
     private double familiarity;
     //private string imageName;
 
 
-    public Room(String id, String rmName, double mLatitude, double mLongitude) {
+    public Room(String id, String rmName, double mLatitude, double mLongitude, double floor) {
         super(id, rmName, mLatitude, mLatitude, "ROOM");
-        this.rmName = rmName;
-        this.id = id;
-        this.mLatitude = mLatitude;
-        this.mLongitude = mLongitude;
+
+        this.floor = floor;
     }
 
 
-    public void setLat( Double Lat){
-        this.mLatitude = Lat;
-    }
-
-
-    public void setLng( Double Lng){
-        this.mLongitude = Lng;
-    }
-
-    public double getLat(){
-        return this.mLatitude;
-    }
-
-    public double getLng(){
-        return this.mLongitude;
-    }
 
 
     public double getFloor() {
         return floor;
-    }
-
-    public void setFloor(double floor) {
-        this.floor = floor;
     }
 
     public boolean isKnown() {
@@ -84,12 +58,4 @@ public class Room  extends Vertex{
         Description = description;
     }
 
-    public String getRmName() {
-        return rmName;
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
 }

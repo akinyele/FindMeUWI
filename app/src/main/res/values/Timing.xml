@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <integer name="TwoMinutes"> 120000 </integer>
+
+    <integer name="FiveMinutes"> 300000 </integer>
+
+    <integer name="SevenMinutes"> 420000</integer>
+
+    <integer name="TenMinutes"> 600000 </integer>
+
+</resources>

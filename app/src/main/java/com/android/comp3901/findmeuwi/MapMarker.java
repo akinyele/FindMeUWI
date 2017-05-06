@@ -23,6 +23,8 @@ public class MapMarker {
 
     GoogleMap mGoogleMap;
     public static MapMarker instance;
+
+
     public static Marker startMarker, destMarker, marker;
     LinkedList<Marker> markers;
 

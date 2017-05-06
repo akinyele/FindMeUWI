@@ -24,22 +24,22 @@ import java.util.List;
 
 public class DB_Helper extends SQLiteOpenHelper{
 
-    public static final Integer DATABASE_VERSION = 28;
+    public static final Integer DATABASE_VERSION = 30;
     public static final String DATABASE_NAME = "findme.db";
     private static String DB_PATH = "";
 
 
 
     // Database For Vertices variable.
-    public static final String VERTICES_TABLE ="vertices";
+    public static final String VERTICES_TABLE ="Vertices";
     public static final String V_NAME ="Vname";
-    public static final String V_ID ="Vid";
-    public static final String V_LAT ="latitude";
-    public static final String V_LONG ="longitude";
-    public static final String V_TYPE ="type";
+    public static final String V_ID ="V_ID";
+    public static final String V_LAT ="V_Latitude";
+    public static final String V_LONG ="V_Longitude";
+    public static final String V_TYPE ="V_Type";
 
     // Database for edges on the graph.
-    public static final String EDGES_TABLE ="edges";
+    public static final String EDGES_TABLE ="Edges";
     public static final String E_SOURCE ="source";
     public static final String E_DESTINATION ="destination";
     public static final String E_WEIGHT ="weight";
@@ -47,27 +47,34 @@ public class DB_Helper extends SQLiteOpenHelper{
 
     // Database Room table variable.
     public static final String ROOM_TABLE ="room_data";
-    public static final String RT_ID ="ID";
-    public static final String RT_NAME ="name";
-    public static final String RT_LAT ="latitude";
-    public static final String RT_LONG ="longitude";
-    public static final String RT_DESC ="description";
-    public static final String RT_FLOOR ="floor";
-    public static final String RT_KNOWN ="known";
-    public static final String RT_FAM ="familiarity";
-    public static final String RT_BUILDING ="building";
+    public static final String RT_ID ="RM_ID";
+    public static final String RT_NAME ="RM_Name";
+    public static final String RT_LAT ="RM_Latitude";
+    public static final String RT_LONG ="RM_Longitude";
+    public static final String RT_DESC ="RM_Description";
+    public static final String RT_FLOOR ="RM_Floor";
+    public static final String RT_KNOWN ="RM_Known";
+    public static final String RT_FAM ="RM_Familiarity";
+    public static final String RT_BUILDING ="RM_Building";
     // public static final String RT_COL_8 ="image";
 
 
-    // Database for Buildings variable.
-    public static final String BUILDING_TABLE ="buildings";
-    public static final String B_NAME ="name";
-    public static final String B_region ="region";
+    //Database for Buildings variable.
+    public static final String BUILDING_TABLE ="Buildings";
+    public static final String B_ID = "B_ID";
+    public static final String B_LAT = "B_Latitude";
+    public static final String B_LONG = "B_Longitude";
+    public static final String B_NAME ="B_Name";
+    public static final String B_ROOMS ="B_Rooms";
+    public static final String B_FLOORS = "B_Floors";
+    public static final String B_KNOWN ="B_Known";
+    public static final String B_FAM ="B_Familiarity";
 
 
     private Context mCxt;
 
     private static DB_Helper mInstance = null;
+
 
 
     public static synchronized DB_Helper getInstance(Context ctx){
@@ -101,7 +108,9 @@ public class DB_Helper extends SQLiteOpenHelper{
 //                    //          Name, Lat, Lng, Description, Floor, Known, Familiarity
 //                    " VALUES ('SLT 2', 'Science Lecture Theatre 2', 18.0051221, -76.7497594, 'in front of slt 2 , Next to the  Deans Office', 1, 0 , 0) ";
 
-        db.execSQL(" CREATE TABLE " + ROOM_TABLE + " ( " +
+
+        //TODO CREATE TABLE RELATION FOR DB COLUMN
+        db.execSQL("CREATE TABLE " + ROOM_TABLE + " ( " +
                     RT_ID + " TEXT, " +
                     RT_NAME + " TEXT, " +
                     RT_LAT + " REAL, " +
@@ -111,6 +120,17 @@ public class DB_Helper extends SQLiteOpenHelper{
                     RT_KNOWN + " INT, " +
                     RT_FAM + " REAL, " +
                    "PRIMARY KEY ("+RT_LAT+","+RT_LONG+","+RT_ID+") ); ");
+
+        db.execSQL(" CREATE TABLE " + BUILDING_TABLE + " ( " +
+                B_ID + " TEXT, " +
+                B_NAME + " TEXT, " +
+                B_LAT + " REAL, " +
+                B_LONG + " REAL, " +
+                B_ROOMS + " TEXT, " +
+                B_FLOORS+ " REAL, " +
+                B_KNOWN + " INT, " +
+                B_FAM + " REAL, " +
+                "PRIMARY KEY ("+B_LAT+","+B_LONG+","+B_ID+") ); ");
 
 
         db.execSQL(" CREATE TABLE " + VERTICES_TABLE + " (" +
@@ -973,26 +993,6 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         ContentValues vertices = new ContentValues();
 
-
-//        vertices.put(V_ID, "CA");
-//        vertices.put(V_NAME,"CA" );
-//        vertices.put(V_LAT, 18.004678);
-//        vertices.put(V_LONG, -76.749723);
-//        vertices.put(V_TYPE ,"POINT");
-//
-//        db.insert(VERTICES_TABLE,null,vertices);
-//        vertices.clear();
-//
-//
-//        vertices.put(V_ID,"CB" );
-//        vertices.put(V_NAME,"CB" );
-//        vertices.put(V_LAT, 18.004879 );
-//        vertices.put(V_LONG, -76.749702 );
-//        vertices.put(V_TYPE ,"POINT");
-//
-//        db.insert(VERTICES_TABLE,null,vertices);
-//        vertices.clear();
-
         vertices.put(V_ID,"SLT1");
         vertices.put(V_NAME,"Science Lecture Theatre 1" );
         vertices.put(V_LAT,  18.005178);
@@ -1010,8 +1010,6 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
-
-
 
         vertices.put(V_ID,"SLT3"  );
         vertices.put(V_NAME,"Science Lecture Theatre 3"  );
@@ -2791,11 +2789,32 @@ public class DB_Helper extends SQLiteOpenHelper{
      * Takes a string and query it for a room.
      */
     public Cursor findClasses( String rm ){
-         SQLiteDatabase db = this.getWritableDatabase();
+
+        rm.toLowerCase();
+
+        SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery( "SELECT * FROM " + ROOM_TABLE + " WHERE LOWER("+ RT_NAME + ") like LOWER('%"+ rm +"%') " +
                 "OR  LOWER("+ RT_ID + ") like LOWER('%"+ rm +"%');", null);
 
         res.moveToFirst();
+        return res;
+    }
+
+
+    public Cursor getLocations(){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor res = db.rawQuery("SELECT * " +
+                " FROM (( " + VERTICES_TABLE + " V"+
+                " INNER JOIN " + ROOM_TABLE + " R"+
+                " ON V."+V_LAT+"=R."+RT_LAT+" AND V."+V_LONG+" = R."+RT_LONG+")" +
+                " INNER JOIN "+BUILDING_TABLE+" B"+
+                " ON V."+V_LAT+"=B."+B_LAT+" AND V."+V_LONG+"=B."+B_LONG+")"
+                ,null);
+
+
+        res.moveToFirst();
+        db.close();
         return res;
     }
 

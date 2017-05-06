@@ -74,6 +74,7 @@ public class Distance {
          Vertex start;
 
         ArrayList<Double> distances = new ArrayList();
+
         List<Vertex> points = path.getCNodes(); // uses nodes that are connected to an edge
 
         Integer closest = -1;

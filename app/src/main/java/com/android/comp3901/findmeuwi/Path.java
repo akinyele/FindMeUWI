@@ -12,7 +12,7 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
 /**
- * Created by Dylan on 2/17/2017.
+ * Created on 2/17/2017.
  */
 
 public class Path {
@@ -24,11 +24,11 @@ public class Path {
     DB_Helper dbHelper;
 
     private Graph graph;
-    HashMap<String,Vertex> vertices;
+    static HashMap<String,Vertex> vertices;
 
 
     /*
-        Constructor methods which initializes and creates all the vertices and edges.
+     *  Constructor methods which initializes and creates all the vertices and edges.
      */
     public Path(DB_Helper db){
 
@@ -44,17 +44,11 @@ public class Path {
 
         //creates a vertex object for the values in the database
         while (!verticesDB.isAfterLast()) {
-
-
-            Vertex Locations = new Vertex(verticesDB.getString(0),  //Vid
-                    verticesDB.getString(1),                        //Vname
-                    verticesDB.getDouble(2),                        //latitude
-                    verticesDB.getDouble(3),                        //longtude
-                    verticesDB.getString(4));                       //type
+            Vertex location = creator(verticesDB);
 
             //Places the create vertex into a list and a HashMap
-            nodes.add(Locations);
-            vertices.put(verticesDB.getString(0), Locations);
+            nodes.add(location);
+            vertices.put(verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_ID)), location);
 
             verticesDB.moveToNext();
         }
@@ -76,9 +70,6 @@ public class Path {
                     vertices.get(edgesDB.getString(1)),
                     vertices.get(edgesDB.getString(0)),
                     (int) edgesDB.getDouble(2));
-
-
-
 
 
             connectedNodes.add(vertices.get(edgesDB.getString(0)));
@@ -108,8 +99,8 @@ public class Path {
 
 
 
-        assertNotNull(path);
-        assertTrue(path.size() > 0);
+        //assertNotNull(path);
+        //assertTrue(path.size() > 0);
 
         return path;
     }
@@ -130,5 +121,40 @@ public class Path {
         return edges;
     }
 
+
+
+    private Vertex creator(Cursor verticesDB){
+
+        Vertex Location = null;
+        String type =verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_TYPE)).toLowerCase().replaceAll("\\s+","");
+
+        switch (type){
+
+//            case "room":
+//                Cursor res = dbHelper.findClasses( verticesDB.getString(0) );
+//
+//                Location = new Room(res.getString(verticesDB.getColumnIndex(DB_Helper.RT_ID)),
+//                        res.getString(verticesDB.getColumnIndex(DB_Helper.RT_NAME)),//name
+//                        res.getDouble(verticesDB.getColumnIndex(DB_Helper.RT_LAT)), //latitude
+//                        res.getDouble(verticesDB.getColumnIndex(DB_Helper.RT_LONG)),//longtude
+//                        res.getDouble(verticesDB.getColumnIndex(DB_Helper.RT_FLOOR))
+//                        );
+//
+//                break;
+//            case "building":
+//                //Location = new Building()
+//                        break;
+            default:
+                Location = new Vertex(verticesDB.getString(0),  //Vid
+                        verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_NAME)),//Vname
+                        verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LAT)), //latitude
+                        verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LONG)),//longtude
+                        verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_TYPE)));//type
+                break;
+        }
+
+
+        return Location;
+    }
 
 }

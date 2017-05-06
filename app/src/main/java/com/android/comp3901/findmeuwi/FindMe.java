@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -62,12 +63,14 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     GoogleApiClient mGoogleApiClient;
     UiSettings mUiSettings;
     DB_Helper dbHelper;
+    Tracker mapTracker;
+    MapMarker mMarkers;
 
 
     //Map Objects
+
     Marker startMarker, destMarker, marker;
     LinkedList<Polyline> graphLines;
-    Room destination;
     Vertex source, known;
     LinkedList<Vertex> route;
     Polyline line;
@@ -78,24 +81,21 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
 
 
-    MapMarker mMarkers;
 
-
+    //Static Variables
     static GoogleMap mGoogleMap;
 
     static Vertex start;
+    static Vertex destination;
     static Path path;
-    static Activity instance;
 
+    static Activity instance;
     static Activity  get(){ return instance;}
 
 
 
 
 
-//    public void createRooms() throws IOException {
-//
-//    }
 
 
     /*
@@ -120,6 +120,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         mGoogleMap = googleMap;
         mUiSettings = mGoogleMap.getUiSettings();
         mMarkers = MapMarker.getInstance();
+        mapTracker = new Tracker(getActivity());
+
 
         displayGraph(); // Display the edges
         displayIcons(); // Diplay the node icons
@@ -219,6 +221,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     @NonNull
     private void setTextViews() {
 
+
         String[] roomSugg = dbHelper.roomList().toArray(new String[dbHelper.roomList().size()]);
         ArrayAdapter<String> roomsArrayAdapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1, roomSugg);
 
@@ -227,19 +230,22 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         getSourceView.setThreshold(1);
         getSourceView.setAdapter(roomsArrayAdapter);
 
-        getSourceView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+
+        getSourceView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                /* hide keyboard */
+                ((InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE))
+                        .toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+
                 String selected = (String) parent.getItemAtPosition(position);
                 setSource();
                 Toast.makeText(getActivity(),"Selected :" + selected, Toast.LENGTH_SHORT);
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
         });
+
+
 
 
 
@@ -247,6 +253,27 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         classSearchView = (AutoCompleteTextView) getView().findViewById(R.id.classSearch);
         classSearchView.setThreshold(1);
         classSearchView.setAdapter(roomsArrayAdapter);
+        classSearchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                /* hide keyboard */
+                ((InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE))
+                        .toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+
+
+                String selected = (String) parent.getItemAtPosition(position);
+
+                try {
+                    geoLocate(getActivity().findViewById(R.id.classSearch));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(getActivity(),"Selected :" + selected, Toast.LENGTH_SHORT);
+
+
+            }
+        });
+
 
         return ;
     }
@@ -311,6 +338,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         LatLng ll = new LatLng(lat, lng);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 18);
         mGoogleMap.moveCamera(update);
+
+
     }
 
 
@@ -334,19 +363,17 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             return;
         } else {
             // create the room
-            destination = new Room(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3));
-            mMarkers.addMarker(destination.getLL(), destination.getRmName(), destination.getId(), 2);
+            destination = new Vertex(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3),"Room");
+            mMarkers.addMarker(destination.getLL(), destination.getName(), destination.getId(), 2);
         }
 
 
         double lat = destination.getLat();
         double lng = destination.getLng();
 
-        Toast.makeText(this.getActivity(), destination.getRmName() + " is here", Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getActivity(), destination.getName() + " is here", Toast.LENGTH_LONG).show();
 
         goToLocation(lat, lng);
-
-
     }
 
 
@@ -561,7 +588,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         Boolean isSourceSet;
 
 
-
+        //handles the start location configuration
         if (mylocation) {
             if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -576,9 +603,12 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             //MapMarker.startMarker
             start = Distance.find_closest_marker(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient));
             isSourceSet = true;
+
         }else{
             isSourceSet = setSource();
         }
+
+
 
          if (!isSourceSet) {
             // ask them to select a starting point
@@ -588,13 +618,19 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             Toast.makeText(this.getActivity(), "No Destination selected", Toast.LENGTH_LONG).show();
             return;
         } else {
-
             route = path.getPath(start.getId(), destination.getId());
-
-            Toast.makeText(this.getActivity(), "Path to " + destination.getRmName() + " found.", Toast.LENGTH_LONG).show();
+                if(route==null){
+                    Toast.makeText(this.getActivity(), "Could not find path from "+ start.getName()+ " to " + destination.getName() + " found.", Toast.LENGTH_LONG).show();
+                    return;
+                }else {
+                    Toast.makeText(this.getActivity(), "Path to " + destination.getName() + " found.", Toast.LENGTH_LONG).show();
+                }
         }
 
         drawPath(route);
+        if(!mylocation){
+            mapTracker.startArrivalTimer();
+        }
     }
 
 
@@ -707,8 +743,6 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this); //this methods uses the location services to display users location
 
-
-
     }
 
 
@@ -734,16 +768,22 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         if(location == null){
             Toast.makeText(this.getActivity(), "Cant get current Location", Toast.LENGTH_LONG).show();
         }else {
+
+
+
             LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll,18);
             mGoogleMap.animateCamera(update);
+
+
             //Toast.makeText(this, "Located", Toast.LENGTH_LONG).show();
+
+
+
+
+
         }
-
     }
-
-
-
 
 
 

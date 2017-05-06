@@ -1,8 +1,6 @@
 package com.android.comp3901.findmeuwi;
 
-/**
- * Created by Akinyele on 2/10/2017.
- */
+
 
 import java.util.ArrayList;
 import java.util.Collections;
