@@ -21,15 +21,21 @@ public class Room  extends Vertex{
     //private string imageName;
 
 
+    //TODO add room description parameter
     public Room(String id, String rmName, double mLatitude, double mLongitude, double floor) {
-        super(id, rmName, mLatitude, mLatitude, "ROOM");
+        super(id, rmName, mLatitude, mLongitude, "ROOM");
 
         this.floor = floor;
     }
 
+    public void updateDB(){
+        DB_Helper.getInstance(FindMe.get()).updateRoom(super.getId(),known,familiarity);
+    }
 
 
-
+    /***
+     *Getters and setters
+     ***/
     public double getFloor() {
         return floor;
     }

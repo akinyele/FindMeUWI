@@ -3,6 +3,7 @@ package com.android.comp3901.findmeuwi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -43,8 +44,6 @@ public class Tracker {
     public void startArrivalTimer(){
 
         handler = new Handler();
-
-
         Runnable r = new Runnable() {
             @Override
             public void run() {
@@ -62,12 +61,7 @@ public class Tracker {
      private void createDialog(){
          AlertDialog.Builder arrivalDialog = new AlertDialog.Builder(instance);
          View mView = instance.getLayoutInflater().inflate(R.layout.arrival_query_dialog, null);
-         Toast.makeText(instance,"TIMER",Toast.LENGTH_SHORT);
 
-
-
-         arrivalDialog.setView(mView);
-         AlertDialog dialog = arrivalDialog.create();
 
          Button yesBtn = (Button) mView.findViewById(R.id.arrival_dialog_yesBtn);
          yesBtn.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +72,8 @@ public class Tracker {
 
                  if( FindMe.destination instanceof Room){
 
-                     //(Room)FindMe.destination
+                     Log.d("ROOM TYPE  ", "TRUE");
+                     ((Room) FindMe.destination).updateDB();
 
                  }
 
@@ -97,10 +92,10 @@ public class Tracker {
          });
 
 
-
+         arrivalDialog.setView(mView);
+         AlertDialog dialog = arrivalDialog.create();
          dialog.show();
-
-     }
+        }
 
 
 

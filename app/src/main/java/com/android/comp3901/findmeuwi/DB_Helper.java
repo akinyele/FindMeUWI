@@ -24,7 +24,7 @@ import java.util.List;
 
 public class DB_Helper extends SQLiteOpenHelper{
 
-    public static final Integer DATABASE_VERSION = 30;
+    public static final Integer DATABASE_VERSION = 33;
     public static final String DATABASE_NAME = "findme.db";
     private static String DB_PATH = "";
 
@@ -109,7 +109,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 //                    " VALUES ('SLT 2', 'Science Lecture Theatre 2', 18.0051221, -76.7497594, 'in front of slt 2 , Next to the  Deans Office', 1, 0 , 0) ";
 
 
-        //TODO CREATE TABLE RELATION FOR DB COLUMN
+        //TODO CREATE TABLE RELATION FOR DB COLUMNS
         db.execSQL("CREATE TABLE " + ROOM_TABLE + " ( " +
                     RT_ID + " TEXT, " +
                     RT_NAME + " TEXT, " +
@@ -264,7 +264,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         rooms.clear();
 
         rooms.put(RT_ID,"C5");
-        rooms.put(RT_NAME,"Chemistry Lecture Theatre");
+        rooms.put(RT_NAME,"Chemistry Lecture Theatre 5");
         rooms.put(RT_LAT,18.004506);
         rooms.put(RT_LONG,-76.749995);
         rooms.put(RT_DESC,"Description");
@@ -365,8 +365,9 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(ROOM_TABLE,null, rooms);
         rooms.clear();
 
-        rooms.put(RT_ID,"COMPLAB");
-        rooms.put(RT_NAME,"Computer Lab Lab 1");
+        //TODO changed room name to match vertex name
+        rooms.put(RT_ID,"COMLAB");
+        rooms.put(RT_NAME,"Computer Science Lab Room" );
         rooms.put(RT_LAT,18.005132);
         rooms.put(RT_LONG,-76.750145);
         rooms.put(RT_DESC,"Description");
@@ -476,7 +477,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(ROOM_TABLE,null, rooms);
         rooms.clear();
 
-        rooms.put(RT_ID,"ML2");
+        rooms.put(RT_ID,"MLT2");
         rooms.put(RT_NAME,"Math Lecture Theatre 2");
         rooms.put(RT_LAT,18.004934);
         rooms.put(RT_LONG,-76.749435);
@@ -487,7 +488,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(ROOM_TABLE,null, rooms);
         rooms.clear();
 
-        rooms.put(RT_ID,"ML3");
+        rooms.put(RT_ID,"MLT3");
         rooms.put(RT_NAME,"Math Lecture Theatre 3");
         rooms.put(RT_LAT,18.004888);
         rooms.put(RT_LONG,-76.749454);
@@ -910,6 +911,18 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(ROOM_TABLE,null, rooms);
         rooms.clear();
 
+        //TODO update fluids lab values to actual values
+        //Check to see if its at the write place
+        rooms.put(RT_ID,"NGR-F-L");
+        rooms.put(RT_NAME,"Fluids Laboratory");
+        rooms.put(RT_LAT,18.005569);
+        rooms.put(RT_LONG,-76.749115);
+        rooms.put(RT_DESC,"Description");
+        rooms.put(RT_FLOOR,3 );
+        rooms.put(RT_KNOWN,0 );
+        rooms.put(RT_FAM,0 );
+        db.insert(ROOM_TABLE,null, rooms);
+        rooms.clear();
 
         rooms.put(RT_ID,"SOLARB");
         rooms.put(RT_NAME,"Solar Lab");
@@ -993,6 +1006,11 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         ContentValues vertices = new ContentValues();
 
+
+
+        /****
+         * ROOMS
+         ****/
         vertices.put(V_ID,"SLT1");
         vertices.put(V_NAME,"Science Lecture Theatre 1" );
         vertices.put(V_LAT,  18.005178);
@@ -1050,7 +1068,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
 
         vertices.put(V_ID,"C2");
-        vertices.put(V_NAME,"Chemistry Lecture Theatre 2"  );
+        vertices.put(V_NAME,"Chemistry Lecture Theatre 2");
         vertices.put(V_LAT,18.004348);
         vertices.put(V_LONG,-76.749758);
         vertices.put(V_TYPE ,"ROOM" );
@@ -1059,7 +1077,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.clear();
 
         vertices.put(V_ID,"C3"  );
-        vertices.put(V_NAME,"Chemistry Lecture Theatre 3"  );
+        vertices.put(V_NAME,"Chemistry Lecture Theatre 3");
         vertices.put(V_LAT,18.004379);
         vertices.put(V_LONG,-76.749753);
         vertices.put(V_TYPE ,"ROOM" );
@@ -1068,7 +1086,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.clear();
 
         vertices.put(V_ID,"ACL"  );
-        vertices.put(V_NAME,"Analytical Chemistry Lab"  );
+        vertices.put(V_NAME,"Analytical Chemistry Lab");
         vertices.put(V_LAT,18.004767);
         vertices.put(V_LONG,-76.749870);
         vertices.put(V_TYPE,"ROOM" );
@@ -1105,7 +1123,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
 
         vertices.put(V_ID,"CHETR1"  );
-        vertices.put(V_NAME,"Chemistry Tutorial 1"  );
+        vertices.put(V_NAME,"Chemistry Tutorial Room 1");
         vertices.put(V_LAT,18.004593);
         vertices.put(V_LONG,-76.750123);
         vertices.put(V_TYPE,"ROOM" );
@@ -1114,7 +1132,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.clear();
 
         vertices.put(V_ID,"CHETR2"  );
-        vertices.put(V_NAME,"Chemistry Tutorial 2"  );
+        vertices.put(V_NAME,"Chemistry Tutorial Room 2");
         vertices.put(V_LAT,18.004577);
         vertices.put(V_LONG,-76.750150);
         vertices.put(V_TYPE,"ROOM" );
@@ -1225,6 +1243,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
+
+        //TODO WRONG VALUES
         vertices.put(V_ID,"NGR-F-L"  );
         vertices.put(V_NAME,"Fluids Laboratory"  );
         vertices.put(V_LAT,18.005569);
@@ -1342,7 +1362,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.clear();
 
         vertices.put(V_ID,"DLSMVL"  );
-        vertices.put(V_NAME,"Molec & Virology Lab"  );
+        vertices.put(V_NAME,"DLS Molec & Virology Lab"  );
         vertices.put(V_LAT,18.005943);
         vertices.put(V_LONG,-76.749906);
         vertices.put(V_TYPE,"ROOM" );
@@ -1685,7 +1705,10 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
-        //Nodes for Stairs
+        /***
+         *  Nodes for Stairs
+         ***/
+
 
         vertices.put(V_ID,"ICLS"  );
         vertices.put(V_NAME,"Inorganic Chem lab Stairs"  );
@@ -1814,8 +1837,10 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.clear();
 
 
+        /***
+         *  Unimportant nodes
+         ****/
 
-        //Unimportant nodes
 
 
 
@@ -2437,9 +2462,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
 
       vertices.clear();
-
-
-    }
+ }
 
     /*
      * Generate Edges
@@ -2804,12 +2827,15 @@ public class DB_Helper extends SQLiteOpenHelper{
     public Cursor getLocations(){
         SQLiteDatabase db = this.getReadableDatabase();
 
+
+        //TODO: join buildings table when it is created
         Cursor res = db.rawQuery("SELECT * " +
-                " FROM (( " + VERTICES_TABLE + " V"+
+                " FROM (" +
+                         VERTICES_TABLE + " V"+
                 " INNER JOIN " + ROOM_TABLE + " R"+
-                " ON V."+V_LAT+"=R."+RT_LAT+" AND V."+V_LONG+" = R."+RT_LONG+")" +
-                " INNER JOIN "+BUILDING_TABLE+" B"+
-                " ON V."+V_LAT+"=B."+B_LAT+" AND V."+V_LONG+"=B."+B_LONG+")"
+                " ON V."+V_LAT+"=R."+RT_LAT+" AND V."+V_LONG+" = R."+RT_LONG+")"
+//                " INNER JOIN "+BUILDING_TABLE+" B"+
+//                " ON V."+V_LAT+"=B."+B_LAT+" AND V."+V_LONG+"=B."+B_LONG+")"
                 ,null);
 
 
@@ -2891,6 +2917,22 @@ public class DB_Helper extends SQLiteOpenHelper{
     }
 
 
+
+    public void updateRoom(String id, boolean known, double familiarity) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues rm = new ContentValues();
+
+
+        rm.put(RT_KNOWN,known);
+        rm.put(RT_FAM,familiarity);
+        db.update(ROOM_TABLE,rm, RT_ID+"= ?", new String[]{id});
+
+        rm.clear();
+        db.close();
+    }
+
+
     /*
      *   For debugging purposes to get database.
      */
@@ -2920,4 +2962,5 @@ public class DB_Helper extends SQLiteOpenHelper{
         }
     }
 
-}
+
+}//END of DB_HELPER

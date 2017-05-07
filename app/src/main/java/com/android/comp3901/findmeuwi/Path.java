@@ -1,13 +1,16 @@
 package com.android.comp3901.findmeuwi;
 
 import android.database.Cursor;
+import android.util.Log;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
@@ -123,24 +126,33 @@ public class Path {
 
 
 
+    /*
+     *Used when creating the vertices. Used to create the vertices of the right subclass
+     */
     private Vertex creator(Cursor verticesDB){
 
         Vertex Location = null;
         String type =verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_TYPE)).toLowerCase().replaceAll("\\s+","");
+        String test =verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_ID));
 
         switch (type){
 
-//            case "room":
-//                Cursor res = dbHelper.findClasses( verticesDB.getString(0) );
-//
-//                Location = new Room(res.getString(verticesDB.getColumnIndex(DB_Helper.RT_ID)),
-//                        res.getString(verticesDB.getColumnIndex(DB_Helper.RT_NAME)),//name
-//                        res.getDouble(verticesDB.getColumnIndex(DB_Helper.RT_LAT)), //latitude
-//                        res.getDouble(verticesDB.getColumnIndex(DB_Helper.RT_LONG)),//longtude
-//                        res.getDouble(verticesDB.getColumnIndex(DB_Helper.RT_FLOOR))
-//                        );
-//
-//                break;
+            case "room":
+                Cursor res = dbHelper.findClasses( verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_ID)) );
+
+                if(res.getCount() == 0){
+                    Log.d("GET ROOM", test);
+                    assertEquals(1,res.getCount());
+                }
+
+                Location = new Room(res.getString(res.getColumnIndex(DB_Helper.RT_ID)),
+                        res.getString(res.getColumnIndex(DB_Helper.RT_NAME)),//name
+                        res.getDouble(res.getColumnIndex(DB_Helper.RT_LAT)), //latitude
+                        res.getDouble(res.getColumnIndex(DB_Helper.RT_LONG)),//longtude
+                        res.getDouble(res.getColumnIndex(DB_Helper.RT_FLOOR))
+                        );
+                break;
+
 //            case "building":
 //                //Location = new Building()
 //                        break;

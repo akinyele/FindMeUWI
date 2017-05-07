@@ -358,22 +358,20 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             Toast.makeText(this.getActivity(), "Could not find " + clss, Toast.LENGTH_LONG).show();
             return;
         } else if (res.getCount() > 1) {
-            // more than one possible classes found. Create method to let them choose
+            //TODO more than one possible classes found. Create method to let them choose
             Toast.makeText(this.getActivity(), " Select a Class", Toast.LENGTH_LONG).show();
             return;
         } else {
             // create the room
-            destination = new Vertex(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3),"Room");
+            //new Vertex(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3),"Room");
+            destination = Path.vertices.get(res.getString(res.getColumnIndex(DB_Helper.RT_ID)));
             mMarkers.addMarker(destination.getLL(), destination.getName(), destination.getId(), 2);
         }
 
 
-        double lat = destination.getLat();
-        double lng = destination.getLng();
 
         Toast.makeText(this.getActivity(), destination.getName() + " is here", Toast.LENGTH_LONG).show();
-
-        goToLocation(lat, lng);
+        goToLocation(destination.getLat(), destination.getLng());
     }
 
 
@@ -690,6 +688,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             v2 = vertexHashMap.get(edge.getDestination().getId());
 
 
+            //TODO make polyline clickable
             PolylineOptions options = new PolylineOptions()
                     .color(0x33606060)
                     .width(15)
