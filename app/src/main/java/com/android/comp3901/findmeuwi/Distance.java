@@ -1,6 +1,7 @@
 package com.android.comp3901.findmeuwi;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -28,8 +29,8 @@ public class Distance {
 
 
 
-    /*
-        Find the total distance of a route
+    /**
+     *   Find the total distance of a route
      */
     public static Double routeDistance(LinkedList<Vertex> route){
         double dist = 0.00;
@@ -46,6 +47,13 @@ public class Distance {
         return dist;
     }
 
+
+    /**
+     * Uses Harversine's formula to calculate the distance between two LatLng
+     * @param myLL the Lat long provided by your location
+     * @param markerLL
+     * @return returns the distance d in Km
+     */
     public static Double find_distance(LatLng myLL, LatLng markerLL){
 
         double myLat = myLL.latitude;
@@ -63,7 +71,7 @@ public class Distance {
         Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         Double d = R * c;
 
-
+        Log.d("Distance  ",""+d);
         return d;
     }
 
@@ -98,7 +106,7 @@ public class Distance {
     }
 
 
-    public static double rad(double x) {
+    private static double rad(double x) {
         return x * Math.PI / 180;
     }
 

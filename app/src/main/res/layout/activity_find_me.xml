@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_find_me"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.android.comp3901.findmeuwi.FindMe">
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+        tools:context="com.android.comp3901.findmeuwi.FindMe"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_find_me"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2.74"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
 
-    <android.support.v7.widget.SwitchCompat
-        android:layout_width="wrap_content"
-        android:layout_height="47dp"
-        android:checked="true"
-        android:theme="@style/MySwitch"
-        android:layout_weight="0.16" />
 
     <fragment
         android:layout_width="match_parent"
@@ -24,18 +22,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-    <!--<EditText-->
-        <!--style="@style/FullWidthEditText"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:inputType="text|textPersonName"-->
-        <!--android:ems="10"-->
-        <!--android:id="@+id/getSource"-->
-        <!--android:hint="starting point."-->
-        <!--android:fontFamily="sans-serif"-->
-        <!--android:layout_alignParentStart="true"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_toStartOf="@+id/locationToggle" />-->
 
     <LinearLayout
         android:orientation="horizontal"
@@ -112,25 +98,85 @@
     ]]>
     </LinearLayout>
 
-    <android.support.design.widget.CoordinatorLayout
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="2.74"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_height="200dp"
+        android:elevation="100dp"
+        android:background="@android:color/holo_blue_bright"
+        app:layout_behavior= "android.support.design.widget.BottomSheetBehavior">
 
-    </android.support.design.widget.CoordinatorLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
 
-    <!--<EditText-->
-        <!--style="@style/FullWidthEditText"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:inputType="text|textNoSuggestions|textPersonName"-->
-        <!--android:ems="10"-->
-        <!--android:id="@+id/classSearch"-->
-        <!--android:hint="What room would you like to find?"-->
-        <!--tools:ignore="RelativeOverlap"-->
-        <!--android:layout_below="@+id/textInputLayout"-->
-        <!--android:layout_alignParentStart="true" />-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:text="PLACE"
+                android:padding="20dp"
+                />
 
-</RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:id="@+id/place_image_view"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/place_info1"
+                    android:text="info1"
+                    android:textSize="16sp"
+                    android:textAllCaps="true"
+                    android:padding="16dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/place_info2"
+                    android:text="info2"
+                    android:padding="16dp"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/place_info3"
+                    android:text="info"
+                    android:padding="16dp"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+</android.support.design.widget.CoordinatorLayout>
+
+
+
+
+

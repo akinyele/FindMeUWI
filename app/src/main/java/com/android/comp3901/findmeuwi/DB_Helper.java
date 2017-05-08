@@ -2918,7 +2918,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
 
 
-    public void updateRoom(String id, boolean known, double familiarity) {
+    public void updateRoom(String id, Integer known, double familiarity) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues rm = new ContentValues();

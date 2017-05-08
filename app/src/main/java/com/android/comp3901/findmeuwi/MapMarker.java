@@ -26,13 +26,20 @@ public class MapMarker {
 
 
     public static Marker startMarker, destMarker, marker;
-    LinkedList<Marker> markers;
+     LinkedList<Marker> stairs_markers ;
+     LinkedList<Marker> building_markers ;
+     LinkedList<Marker> junction_markers ;
+
+
 
 
 
 
     private MapMarker(GoogleMap map){
         mGoogleMap = map;
+        this.stairs_markers = new LinkedList<>();
+        this.building_markers = new LinkedList<>();
+        this.junction_markers = new LinkedList<>();
 
     }
 
@@ -76,32 +83,63 @@ public class MapMarker {
     }
 
     public void addIcon(LatLng ll,String title, String snip, String type){
-        //MarkerOptions node;
-        switch (type){
 
-            case "Building":
+
+        switch (type.replaceAll("\\s","").toLowerCase()){
+
+            case "building":
                 MarkerOptions building;
                 building = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.mipmap.building)).title(title).snippet(snip);
                 marker = mGoogleMap.addMarker(building);
+                building_markers.add(marker);
                 break;
-            case "Junction":
+            case "junction":
                 MarkerOptions junction;
-                junction = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.mipmap.junction)).title(title).snippet(snip);
+                junction = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.mipmap.junction)).title(title).snippet(snip).visible(false);
                 marker = mGoogleMap.addMarker(junction);
+                junction_markers.add(marker);
                 break;
-            case "Stairs":
+            case "stairs":
                 MarkerOptions stairs;
-                stairs = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.mipmap.stair)).title(title).snippet(snip);
+                stairs = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.mipmap.stair)).title(title).snippet("stairs").visible(false);
                 marker = mGoogleMap.addMarker(stairs);
+                stairs_markers.add(marker);
                 break;
             default:
                 break;
+
+
         }
     }
 
 
+    public void addKnowMarker(Vertex knownPoint){
+
+        MarkerOptions known_place_options;
+        known_place_options = new MarkerOptions()
+                                    .position(knownPoint.getLL())
+                                    .title(knownPoint.getName());
+    }
 
 
+    public  void showStairs(boolean b){
+        for ( Marker stair: stairs_markers) {
+            stair.setVisible(b);
+        }
+    }
 
 
+    public void showBuildings(boolean b) {
+
+        for ( Marker building: building_markers) {
+            building.setVisible(b);
+        }
+    }
+
+    public void showJunctions(boolean b) {
+        for ( Marker junction: junction_markers) {
+            junction.setVisible(b);
+        }
+
+    }
 }//End of Marker Class

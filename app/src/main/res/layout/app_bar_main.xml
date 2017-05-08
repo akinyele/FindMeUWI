@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.capestone.android.smartmap.MainActivity">
+    tools:context="com.android.comp3901.findmeuwi.MainActivity">
 
 
     <include layout="@layout/content_main" />
@@ -51,6 +51,7 @@
 
 
     </LinearLayout>
+
 
 
 </android.support.design.widget.CoordinatorLayout>

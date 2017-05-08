@@ -14,9 +14,12 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,7 +47,9 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -57,7 +62,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
+public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener,GoogleMap.OnMarkerClickListener
+        {
 
     //Map Clients
     GoogleApiClient mGoogleApiClient;
@@ -65,11 +72,11 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     DB_Helper dbHelper;
     Tracker mapTracker;
     MapMarker mMarkers;
+    BottomSheetBehavior sheetBehavior;
 
 
     //Map Objects
-
-    Marker startMarker, destMarker, marker;
+    Marker startMarker, destMarker, marker; //TODO let MapMarker class handle the creation of these markers
     LinkedList<Polyline> graphLines;
     Vertex source, known;
     LinkedList<Vertex> route;
@@ -78,6 +85,9 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     //Views
     private AutoCompleteTextView getSourceView;
     private AutoCompleteTextView classSearchView;
+    private NestedScrollView nestedView;
+
+
 
 
 
@@ -116,24 +126,50 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         //Initialisations
         path = new Path(dbHelper); //Initialises path object which creates graph
 
+        //LatLngBounds latLngBounds = new LatLngBounds()
 
         mGoogleMap = googleMap;
         mUiSettings = mGoogleMap.getUiSettings();
         mMarkers = MapMarker.getInstance();
-        mapTracker = new Tracker(getActivity());
+        mGoogleMap.setOnMarkerClickListener(this);
+        //mGoogleMap.setLatLngBoundsForCameraTarget();
+
+        mGoogleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                Log.d("ZOOM Level", ""+ mGoogleMap.getCameraPosition().zoom);
+
+                Double level = Double.valueOf(mGoogleMap.getCameraPosition().zoom);
+                if(level < 20.0){
+                    mMarkers.showStairs(false);
+                }else{
+                    mMarkers.showStairs(true);
+                }
+
+                if(level < 18.58317 ){
+                    mMarkers.showBuildings(false);
+                }else{
+                    mMarkers.showBuildings(true);
+                }
+
+                if(level < 19.0){
+                    mMarkers.showJunctions(false);
+                }else{
+                    mMarkers.showJunctions(true);
+                }
+            }
+        });
+
+
+
 
 
         displayGraph(); // Display the edges
         displayIcons(); // Diplay the node icons
         goToLocation(18.005072, -76.749544);
 
-        boolean success = googleMap.setMapStyle(new MapStyleOptions(getResources()
-                .getString(R.string.style_icyBlue))); //Changes the way how the map looks
-
-
-        if (!success) {
-            Toast.makeText(this.getActivity(), "Style parsing failed.", Toast.LENGTH_LONG).show();
-        }
+        boolean success = googleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_icyBlue)));
+        if (!success) {Toast.makeText(this.getActivity(), "Style parsing failed.", Toast.LENGTH_LONG).show();}
 
     }
 
@@ -141,9 +177,9 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        instance = this.getActivity();
-
         super.onCreate(savedInstanceState);
+
+        instance = this.getActivity();
         dbHelper =  DB_Helper.getInstance(getActivity()); //Creating databases
 
 
@@ -222,6 +258,9 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     private void setTextViews() {
 
 
+        /**
+         * Autocomplete Text Views
+         */
         String[] roomSugg = dbHelper.roomList().toArray(new String[dbHelper.roomList().size()]);
         ArrayAdapter<String> roomsArrayAdapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1, roomSugg);
 
@@ -229,10 +268,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         getSourceView = (AutoCompleteTextView) getView().findViewById(R.id.getSource);
         getSourceView.setThreshold(1);
         getSourceView.setAdapter(roomsArrayAdapter);
-
-
-
-        getSourceView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+         getSourceView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 /* hide keyboard */
@@ -244,11 +280,6 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 Toast.makeText(getActivity(),"Selected :" + selected, Toast.LENGTH_SHORT);
             }
         });
-
-
-
-
-
 
         classSearchView = (AutoCompleteTextView) getView().findViewById(R.id.classSearch);
         classSearchView.setThreshold(1);
@@ -269,11 +300,18 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                     e.printStackTrace();
                 }
                 Toast.makeText(getActivity(),"Selected :" + selected, Toast.LENGTH_SHORT);
-
-
-            }
+             }
         });
 
+
+        /*
+         * Bottom Sheet View
+         */
+        nestedView = (NestedScrollView) getView().findViewById(R.id.bottom_sheet);
+        sheetBehavior = BottomSheetBehavior.from(nestedView);
+        sheetBehavior.setHideable(true);
+        sheetBehavior.setPeekHeight(300);
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         return ;
     }
@@ -336,10 +374,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
      */
     private void goToLocation(double lat, double lng) {
         LatLng ll = new LatLng(lat, lng);
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 18);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 19);
         mGoogleMap.moveCamera(update);
-
-
     }
 
 
@@ -626,14 +662,13 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         }
 
         drawPath(route);
+
+        mapTracker = new Tracker(getActivity());
+
         if(!mylocation){
             mapTracker.startArrivalTimer();
         }
     }
-
-
-
-
 
     /*
      * Draws a path with the provided the set of vertices
@@ -715,7 +750,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
 
     /*
-        Handling of the locations services and tracking
+     *   Handling of the locations services and tracking
      */
     LocationRequest mLocationRequest;
 
@@ -774,6 +809,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll,18);
             mGoogleMap.animateCamera(update);
 
+            //TODO call tracker method
 
             //Toast.makeText(this, "Located", Toast.LENGTH_LONG).show();
 
@@ -783,6 +819,24 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
         }
     }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        Log.d("Marker Snippet", marker.getSnippet() );
+
+        switch (marker.getSnippet()){
+            case "stairs":
+                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            default:
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                break;
+        }
+
+        return false;
+    }
+
 
 
 

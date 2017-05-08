@@ -114,7 +114,16 @@ public class Path {
         return graph;
     }
 
+
+    /***
+     * Used to get the nodes that are connected to the graph
+     * @return
+     */
     public List getCNodes() {   return  connectedNodes; }
+
+
+
+
 
     public List<Vertex> getNodes(){
         return nodes;
@@ -149,12 +158,16 @@ public class Path {
                         res.getString(res.getColumnIndex(DB_Helper.RT_NAME)),//name
                         res.getDouble(res.getColumnIndex(DB_Helper.RT_LAT)), //latitude
                         res.getDouble(res.getColumnIndex(DB_Helper.RT_LONG)),//longtude
-                        res.getDouble(res.getColumnIndex(DB_Helper.RT_FLOOR))
+                        res.getDouble(res.getColumnIndex(DB_Helper.RT_FLOOR)),
+                        res.getInt(res.getColumnIndex(DB_Helper.RT_KNOWN)),
+                        res.getDouble(res.getColumnIndex(DB_Helper.RT_FAM)),
+                        res.getString(res.getColumnIndex(DB_Helper.RT_DESC))
                         );
                 break;
 
-//            case "building":
-//                //Location = new Building()
+            //TODO add when building have been added to the database.
+//           case "building":
+//                Location = new Building()
 //                        break;
             default:
                 Location = new Vertex(verticesDB.getString(0),  //Vid

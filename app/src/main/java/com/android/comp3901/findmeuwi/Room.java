@@ -14,24 +14,36 @@ public class Room  extends Vertex{
      * @param locale
      */
 
-    private List<String> Description;
+    private String Description;
     private final double floor;
-    private boolean known;
+    private int known;
     private double familiarity;
     //private string imageName;
 
 
     //TODO add room description parameter
-    public Room(String id, String rmName, double mLatitude, double mLongitude, double floor) {
+    public Room(String id, String rmName, double mLatitude, double mLongitude, double floor, int known, double familiarity, String desc ) {
         super(id, rmName, mLatitude, mLongitude, "ROOM");
 
+        this.familiarity = familiarity;
+        this.known = known;
         this.floor = floor;
+        this.Description = desc;
     }
 
     public void updateDB(){
+
         DB_Helper.getInstance(FindMe.get()).updateRoom(super.getId(),known,familiarity);
+
     }
 
+    public  void updateFamiliarity(Double value){
+        this.familiarity += value;
+    }
+
+    public boolean isKnown(){
+        return this.known==1;
+    }
 
     /***
      *Getters and setters
@@ -40,11 +52,11 @@ public class Room  extends Vertex{
         return floor;
     }
 
-    public boolean isKnown() {
+    public Integer getKnown() {
         return known;
     }
 
-    public void setKnown(boolean known) {
+    public void setKnown(Integer known) {
         this.known = known;
     }
 
@@ -56,12 +68,14 @@ public class Room  extends Vertex{
         this.familiarity = familiarity;
     }
 
-    public List<String> getDescription() {
+    public String getDescription() {
         return Description;
     }
 
-    public void setDescription(List<String> description) {
+    public void setDescription(String description) {
         Description = description;
     }
+
+
 
 }
