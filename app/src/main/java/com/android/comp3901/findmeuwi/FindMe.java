@@ -30,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -125,6 +126,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
         //Initialisations
         path = new Path(dbHelper); //Initialises path object which creates graph
+        mapTracker = new Tracker(getActivity());
 
         //LatLngBounds latLngBounds = new LatLngBounds()
 
@@ -134,10 +136,31 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         mGoogleMap.setOnMarkerClickListener(this);
         //mGoogleMap.setLatLngBoundsForCameraTarget();
 
+
+        //Map Listeners
+        mGoogleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                // TODO hide all views but the map view
+                Log.d("Camera Idle: ", "onCameraIdle: ");
+            }
+        });
+
+        mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                Log.d("Map Click  ", " Clicked");
+            }
+        });
+
         mGoogleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
             @Override
             public void onCameraMove() {
-                Log.d("ZOOM Level", ""+ mGoogleMap.getCameraPosition().zoom);
+                cameraLevels();
+            }
+
+            private void cameraLevels() {
+                //  Log.d("ZOOM Level", ""+ mGoogleMap.getCameraPosition().zoom);
 
                 Double level = Double.valueOf(mGoogleMap.getCameraPosition().zoom);
                 if(level < 20.0){
@@ -159,10 +182,6 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 }
             }
         });
-
-
-
-
 
         displayGraph(); // Display the edges
         displayIcons(); // Diplay the node icons
@@ -307,10 +326,10 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         /*
          * Bottom Sheet View
          */
-        nestedView = (NestedScrollView) getView().findViewById(R.id.bottom_sheet);
+        nestedView = (NestedScrollView) getActivity().findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(nestedView);
         sheetBehavior.setHideable(true);
-        sheetBehavior.setPeekHeight(300);
+        sheetBehavior.setPeekHeight(200);
         sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         return ;
@@ -437,7 +456,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             return false;
         } else {
             // create the starting node
-            start = new Vertex(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3), "TEMP");
+            start = new Vertex(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3), "TEMP",0);
 
             mMarkers.addMarker(start.getLL(), start.getName(), start.getId(), 1);
 
@@ -743,8 +762,9 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         List<Edge> edges =  path.getEdges();
         HashMap<String, Vertex> vertexHashMap = path.getVertices();
 
-        for( Vertex nodes: vertexHashMap.values()){
-            mMarkers.addIcon(nodes.getLL(),nodes.getName(),"Snip",nodes.getType());
+        //TODO pass the vertex object as parameter to addIcon
+        for( Vertex node: vertexHashMap.values()){
+            mMarkers.addIcon(node);
          }
     }
 
@@ -813,7 +833,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
             //Toast.makeText(this, "Located", Toast.LENGTH_LONG).show();
 
-
+            mapTracker.locationTracking(location);
 
 
 
@@ -830,14 +850,28 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
             default:
+
+
+
+
                 sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                loadBottomSheet(marker);
                 break;
         }
-
-        return false;
+         return false;
     }
 
+    private void loadBottomSheet(Marker marker) {
 
+        gi
+
+
+        TextView placeTitle = (TextView) getActivity().findViewById(R.id.bottom_sheet_title);
+        TextView placeInfo = (TextView) getActivity().findViewById(R.id.place_info1);
+        //TextView text = (TextView) getView().findViewById(R.id.place_info1);
+
+        placeTitle.setText(marker.getTitle());
+    }
 
 
 //    AddPlaceRequest place = new AddPlaceRequest("C5",

@@ -29,6 +29,8 @@ public class MapMarker {
      LinkedList<Marker> stairs_markers ;
      LinkedList<Marker> building_markers ;
      LinkedList<Marker> junction_markers ;
+     LinkedList<Marker> knownMarkers;
+     LinkedList<Marker> landMarkers;
 
 
 
@@ -40,7 +42,8 @@ public class MapMarker {
         this.stairs_markers = new LinkedList<>();
         this.building_markers = new LinkedList<>();
         this.junction_markers = new LinkedList<>();
-
+        this.knownMarkers = new LinkedList<>();
+        this.landMarkers = new LinkedList<>();
     }
 
     public static MapMarker getInstance(){
@@ -77,34 +80,49 @@ public class MapMarker {
                     //.icon(BitmapDescriptorFactory.fromResource(R.))
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
                     .position(ll);
-
             destMarker = mGoogleMap.addMarker(option);
             } else {}
     }
 
-    public void addIcon(LatLng ll,String title, String snip, String type){
+    public void addIcon(Vertex node){
 
+        LatLng ll = node.getLL();
+        String title = node.getName();
+        String type = node.getType();
+        String snip = "Snip";
 
         switch (type.replaceAll("\\s","").toLowerCase()){
 
             case "building":
                 MarkerOptions building;
                 building = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.mipmap.building)).title(title).snippet(snip);
+                marker.setTag(node);
                 marker = mGoogleMap.addMarker(building);
+                if(node.isLandmark()){landMarkers.add(marker);}
                 building_markers.add(marker);
                 break;
             case "junction":
                 MarkerOptions junction;
                 junction = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.mipmap.junction)).title(title).snippet(snip).visible(false);
+                marker.setTag(node);
                 marker = mGoogleMap.addMarker(junction);
                 junction_markers.add(marker);
                 break;
             case "stairs":
                 MarkerOptions stairs;
-                stairs = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.mipmap.stair)).title(title).snippet("stairs").visible(false);
+                stairs = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.drawable.stair)).title(title).snippet("stairs").visible(false);
                 marker = mGoogleMap.addMarker(stairs);
                 stairs_markers.add(marker);
                 break;
+            case "place":
+                MarkerOptions place;
+                place = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.drawable.point_of_interest)).title(title).snippet("Landmark").visible(false);
+                marker.setTag(node);
+                marker = mGoogleMap.addMarker(place);
+                landMarkers.add(marker);
+                break;
+
+
             default:
                 break;
 
@@ -113,12 +131,17 @@ public class MapMarker {
     }
 
 
-    public void addKnowMarker(Vertex knownPoint){
+
+    public void addPointOfInterestMarker(Vertex knownPoint){
 
         MarkerOptions known_place_options;
         known_place_options = new MarkerOptions()
                                     .position(knownPoint.getLL())
+                                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.chat_bubble))
                                     .title(knownPoint.getName());
+        marker = mGoogleMap.addMarker(known_place_options);
+
+        knownMarkers.add(marker);
     }
 
 

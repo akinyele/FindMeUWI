@@ -24,7 +24,7 @@ import java.util.List;
 
 public class DB_Helper extends SQLiteOpenHelper{
 
-    public static final Integer DATABASE_VERSION = 33;
+    public static final Integer DATABASE_VERSION = 35;
     public static final String DATABASE_NAME = "findme.db";
     private static String DB_PATH = "";
 
@@ -37,6 +37,7 @@ public class DB_Helper extends SQLiteOpenHelper{
     public static final String V_LAT ="V_Latitude";
     public static final String V_LONG ="V_Longitude";
     public static final String V_TYPE ="V_Type";
+    public static final String V_LANDMARK="V_Landmark";
 
     // Database for edges on the graph.
     public static final String EDGES_TABLE ="Edges";
@@ -56,6 +57,8 @@ public class DB_Helper extends SQLiteOpenHelper{
     public static final String RT_KNOWN ="RM_Known";
     public static final String RT_FAM ="RM_Familiarity";
     public static final String RT_BUILDING ="RM_Building";
+    public static final String RT_LANDMARK="RT_Landmark";
+
     // public static final String RT_COL_8 ="image";
 
 
@@ -69,6 +72,7 @@ public class DB_Helper extends SQLiteOpenHelper{
     public static final String B_FLOORS = "B_Floors";
     public static final String B_KNOWN ="B_Known";
     public static final String B_FAM ="B_Familiarity";
+    public static final String B_LANDMARK="B_Landmark";
 
 
     private Context mCxt;
@@ -93,21 +97,8 @@ public class DB_Helper extends SQLiteOpenHelper{
     }
 
 
-
-
-//    public DB_Helper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
-//        super(context, name, factory, version, errorHandler);
-//    }
-
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-
-//        //SLT2
-//        String InsertRooms = "INSERT INTO " + ROOM_TABLE + "(" +RT_ID +", " +RT_NAME +", "+RT_LAT+", "+RT_LONG+", "+RT_DESC+", "+RT_FLOOR+",  "+RT_KNOWN+", "+RT_FAM+" )" +
-//                    //          Name, Lat, Lng, Description, Floor, Known, Familiarity
-//                    " VALUES ('SLT 2', 'Science Lecture Theatre 2', 18.0051221, -76.7497594, 'in front of slt 2 , Next to the  Deans Office', 1, 0 , 0) ";
-
 
         //TODO CREATE TABLE RELATION FOR DB COLUMNS
         db.execSQL("CREATE TABLE " + ROOM_TABLE + " ( " +
@@ -116,9 +107,12 @@ public class DB_Helper extends SQLiteOpenHelper{
                     RT_LAT + " REAL, " +
                     RT_LONG + " REAL, " +
                     RT_DESC + " TEXT, " +
+                    RT_BUILDING + " TEXT, " +
                     RT_FLOOR + " REAL, " +
+                    RT_BUILDING + " TEXT, " +
                     RT_KNOWN + " INT, " +
                     RT_FAM + " REAL, " +
+                    RT_LANDMARK + " INT DEFAULT 0, " +
                    "PRIMARY KEY ("+RT_LAT+","+RT_LONG+","+RT_ID+") ); ");
 
         db.execSQL(" CREATE TABLE " + BUILDING_TABLE + " ( " +
@@ -127,9 +121,10 @@ public class DB_Helper extends SQLiteOpenHelper{
                 B_LAT + " REAL, " +
                 B_LONG + " REAL, " +
                 B_ROOMS + " TEXT, " +
-                B_FLOORS+ " REAL, " +
+                B_FLOORS+ " INT, " +
                 B_KNOWN + " INT, " +
                 B_FAM + " REAL, " +
+                B_LANDMARK + " INT DEFAULT 0, " +
                 "PRIMARY KEY ("+B_LAT+","+B_LONG+","+B_ID+") ); ");
 
 
@@ -139,6 +134,7 @@ public class DB_Helper extends SQLiteOpenHelper{
                     V_LAT + " REAL, " +
                     V_LONG  + " REAL, " +
                     V_TYPE + " TEXT," +
+                    V_LANDMARK + " INT DEFAULT 0, " +
                     "PRIMARY KEY ("+V_LAT+","+V_LONG+","+V_ID+" ) ); " );
 
 
@@ -1837,13 +1833,9 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.clear();
 
 
-        /***
+        /****
          *  Unimportant nodes
          ****/
-
-
-
-
         vertices.put(V_ID,"SJ0"  );
         vertices.put(V_NAME,"Spine Junction 0"  );
         vertices.put(V_LAT,18.004442);
@@ -2450,8 +2442,22 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
+
+        /**
+         * CUSTOM LANDMARKS
+         */
+
+        vertices.put(V_ID,"Jackie's");
+        vertices.put(V_NAME,"Jackie's Stall");
+        vertices.put(V_LAT,18.005010 );
+        vertices.put(V_LONG,-76.749584);
+        vertices.put(V_TYPE ,"Place");
+        vertices.put(V_LANDMARK, 1);
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
 //
-//        vertices.put(V_ID,""  );
+//        vertices.put(V_ID,""  );    18.005010, -76.749584
 //        vertices.put(V_NAME,""  );
 //        vertices.put(V_LAT,18. );
 //        vertices.put(V_LONG,-76.  );
@@ -2823,28 +2829,6 @@ public class DB_Helper extends SQLiteOpenHelper{
         return res;
     }
 
-
-    public Cursor getLocations(){
-        SQLiteDatabase db = this.getReadableDatabase();
-
-
-        //TODO: join buildings table when it is created
-        Cursor res = db.rawQuery("SELECT * " +
-                " FROM (" +
-                         VERTICES_TABLE + " V"+
-                " INNER JOIN " + ROOM_TABLE + " R"+
-                " ON V."+V_LAT+"=R."+RT_LAT+" AND V."+V_LONG+" = R."+RT_LONG+")"
-//                " INNER JOIN "+BUILDING_TABLE+" B"+
-//                " ON V."+V_LAT+"=B."+B_LAT+" AND V."+V_LONG+"=B."+B_LONG+")"
-                ,null);
-
-
-        res.moveToFirst();
-        db.close();
-        return res;
-    }
-
-
     public Cursor getVertices(){
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -2933,7 +2917,7 @@ public class DB_Helper extends SQLiteOpenHelper{
     }
 
 
-    /*
+    /***
      *   For debugging purposes to get database.
      */
      public void writeToSD(Context context) throws IOException {

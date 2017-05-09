@@ -1,5 +1,10 @@
 package com.android.comp3901.findmeuwi;
 
+import android.app.Activity;
+import android.support.design.widget.Snackbar;
+import android.util.Log;
+import android.view.View;
+
 /**
  * Created by Kyzer on 5/6/2017.
  *
@@ -11,12 +16,59 @@ package com.android.comp3901.findmeuwi;
 
 public class Learner {
 
+    Snackbar knownValidotorSnackBar;
+    Activity instance;
+
+    public Learner(Activity instance){
+        this.instance = instance;
+    }
 
 
 
-    public void roomFamiliarity(){
+
+
+
+    public void learner1(Vertex node){
+
+        if( node instanceof Place ){
+            Place place = ((Place) node);
+
+            if(place.isKnown()){
+                return;
+            }else if(place.getFamiliarity() >= 5.0 ){
+                isKnownValidation(place);
+            }else {
+                place.updateFamiliarity(1.0);
+            }
+
+
+
+        }else{
+            Log.d("Learner: ", "Not Place");
+            return;
+        }
 
     }
+
+    private void isKnownValidation(final Place node) {
+
+        knownValidotorSnackBar = Snackbar.make(instance.findViewById(R.id.app_bar_main),"Is "+ node.getName()+" somewhere you know? ",Snackbar.LENGTH_INDEFINITE);
+        knownValidotorSnackBar.setAction("Yes", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                node.setKnown(1);
+            }
+        });
+
+        //knownValidotorSnackBar.setDuration();
+        knownValidotorSnackBar.show();
+    }
+
+
+    public void setKnown(Place place){
+        place.setKnown(1);
+    }
+
 
 
 

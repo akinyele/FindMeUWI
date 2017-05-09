@@ -53,19 +53,20 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
 
         db_helper = DB_Helper.getInstance(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT,
+//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath());
+//                startActivityForResult(intent, 1);
+//                /*Snackbar.make(view, "Add landmark?", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();*/
+//            }
+//        });
+
         FloatingActionButton route = (FloatingActionButton) findViewById(R.id.fbPath);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath());
-                startActivityForResult(intent, 1);
-                /*Snackbar.make(view, "Add landmark?", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
-            }
-        });
         route.setOnClickListener(new View.OnClickListener() {
 
             @Override

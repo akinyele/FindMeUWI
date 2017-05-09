@@ -11,6 +11,7 @@ public class Vertex {
     final private String id;
     final private String name;
     final private String type;
+    private int landmark;
 
     final private double lat;
     final private double lng;
@@ -22,16 +23,23 @@ public class Vertex {
      */
 
 
-    public Vertex(String id, String name, double lat, double lng, String Type) {
+    public Vertex(String id, String name, double lat, double lng, String Type, int landmark) {
         this.id = id;
         this.name = name;
         this.lat = lat;
         this.lng = lng;
         this.type = Type;
+        this.landmark = landmark;
     }
 
 
+    public Boolean isLandmark() {
+        return landmark>1;
+    }
 
+    public void setLandmark(int landmark) {
+        this.landmark = landmark;
+    }
 
     public final String getId() {
         return id;

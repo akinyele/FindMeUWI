@@ -26,8 +26,10 @@ public class Path {
     private List<Edge> edges;
     DB_Helper dbHelper;
 
+    public static LinkedList<Vertex> currPath;
     private Graph graph;
     static HashMap<String,Vertex> vertices;
+
 
 
     /*
@@ -98,14 +100,14 @@ public class Path {
 
         dijkstra.execute(vertices.get(src));
 
-        LinkedList<Vertex> path = dijkstra.getPath(vertices.get(dest));
+        currPath = dijkstra.getPath(vertices.get(dest));
 
 
 
         //assertNotNull(path);
         //assertTrue(path.size() > 0);
 
-        return path;
+        return currPath;
     }
 
     public HashMap<String,Vertex> getVertices(){ return vertices; };
@@ -120,8 +122,6 @@ public class Path {
      * @return
      */
     public List getCNodes() {   return  connectedNodes; }
-
-
 
 
 
@@ -158,10 +158,11 @@ public class Path {
                         res.getString(res.getColumnIndex(DB_Helper.RT_NAME)),//name
                         res.getDouble(res.getColumnIndex(DB_Helper.RT_LAT)), //latitude
                         res.getDouble(res.getColumnIndex(DB_Helper.RT_LONG)),//longtude
-                        res.getDouble(res.getColumnIndex(DB_Helper.RT_FLOOR)),
                         res.getInt(res.getColumnIndex(DB_Helper.RT_KNOWN)),
                         res.getDouble(res.getColumnIndex(DB_Helper.RT_FAM)),
-                        res.getString(res.getColumnIndex(DB_Helper.RT_DESC))
+                        res.getDouble(res.getColumnIndex(DB_Helper.RT_FLOOR)),
+                        res.getString(res.getColumnIndex(DB_Helper.RT_DESC)),
+                        res.getInt(res.getColumnIndex(DB_Helper.RT_LANDMARK))
                         );
                 break;
 
@@ -174,7 +175,8 @@ public class Path {
                         verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_NAME)),//Vname
                         verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LAT)), //latitude
                         verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LONG)),//longtude
-                        verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_TYPE)));//type
+                        verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_TYPE)),//type
+                        verticesDB.getInt(verticesDB.getColumnIndex(DB_Helper.V_LANDMARK)));//Landmark
                 break;
         }
 

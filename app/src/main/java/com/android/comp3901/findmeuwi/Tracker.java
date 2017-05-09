@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.location.Location;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,8 +16,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import static android.os.SystemClock.uptimeMillis;
+import java.util.Objects;
 
 
 /**
@@ -28,7 +29,10 @@ public class Tracker {
     Activity instance;
     Handler handler;
     MapMarker mapMarker;
+    Learner learner;
     public Boolean arrived;
+
+    Snackbar directionsSnackbar;
 
     ArrayList<Vertex> knownNodes;
 
@@ -39,12 +43,17 @@ public class Tracker {
 
     public Tracker(Activity instance){
 
-        this.knownNodes =  this.getKnownNodes();
+        this.knownNodes =  this.getPointsOfInterest();
         this.instance = instance;
         this.mapMarker = MapMarker.getInstance();
         this.arrived = false;
+        this.learner = new Learner(instance);
+        directionsSnackbar = Snackbar.make(instance.findViewById(R.id.app_bar_main), " ", Snackbar.LENGTH_LONG );
+
 
     }
+
+
 
     public Boolean hasArrived() {
         return arrived;
@@ -70,33 +79,58 @@ public class Tracker {
     }
 
 
-
+    /***
+     * This mehthod is used to keep track of the user and pop of known
+     * place the they are close to.
+     * @param location Current Location that is given by the user.
+     */
     public void locationTracking(Location location){
+
+        if(Path.currPath == null){return;}
+
 
         LatLng  myLL = new LatLng(location.getLatitude(),location.getLongitude());
         LatLng dest = new LatLng( FindMe.destination.getLat(), FindMe.destination.getLng());
 
-        Double closeDistance= 0.0014;
+        Double closeDistance= 0.0014;//in Km
         Double distance_to_dest = Distance.find_distance(myLL,dest);
 
 
-        if( distance_to_dest < closeDistance ){
-            //TODO create arrival dialog and increment familiarity
+        if( distance_to_dest <= closeDistance ){ //Check if user have arrived
+            //TODO create arrival dialog and increment familiarity clear path and land marks on arrival
             Toast.makeText(instance,"YOU HAVE ARRIVED AT YOUR DESTINATION", Toast.LENGTH_SHORT);
             arrived = true;
 
 
 
-
             return;
-        }else{
+        }else{// checks for known point and landMarks along the way
+
             //make variable local
             for ( Vertex node : knownNodes) {
 
                 if(Distance.find_distance(myLL,node.getLL())<closeDistance){
-                    //TODO Pop up the know place
 
-                    mapMarker.addKnowMarker(node);
+                //TODO Pop up the known places
+                    knownNodes.remove(node);
+
+                    String nodeType = node.getType().replaceAll("\\s","").toLowerCase();
+
+                    //only pop up know rooms and land marks since building are always shown;
+                    if(!nodeType.equals("building"))
+                        mapMarker.addPointOfInterestMarker(node);
+
+                //TODO show a snack bar showing the tell what just popped up and where it is relative to you
+
+
+                    Directions.getDirection(node);
+
+                    String message = node.getName()+" is on your ";
+                    directionsSnackbar.setText(message);
+                    directionsSnackbar.show();
+
+
+
                     return;
                 }
             }
@@ -105,7 +139,12 @@ public class Tracker {
 
     }
 
-    private ArrayList<Vertex> getKnownNodes() {
+    /**
+     * Gets the Landmarks and known nodes that will be pop during a tracking phase.
+     *
+     * @return the arrayList
+     */
+    private ArrayList<Vertex> getPointsOfInterest() {
 
 
         ArrayList<Vertex> nodes = new ArrayList<>();
@@ -121,9 +160,12 @@ public class Tracker {
 
             Vertex v = allnodes.get(key);
 
-            if( v instanceof Room ){
-                 known = ((Room) v).isKnown();
-            }else {
+
+            if( v instanceof Place ){
+                 known = ((Place) v).isKnown();
+            }else if( v.isLandmark() ){
+                known =true;
+            } else {
                 known = false;
             }
 
@@ -155,16 +197,21 @@ public class Tracker {
              @Override
              public void onClick(View v) {
                  Toast.makeText(instance.getApplicationContext(),"Arrived at"+FindMe.destination.getName() ,Toast.LENGTH_SHORT).show();
+                 dialog.dismiss();
 
-                     // TODO: Check which class instance the destination is and increment the familiarity
-                     if( FindMe.destination instanceof Room){
+                 // TODO: Check which class instance the destination is and increment the familiarity
+                     if( FindMe.destination instanceof Place){
 
                          Log.d("ROOM TYPE  ", "TRUE");
-                         ((Room) FindMe.destination).updateFamiliarity(1.0);
+                         learner.learner1(FindMe.destination);
                          ((Room) FindMe.destination).updateDB();
                          Log.d("NEW Familiarity  ", ""+((Room) FindMe.destination).getFamiliarity());
                      }
-                     dialog.dismiss();
+
+
+
+                 //TODO toast message
+                 onArrival(FindMe.destination);
              }
          });
 
@@ -184,16 +231,13 @@ public class Tracker {
 
         }
 
+    private void onArrival(Vertex node) {
 
 
-
-
-
-
-
-
-
-
+        String message = "You have arrived at " + node.getName();
+        directionsSnackbar.setText(message);
+        directionsSnackbar.show();
+      }
 
 
 }
