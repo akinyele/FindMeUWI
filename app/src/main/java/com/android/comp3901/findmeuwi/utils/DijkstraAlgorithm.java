@@ -1,4 +1,4 @@
-package com.android.comp3901.findmeuwi;
+package com.android.comp3901.findmeuwi.utils;
 
 
 
@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.android.comp3901.findmeuwi.Edge;
-import com.android.comp3901.findmeuwi.Graph;
-import com.android.comp3901.findmeuwi.Vertex;
+import com.android.comp3901.findmeuwi.services.Edge;
+import com.android.comp3901.findmeuwi.services.Graph;
+import com.android.comp3901.findmeuwi.locations.Vertex;
 
 public class DijkstraAlgorithm {
 

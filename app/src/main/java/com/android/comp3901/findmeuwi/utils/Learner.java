@@ -1,9 +1,13 @@
-package com.android.comp3901.findmeuwi;
+package com.android.comp3901.findmeuwi.utils;
 
 import android.app.Activity;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
+
+import com.android.comp3901.findmeuwi.locations.Place;
+import com.android.comp3901.findmeuwi.locations.Vertex;
+import com.android.comp3901.findmeuwi.R;
 
 /**
  * Created by Kyzer on 5/6/2017.
@@ -30,7 +34,7 @@ public class Learner {
 
     public void learner1(Vertex node){
 
-        if( node instanceof Place ){
+        if( node instanceof Place){
             Place place = ((Place) node);
 
             if(place.isKnown()){

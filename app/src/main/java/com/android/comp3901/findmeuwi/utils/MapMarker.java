@@ -1,5 +1,8 @@
-package com.android.comp3901.findmeuwi;
+package com.android.comp3901.findmeuwi.utils;
 
+import com.android.comp3901.findmeuwi.activities.FindMe;
+import com.android.comp3901.findmeuwi.locations.Vertex;
+import com.android.comp3901.findmeuwi.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -54,10 +57,17 @@ public class MapMarker {
     }
 
 
-    public void addMarker(LatLng ll, String title, String snip, Integer type) {
+    /**
+     *
+     * @param vertex
+     * @param type deteremins what type of marker is being created.
+     */
+    public void addMarker(Vertex vertex, Integer type) {
+        LatLng ll = vertex.getLL();
+        String title = vertex.getName();
+        String snip = vertex.getType();
 
-
-        if (type == 1) {
+        if (type == 1) {//Start marker
             if (startMarker != null)
                 startMarker.remove();
 
@@ -67,13 +77,12 @@ public class MapMarker {
                     //.icon(BitmapDescriptorFactory.fromResource(R.))
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                     .position(ll);
-
             startMarker = mGoogleMap.addMarker(option);
+            startMarker.setTag(vertex);
 
-        } else if (type == 2) {
+        } else if (type == 2) {//end marker
             if (destMarker != null)
                 destMarker.remove();
-
             MarkerOptions option = new MarkerOptions()
                     .title(title)
                     .snippet(snip)
@@ -81,7 +90,8 @@ public class MapMarker {
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
                     .position(ll);
             destMarker = mGoogleMap.addMarker(option);
-            } else {}
+            destMarker.setTag(vertex);
+        } else {}
     }
 
     public void addIcon(Vertex node){
@@ -96,15 +106,14 @@ public class MapMarker {
             case "building":
                 MarkerOptions building;
                 building = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.mipmap.building)).title(title).snippet(snip);
-                marker.setTag(node);
                 marker = mGoogleMap.addMarker(building);
+                marker.setTag(node);
                 if(node.isLandmark()){landMarkers.add(marker);}
                 building_markers.add(marker);
                 break;
             case "junction":
                 MarkerOptions junction;
                 junction = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.mipmap.junction)).title(title).snippet(snip).visible(false);
-                marker.setTag(node);
                 marker = mGoogleMap.addMarker(junction);
                 junction_markers.add(marker);
                 break;
@@ -117,11 +126,10 @@ public class MapMarker {
             case "place":
                 MarkerOptions place;
                 place = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.drawable.point_of_interest)).title(title).snippet("Landmark").visible(false);
-                marker.setTag(node);
                 marker = mGoogleMap.addMarker(place);
+                marker.setTag(node);
                 landMarkers.add(marker);
                 break;
-
 
             default:
                 break;
@@ -139,6 +147,7 @@ public class MapMarker {
                                     .position(knownPoint.getLL())
                                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.chat_bubble))
                                     .title(knownPoint.getName());
+        marker.setTag(knownPoint);
         marker = mGoogleMap.addMarker(known_place_options);
 
         knownMarkers.add(marker);
@@ -165,4 +174,6 @@ public class MapMarker {
         }
 
     }
+
+
 }//End of Marker Class

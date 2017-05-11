@@ -1,9 +1,12 @@
-package com.android.comp3901.findmeuwi;
+package com.android.comp3901.findmeuwi.services;
 
 import android.database.Cursor;
 import android.util.Log;
 
-import java.io.Console;
+import com.android.comp3901.findmeuwi.locations.Room;
+import com.android.comp3901.findmeuwi.locations.Vertex;
+import com.android.comp3901.findmeuwi.utils.DijkstraAlgorithm;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -28,7 +31,7 @@ public class Path {
 
     public static LinkedList<Vertex> currPath;
     private Graph graph;
-    static HashMap<String,Vertex> vertices;
+    public static HashMap<String,Vertex> vertices;
 
 
 
@@ -96,7 +99,7 @@ public class Path {
      */
     public LinkedList<Vertex>   getPath(String src, String dest) {
 
-        DijkstraAlgorithm  dijkstra = new DijkstraAlgorithm(graph);
+        DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(graph);
 
         dijkstra.execute(vertices.get(src));
 
@@ -147,7 +150,7 @@ public class Path {
         switch (type){
 
             case "room":
-                Cursor res = dbHelper.findClasses( verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_ID)) );
+                Cursor res = dbHelper.findLocation( verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_ID)) );
 
                 if(res.getCount() == 0){
                     Log.d("GET ROOM", test);

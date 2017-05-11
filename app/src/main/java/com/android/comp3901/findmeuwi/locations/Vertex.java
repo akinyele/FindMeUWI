@@ -1,4 +1,4 @@
-package com.android.comp3901.findmeuwi;
+package com.android.comp3901.findmeuwi.locations;
 
 
 import com.google.android.gms.maps.model.LatLng;
@@ -34,7 +34,7 @@ public class Vertex {
 
 
     public Boolean isLandmark() {
-        return landmark>1;
+        return landmark==1;
     }
 
     public void setLandmark(int landmark) {

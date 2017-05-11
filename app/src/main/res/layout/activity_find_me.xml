@@ -2,7 +2,7 @@
 
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-        tools:context="com.android.comp3901.findmeuwi.FindMe"
+        tools:context="com.android.comp3901.findmeuwi.activities.FindMe"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/activity_find_me"

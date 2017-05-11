@@ -1,14 +1,11 @@
-package com.android.comp3901.findmeuwi;
+package com.android.comp3901.findmeuwi.activities;
 
 import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.ObbInfo;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,15 +20,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.app.Fragment;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.comp3901.findmeuwi.R;
+import com.android.comp3901.findmeuwi.services.DB_Helper;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnSuggestionListener, NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
 
     FragmentManager fragmentManager = getFragmentManager();
-    Fragment mapFrag;
     DB_Helper db_helper;
 
     private SearchView searchView;
@@ -47,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
 
 
 
-             fragmentManager.beginTransaction().replace(R.id.content_frame, new FindMe(), "mapFrag" ).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, new FindMe(), "mapFrag" ).commit();
 
 
 

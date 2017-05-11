@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/place_info_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/place_info_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="INFO"
+        android:layout_gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/plac_name_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="NAME" />
+
+            <TextView
+                android:id="@+id/place_id_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ID" />
+
+            <LinearLayout
+                android:id="@+id/info_building_rooms_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/places_room_info"
+                    android:layout_width="342dp"
+                    android:layout_height="match_parent"
+                    android:paddingTop="5dp"
+                    android:text="Rooms" />
+
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    app:srcCompat="@drawable/ic_eye" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/place_floor_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FLOOR" />
+
+            <TextView
+                android:id="@+id/place_building_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="BUILDING" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Switch
+                    android:id="@+id/switch1"
+                    android:layout_width="match_parent"
+                    android:layout_height="41dp"
+                    android:text="Switch" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/plac_info_dismiss"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:layout_gravity="center"
+
+        android:text="DISMISS" />
+
+</LinearLayout>

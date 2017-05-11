@@ -1,6 +1,7 @@
-package com.android.comp3901.findmeuwi;
+package com.android.comp3901.findmeuwi.locations;
 
-import java.util.List;
+import com.android.comp3901.findmeuwi.services.DB_Helper;
+import com.android.comp3901.findmeuwi.activities.FindMe;
 
 /**
  * Created by Akinyele on 1/29/2017.

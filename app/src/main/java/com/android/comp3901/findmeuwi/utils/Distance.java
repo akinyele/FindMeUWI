@@ -1,15 +1,16 @@
-package com.android.comp3901.findmeuwi;
+package com.android.comp3901.findmeuwi.utils;
 
 import android.location.Location;
 import android.util.Log;
 
+import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.android.comp3901.findmeuwi.FindMe.path;
+import static com.android.comp3901.findmeuwi.activities.FindMe.path;
 
 /**
  * Created by Kyzer on 3/14/2017.

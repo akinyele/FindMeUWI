@@ -1,9 +1,11 @@
-package com.android.comp3901.findmeuwi;
+package com.android.comp3901.findmeuwi.services;
 
 /**
  * Created by Akinyele on 2/10/2017.
  * This represents the graph object with takes a list of vertex and edges.
  */
+
+import com.android.comp3901.findmeuwi.locations.Vertex;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package com.android.comp3901.findmeuwi;
+package com.android.comp3901.findmeuwi.services;
 
-import android.location.Location;
+import com.android.comp3901.findmeuwi.locations.Vertex;
 
 /**
  * Created by Kyzer on 5/8/2017.
@@ -12,13 +12,14 @@ import android.location.Location;
  *
  */
 
+
+
 public class Directions {
+    public static final int x = 0;
 
 
 
-    public Directions(){
 
-    }
 
 
     /**
@@ -57,19 +58,6 @@ public class Directions {
      }
 
 
-    private class Vector{
-
-        private double[] start;
-        private double[] stop;
-
-
-        public Vector(double x1, double y1, double x2, double y2){
-            this.start = new double[]{x1, x2};
-            this.stop = new double[]{x2,x1};
-        }
-
-
-    }
 
 
 

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.android.comp3901.findmeuwi.MainActivity">
+    tools:context="com.android.comp3901.findmeuwi.activities.MainActivity">
 
 
     <android.support.design.widget.AppBarLayout
@@ -48,23 +48,21 @@
 
     <include
         layout="@layout/content_main"
-        android:layout_width="match_parent"
-       />
-
-
+        android:layout_width="match_parent" />
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="290dp"
         android:layout_marginTop="0dp"
-        android:background="@color/Silver"
+        android:background="@color/LightGrey"
         android:elevation="10dp"
+        android:hapticFeedbackEnabled="false"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingTop="0dp"
             android:weightSum="1">
@@ -72,21 +70,21 @@
             <TextView
                 android:id="@+id/bottom_sheet_title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_weight="9.20"
-                android:paddingBottom="20dp"
-                android:paddingTop="2dp"
+                android:layout_height="31dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
                 android:text="PLACE"
                 android:textAlignment="center"
+                android:textAllCaps="false"
 
+                android:textColor="@color/Black"
                 android:textStyle="bold" />
 
 
             <HorizontalScrollView
                 android:id="@+id/bottom_sheet_horizontal_scroll_view"
                 android:layout_width="match_parent"
-                android:layout_height="105dp"
+                android:layout_height="107dp"
                 android:background="@drawable/cast_skip_ad_label_border"
                 android:orientation="horizontal"
                 android:padding="10dp">
@@ -123,29 +121,44 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="16dp"
-                    android:text="info1"
+                    android:text="place_info1"
                     android:textAllCaps="true"
-                    android:textColor="@color/Black"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/place_info2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="16dp"
-                    android:text="info2"
                     android:textColor="@color/Black"
                     android:textSize="16sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
+                    android:layout_height="match_parent"
                     android:background="@drawable/cast_skip_ad_label_border"
-                    android:gravity="center"
                     android:orientation="horizontal"
-                    android:paddingLeft="40dp"
-                    android:paddingRight="50dp">
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp">
+
+                    <ImageView
+                        android:id="@+id/show_info"
+                        android:layout_width="38dp"
+                        android:layout_height="37dp"
+                        android:layout_marginRight="5dp"
+                        app:srcCompat="@drawable/ic_eye" />
+
+                    <TextView
+                        android:id="@+id/place_info2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingTop="8dp"
+                        android:text="place_info2"
+                        android:textColor="@color/Black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/more_info_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/imageView2"
@@ -154,16 +167,18 @@
                         android:layout_marginRight="5dp"
                         android:layout_weight="0.00"
                         android:padding="5dp"
-
+                        android:clickable="false"
                         app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
 
                     <TextView
                         android:id="@+id/place_info3"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginRight="5dp"
                         android:paddingTop="5dp"
+                        android:clickable="false"
                         android:text="more info?"
-                        android:textColor="@color/Black"
+                        android:textColor="?attr/colorAccent"
                         android:textSize="16sp" />
 
                 </LinearLayout>
@@ -181,6 +196,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_vertical_margin"
         android:elevation="100dp"
+        android:hapticFeedbackEnabled="true"
         android:src="@drawable/ic_action_route"
         app:backgroundTint="?attr/actionModeSplitBackground"
         app:elevation="24dp"

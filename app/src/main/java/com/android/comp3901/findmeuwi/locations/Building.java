@@ -1,4 +1,4 @@
-package com.android.comp3901.findmeuwi;
+package com.android.comp3901.findmeuwi.locations;
 
 /**
  * Created by Kyzer on 5/6/2017.

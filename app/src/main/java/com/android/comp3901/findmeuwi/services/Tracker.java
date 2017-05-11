@@ -1,63 +1,114 @@
-package com.android.comp3901.findmeuwi;
+package com.android.comp3901.findmeuwi.services;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.location.Location;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.Snackbar;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.comp3901.findmeuwi.utils.Distance;
+import com.android.comp3901.findmeuwi.activities.FindMe;
+import com.android.comp3901.findmeuwi.utils.Learner;
+import com.android.comp3901.findmeuwi.locations.Place;
+import com.android.comp3901.findmeuwi.locations.Room;
+import com.android.comp3901.findmeuwi.locations.Vertex;
+import com.android.comp3901.findmeuwi.R;
+import com.android.comp3901.findmeuwi.utils.MapMarker;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Objects;
 
 
 /**
  * Created on 5/5/2017.
- * Class is used to give the tracks the user and present relevant info on the journey
+ * Class is used to give the tracks the user and present relevant info on the journey.
+ * this is self contained and done withing a loop.
  *
  */
 
-public class Tracker {
+public class Tracker extends Thread {
+
     Activity instance;
     Handler handler;
     MapMarker mapMarker;
     Learner learner;
-    public Boolean arrived;
+    private Runnable my_runnable;
 
-    Snackbar directionsSnackbar;
+
+
+    private Snackbar directionsSnackbar;
 
     ArrayList<Vertex> knownNodes;
 
+    //State Variable
+    private Boolean hasArrived;
 
 
-
-
+    //Finals
+    public final float min_accurracy_error = 15;
+    private final Double closeDistance= 0.0014;//in Km
 
     public Tracker(Activity instance){
 
         this.knownNodes =  this.getPointsOfInterest();
         this.instance = instance;
         this.mapMarker = MapMarker.getInstance();
-        this.arrived = false;
         this.learner = new Learner(instance);
+        this.hasArrived = false;
         directionsSnackbar = Snackbar.make(instance.findViewById(R.id.app_bar_main), " ", Snackbar.LENGTH_LONG );
 
 
     }
 
 
+    public void startTracker(){
 
-    public Boolean hasArrived() {
-        return arrived;
+        Looper.prepare();
+        while(!hasArrived){
+
+            boolean pathExist = (Path.currPath != null);
+            if(!pathExist){return;}
+
+            if(!FindMe.location_service_enabled){
+
+                if( handler==null ){
+                    startArrivalTimer();
+                }
+
+            }else{
+
+                Location  location = FindMe.my_location;
+
+                if ( !(location.getAccuracy()>min_accurracy_error ||  location.hasAccuracy() )){
+                    Log.d(" Tracker: ", "Not Accurate");
+
+                    Toast.makeText(instance, "Cant get accurate location", Toast.LENGTH_SHORT);
+
+
+                }else {
+
+                    if(handler!=null){handler.removeCallbacks(my_runnable);}
+
+                    locationTracking();
+
+                }
+            }
+        }
+
+        if (hasArrived){
+            Log.d("startTracker: ", " Has arrived true");
+        }
+
     }
+
+
 
     /**
      * This method is used when the user is not tracking by location
@@ -68,38 +119,46 @@ public class Tracker {
     public void startArrivalTimer(){
 
         handler = new Handler();
-        Runnable r = new Runnable() {
+        my_runnable = new Runnable() {
             @Override
             public void run() {
                 createDialog();
             }
         };
 
-        handler.postDelayed(r, 10000);
+        handler.postDelayed(my_runnable, 10000);
+        Looper.loop();
     }
 
 
     /***
      * This mehthod is used to keep track of the user and pop of known
      * place the they are close to.
-     * @param location Current Location that is given by the user.
      */
-    public void locationTracking(Location location){
+    public void locationTracking(){
 
-        if(Path.currPath == null){return;}
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Location  location = FindMe.my_location;
+        Log.d("tracking location :", String.valueOf(location) );
+        //if(Path.currPath == null){return;}
 
 
         LatLng  myLL = new LatLng(location.getLatitude(),location.getLongitude());
         LatLng dest = new LatLng( FindMe.destination.getLat(), FindMe.destination.getLng());
 
-        Double closeDistance= 0.0014;//in Km
+
         Double distance_to_dest = Distance.find_distance(myLL,dest);
 
+        Log.d("Distance to destination", "" + distance_to_dest);
 
         if( distance_to_dest <= closeDistance ){ //Check if user have arrived
             //TODO create arrival dialog and increment familiarity clear path and land marks on arrival
             Toast.makeText(instance,"YOU HAVE ARRIVED AT YOUR DESTINATION", Toast.LENGTH_SHORT);
-            arrived = true;
+            hasArrived = true;
 
 
 
@@ -111,7 +170,7 @@ public class Tracker {
 
                 if(Distance.find_distance(myLL,node.getLL())<closeDistance){
 
-                //TODO Pop up the known places
+                    //TODO Pop up the known places
                     knownNodes.remove(node);
 
                     String nodeType = node.getType().replaceAll("\\s","").toLowerCase();
@@ -129,8 +188,6 @@ public class Tracker {
                     directionsSnackbar.setText(message);
                     directionsSnackbar.show();
 
-
-
                     return;
                 }
             }
@@ -138,6 +195,13 @@ public class Tracker {
         }
 
     }
+
+
+
+
+
+
+
 
     /**
      * Gets the Landmarks and known nodes that will be pop during a tracking phase.
@@ -148,23 +212,25 @@ public class Tracker {
 
 
         ArrayList<Vertex> nodes = new ArrayList<>();
-        HashMap<String,Vertex> allnodes = Path.vertices;
+        HashMap<String,Vertex> all_nodes = Path.vertices;
         Boolean known;
 
-        Iterator iter = allnodes.keySet().iterator();
+        Iterator iter = all_nodes.keySet().iterator();
 
 
         while (iter.hasNext()){
 
            String key = (String) iter.next();
 
-            Vertex v = allnodes.get(key);
+            Vertex v = all_nodes.get(key);
 
 
-            if( v instanceof Place ){
+            if( v instanceof Place){
                  known = ((Place) v).isKnown();
             }else if( v.isLandmark() ){
                 known =true;
+            }else if(v instanceof Room){
+                known = ((Room) v).isKnown();
             } else {
                 known = false;
             }
@@ -184,7 +250,7 @@ public class Tracker {
     /***
      * Creates Dialog box that gets displayed to user, asking them if they have arrived.
      */
-     private void createDialog(){
+    private void createDialog(){
          AlertDialog.Builder arrivalDialog = new AlertDialog.Builder(instance);
          View mView = instance.getLayoutInflater().inflate(R.layout.arrival_query_dialog, null);
 
@@ -199,6 +265,7 @@ public class Tracker {
                  Toast.makeText(instance.getApplicationContext(),"Arrived at"+FindMe.destination.getName() ,Toast.LENGTH_SHORT).show();
                  dialog.dismiss();
 
+
                  // TODO: Check which class instance the destination is and increment the familiarity
                      if( FindMe.destination instanceof Place){
 
@@ -206,6 +273,8 @@ public class Tracker {
                          learner.learner1(FindMe.destination);
                          ((Room) FindMe.destination).updateDB();
                          Log.d("NEW Familiarity  ", ""+((Room) FindMe.destination).getFamiliarity());
+
+
                      }
 
 
@@ -233,11 +302,30 @@ public class Tracker {
 
     private void onArrival(Vertex node) {
 
+        hasArrived = true;
+        Looper.myLooper().quit();
 
         String message = "You have arrived at " + node.getName();
         directionsSnackbar.setText(message);
         directionsSnackbar.show();
       }
 
+
+
+      public void cancelHandler(){
+
+          if(handler!=null){
+              handler.removeCallbacks(my_runnable);
+          }
+         return;
+      }
+
+
+
+
+    @Override
+    public void run(){
+        startTracker();
+    }
 
 }

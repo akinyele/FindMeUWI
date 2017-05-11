@@ -1,6 +1,4 @@
-package com.android.comp3901.findmeuwi;
-
-import android.content.Intent;
+package com.android.comp3901.findmeuwi.locations;
 
 /**
  * Created by Kyzer on 5/8/2017.
@@ -9,7 +7,7 @@ import android.content.Intent;
 
 //TODO add known and familiarity to place because because it would make sense for a place to be known or familiar
 
-public class Place extends Vertex{
+public class Place extends Vertex {
 
 
     Integer known;
