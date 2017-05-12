@@ -1,14 +1,13 @@
-package com.android.comp3901.findmeuwi.services;
+package com.android.comp3901.findmeuwi.utils;
 
 import com.android.comp3901.findmeuwi.locations.Vertex;
+import com.google.maps.android.SphericalUtil;
 
 /**
  * Created by Kyzer on 5/8/2017.
  *
  * This is intended to give relative location of a point according to the path
  * you are traversing.
- *
- *
  *
  */
 
@@ -19,7 +18,7 @@ public class Directions {
 
 
 
-
+ //SphericalUtil
 
 
     /**
@@ -30,11 +29,12 @@ public class Directions {
     public static String getDirection(Vertex point){
 
         return " ";
+
     }
 
 
 
-    private double dotProduct( Coordinates start, Coordinates stop, Coordinates query){
+    private double crossproduct( Coordinates start, Coordinates stop, Coordinates query){
         double d = 0.0;
 
 

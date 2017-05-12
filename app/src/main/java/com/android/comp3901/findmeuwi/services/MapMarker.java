@@ -1,4 +1,4 @@
-package com.android.comp3901.findmeuwi.utils;
+package com.android.comp3901.findmeuwi.services;
 
 import com.android.comp3901.findmeuwi.activities.FindMe;
 import com.android.comp3901.findmeuwi.locations.Vertex;
@@ -133,8 +133,6 @@ public class MapMarker {
 
             default:
                 break;
-
-
         }
     }
 
@@ -152,6 +150,9 @@ public class MapMarker {
 
         knownMarkers.add(marker);
     }
+
+
+
 
 
     public  void showStairs(boolean b){

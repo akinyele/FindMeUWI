@@ -11,14 +11,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.comp3901.findmeuwi.utils.Directions;
 import com.android.comp3901.findmeuwi.utils.Distance;
 import com.android.comp3901.findmeuwi.activities.FindMe;
-import com.android.comp3901.findmeuwi.utils.Learner;
 import com.android.comp3901.findmeuwi.locations.Place;
 import com.android.comp3901.findmeuwi.locations.Room;
 import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.android.comp3901.findmeuwi.R;
-import com.android.comp3901.findmeuwi.utils.MapMarker;
+import com.android.comp3901.findmeuwi.utils.Path;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -34,6 +34,7 @@ import java.util.Iterator;
  */
 
 public class Tracker extends Thread {
+    private static final String TAG = "com.android.comp3901";
 
     Activity instance;
     Handler handler;
@@ -75,29 +76,24 @@ public class Tracker extends Thread {
 
             boolean pathExist = (Path.currPath != null);
             if(!pathExist){return;}
+            else {
+                //display landmark and known places that are close to the path;
+
+
+            }
 
             if(!FindMe.location_service_enabled){
-
                 if( handler==null ){
                     startArrivalTimer();
                 }
-
             }else{
-
                 Location  location = FindMe.my_location;
-
                 if ( !(location.getAccuracy()>min_accurracy_error ||  location.hasAccuracy() )){
                     Log.d(" Tracker: ", "Not Accurate");
-
-                    Toast.makeText(instance, "Cant get accurate location", Toast.LENGTH_SHORT);
-
-
+                     Toast.makeText(instance, "Cant get accurate location", Toast.LENGTH_SHORT);
                 }else {
-
                     if(handler!=null){handler.removeCallbacks(my_runnable);}
-
                     locationTracking();
-
                 }
             }
         }
@@ -143,7 +139,7 @@ public class Tracker extends Thread {
             e.printStackTrace();
         }
         Location  location = FindMe.my_location;
-        Log.d("tracking location :", String.valueOf(location) );
+        Log.d(TAG , "tracking location :" + String.valueOf(location) );
         //if(Path.currPath == null){return;}
 
 
@@ -153,7 +149,7 @@ public class Tracker extends Thread {
 
         Double distance_to_dest = Distance.find_distance(myLL,dest);
 
-        Log.d("Distance to destination", "" + distance_to_dest);
+        Log.d(TAG, "Distance to destination" + distance_to_dest);
 
         if( distance_to_dest <= closeDistance ){ //Check if user have arrived
             //TODO create arrival dialog and increment familiarity clear path and land marks on arrival
@@ -305,9 +301,11 @@ public class Tracker extends Thread {
         hasArrived = true;
         Looper.myLooper().quit();
 
-        String message = "You have arrived at " + node.getName();
-        directionsSnackbar.setText(message);
-        directionsSnackbar.show();
+        Toast.makeText(instance, "You have arrived at " + node.getName(),Toast.LENGTH_SHORT);
+
+//        String message = "You have arrived at " + node.getName();
+//        directionsSnackbar.setText(message);
+//        directionsSnackbar.show();
       }
 
 

@@ -1,11 +1,14 @@
-package com.android.comp3901.findmeuwi.services;
+package com.android.comp3901.findmeuwi.utils;
 
 import android.database.Cursor;
 import android.util.Log;
 
 import com.android.comp3901.findmeuwi.locations.Room;
 import com.android.comp3901.findmeuwi.locations.Vertex;
-import com.android.comp3901.findmeuwi.utils.DijkstraAlgorithm;
+import com.android.comp3901.findmeuwi.services.DB_Helper;
+import com.android.comp3901.findmeuwi.services.Edge;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.PolyUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,8 +34,9 @@ public class Path {
 
     public static LinkedList<Vertex> currPath;
     private Graph graph;
-    public static HashMap<String,Vertex> vertices;
+    public static HashMap<String,Vertex> vertices; //List of all the vertices that are in the database
 
+    PolyUtil polyUtil;
 
 
     /*
@@ -138,6 +142,21 @@ public class Path {
 
 
 
+    public List<LatLng> getLatLngs(){
+        ArrayList<LatLng> latLngs = new ArrayList<>();
+
+        for(Vertex node: currPath){
+
+
+
+
+
+        }
+
+     return latLngs;
+    }
+
+
     /*
      *Used when creating the vertices. Used to create the vertices of the right subclass
      */
@@ -186,5 +205,10 @@ public class Path {
 
         return Location;
     }
+
+
+
+
+
 
 }

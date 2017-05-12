@@ -30,23 +30,25 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.android.comp3901.findmeuwi.locations.Building;
 import com.android.comp3901.findmeuwi.locations.Room;
 import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.android.comp3901.findmeuwi.R;
 import com.android.comp3901.findmeuwi.services.Edge;
-import com.android.comp3901.findmeuwi.services.Path;
+import com.android.comp3901.findmeuwi.utils.Path;
 import com.android.comp3901.findmeuwi.services.Tracker;
 import com.android.comp3901.findmeuwi.services.DB_Helper;
 import com.android.comp3901.findmeuwi.utils.Distance;
-import com.android.comp3901.findmeuwi.utils.MapMarker;
+import com.android.comp3901.findmeuwi.services.MapMarker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -67,6 +69,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
 
 
 import java.io.IOException;
@@ -79,6 +82,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener,GoogleMap.OnMarkerClickListener
         {
 
+
+
     //Map Clients
     GoogleApiClient mGoogleApiClient;
     UiSettings mUiSettings;
@@ -88,12 +93,18 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     BottomSheetBehavior sheetBehavior;
 
 
+   //services
+            PolyUtil polyutil;
+
     //Map Objects
     Marker startMarker, destMarker, marker; //TODO let MapMarker class handle the creation of these markers
     LinkedList<Polyline> graphLines;
     Vertex source, known;
     LinkedList<Vertex> route;
     Polyline line;
+
+
+    private static final String TAG = "com.android.comp3901";
 
     //Views
     private AutoCompleteTextView getSourceView;
@@ -157,19 +168,22 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         //mGoogleMap.setLatLngBoundsForCameraTarget();
 
 
+
         //Map Listeners
         mGoogleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
                 // TODO hide all views but the map view
-                Log.d("Camera Idle: ", "onCameraIdle: ");
+
+                Log.d(TAG, "onCameraIdle:");
             }
         });
 
         mGoogleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                Log.d("Map Click  ", " Clicked");
+                 Log.d(TAG, "onMapClick: ");
+
             }
         });
 
@@ -180,7 +194,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             }
 
             private void cameraLevels() {
-                //  Log.d("ZOOM Level", ""+ mGoogleMap.getCameraPosition().zoom);
+                //  Log.d(TAG, ""+ mGoogleMap.getCameraPosition().zoom);
 
                 Double level = Double.valueOf(mGoogleMap.getCameraPosition().zoom);
                 if(level < 20.0){
@@ -254,6 +268,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         switch (v.getId()){
             case R.id.findBtn:
                 try {
+                    Log.d(TAG, "onClick: find button ");
                     geoLocate(v);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -488,14 +503,14 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             // create the starting node
             switch (res.getColumnName(0)){
                 case DB_Helper.RT_ID:
-                    Log.d("Table: ", "room table ");
+                    Log.d(TAG, " Table: room table ");
                     start = path.getVertices().get(res.getString(res.getColumnIndex(DB_Helper.RT_ID)));
                     break;
                 case DB_Helper.B_ID:
-                    Log.d("Table: ", " Building: ");
+                    Log.d(TAG, "Table: Building: ");
                     break;
                 default:
-                    Log.d("Table: ", " Default: ");
+                    Log.d(TAG, "Table: Default: ");
             }
 
 
@@ -751,6 +766,9 @@ private void startTracking() {
              */
     public void drawPath(LinkedList<Vertex> route){
 
+
+
+
         if(line != null)
             line.remove();
 
@@ -770,6 +788,8 @@ private void startTracking() {
                                     ;
 
         line = mGoogleMap.addPolyline(options);
+
+
 
     }
 
@@ -982,26 +1002,75 @@ private void startTracking() {
 
     }
 
-            private void create_info_dialog(Vertex rm) {
+            private void create_info_dialog(Vertex v) {
 
-                AlertDialog.Builder info_dialog = new AlertDialog.Builder(getContext(),AlertDialog.BUTTON_POSITIVE);
+                AlertDialog.Builder info_dialog = new AlertDialog.Builder(getActivity(),AlertDialog.BUTTON_POSITIVE);
                 View room_info_view = getActivity().getLayoutInflater().inflate(R.layout.place_info_dialog, null);
 
 
                 //Instantiate Layout Views
-                TextView name = (TextView) room_info_view.findViewById(R.id.plac_name_info);
-                TextView id = (TextView) room_info_view.findViewById(R.id.place_id_info);
-                TextView building = (TextView) room_info_view.findViewById(R.id.place_building_info);
-                TextView floor  = (TextView) room_info_view.findViewById(R.id.place_floor_info);
-                TextView rooms = (TextView) room_info_view.findViewById(R.id.places_room_info);
+                TextView name_text = (TextView) room_info_view.findViewById(R.id.plac_name_info);
+                TextView id_text = (TextView) room_info_view.findViewById(R.id.place_id_info);
+                TextView building_text = (TextView) room_info_view.findViewById(R.id.place_building_info);
+                TextView floor_text = (TextView) room_info_view.findViewById(R.id.place_floor_info);
+                TextView rooms_text = (TextView) room_info_view.findViewById(R.id.places_room_info);
+                Switch known_switch = (Switch) room_info_view.findViewById(R.id.place_info_known_swittch);
 
                 View rooms_view = room_info_view.findViewById(R.id.info_building_rooms_layout);
-                rooms_view.setVisibility(View.INVISIBLE);
+                rooms_view.setVisibility(View.GONE);
+
+                Button dissmiss = (Button) room_info_view.findViewById(R.id.plac_info_dismiss);
 
 
 
 
+                //check check the instance of the vertex and set the view accordingly
+                //TODO change the test to instance of when buildings  database fully are implemented
+                if(v.getType().replaceAll("\\s","").toLowerCase().equals("room")){
+                    final Room rm = ((Room)v );
 
+                    name_text.setText(rm.getName());
+                    id_text.setText(rm.getId());
+                    building_text.setText(rm.getBuilding());
+                    floor_text.setText(""+rm.getFloor());
+                    known_switch.setChecked(rm.isKnown());
+
+                    known_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                            if(isChecked){
+                                rm.setKnown(1);
+                            }else{
+                                rm.setKnown(0);
+                            }
+                            rm.updateDB();
+
+                        }
+                    });
+
+
+
+                }else if(v.getType().replaceAll("\\s","").toLowerCase().equals("<na>building")){
+                    Building build = ((Building) v );
+
+                    name_text.setText(build.getName());
+                    id_text.setText(build.getId());
+                    floor_text.setText(""+build.getFloors());
+                }
+
+
+                info_dialog.setView(room_info_view);
+                final AlertDialog dialog = info_dialog.create();
+                dialog.show();
+
+
+                dissmiss.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
 
             }
 

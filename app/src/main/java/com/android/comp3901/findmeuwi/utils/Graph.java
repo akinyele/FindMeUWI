@@ -1,4 +1,4 @@
-package com.android.comp3901.findmeuwi.services;
+package com.android.comp3901.findmeuwi.utils;
 
 /**
  * Created by Akinyele on 2/10/2017.
@@ -6,6 +6,7 @@ package com.android.comp3901.findmeuwi.services;
  */
 
 import com.android.comp3901.findmeuwi.locations.Vertex;
+import com.android.comp3901.findmeuwi.services.Edge;
 
 import java.util.List;
 

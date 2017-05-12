@@ -1,4 +1,4 @@
-package com.android.comp3901.findmeuwi.utils;
+package com.android.comp3901.findmeuwi.services;
 
 import android.app.Activity;
 import android.support.design.widget.Snackbar;
@@ -63,6 +63,9 @@ public class Learner {
                 node.setKnown(1);
             }
         });
+
+        //TODO update database after setting known bit.
+
 
         //knownValidotorSnackBar.setDuration();
         knownValidotorSnackBar.show();

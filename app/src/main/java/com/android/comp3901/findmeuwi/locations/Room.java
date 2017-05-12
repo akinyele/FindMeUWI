@@ -17,6 +17,7 @@ public class Room  extends Place{
 
     private String Description;
     private final double floor;
+    private final String building = "NA"; //TODO remove when building are included
 
     //private string imageName;
 
@@ -56,5 +57,7 @@ public class Room  extends Place{
     }
 
 
-
+    public String getBuilding() {
+        return building;
+    }
 }

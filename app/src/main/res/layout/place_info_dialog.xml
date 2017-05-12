@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="5dp"
+    android:background="@drawable/cast_skip_ad_label_border"
     android:weightSum="1">
 
     <TextView
@@ -19,24 +19,33 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/cast_skip_ad_label_border"
+        android:padding="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/plac_name_info"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="NAME" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/place_id_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="ID" />
+                <TextView
+                    android:id="@+id/plac_name_info"
+                    android:layout_width="254dp"
+                    android:layout_height="wrap_content"
+                    android:text="NAME" />
+
+                <TextView
+                    android:id="@+id/place_id_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ID" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/info_building_rooms_layout"
@@ -78,10 +87,12 @@
                 android:orientation="horizontal">
 
                 <Switch
-                    android:id="@+id/switch1"
+                    android:id="@+id/place_info_known_swittch"
                     android:layout_width="match_parent"
                     android:layout_height="41dp"
-                    android:text="Switch" />
+                    android:text="Known"
+                    android:textOff="Unknown"
+                    android:textOn="Known" />
 
             </LinearLayout>
         </LinearLayout>
@@ -90,9 +101,10 @@
     <Button
         android:id="@+id/plac_info_dismiss"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="34dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
 
         android:text="DISMISS" />
 
