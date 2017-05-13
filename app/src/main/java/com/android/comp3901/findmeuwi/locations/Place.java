@@ -43,6 +43,14 @@ public class Place extends Vertex {
         this.familiarity = familiarity;
     }
 
+    public String getInfo(){
+
+
+        return "";
+    }
+
+
+
     public  void updateFamiliarity(Double value){
 
         double fam = this.getFamiliarity();

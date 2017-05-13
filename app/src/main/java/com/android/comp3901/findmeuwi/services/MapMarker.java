@@ -50,9 +50,7 @@ public class MapMarker {
     }
 
     public static MapMarker getInstance(){
-
             instance = new MapMarker(FindMe.mGoogleMap);
-
         return  instance;
     }
 

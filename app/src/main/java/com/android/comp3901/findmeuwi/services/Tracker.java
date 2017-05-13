@@ -45,6 +45,7 @@ public class Tracker extends Thread {
 
 
     private Snackbar directionsSnackbar;
+    private Path path;
 
     ArrayList<Vertex> knownNodes;
 
@@ -62,26 +63,28 @@ public class Tracker extends Thread {
         this.instance = instance;
         this.mapMarker = MapMarker.getInstance();
         this.learner = new Learner(instance);
-        this.hasArrived = false;
         directionsSnackbar = Snackbar.make(instance.findViewById(R.id.app_bar_main), " ", Snackbar.LENGTH_LONG );
-
 
     }
 
 
-    public void startTracker(){
+    public void startTracker() throws InterruptedException {
 
-        Looper.prepare();
-        while(!hasArrived){
+        while(true){
+            sleep(2000);
 
+            Log.d(TAG, "startTracker: Thread Started");
             boolean pathExist = (Path.currPath != null);
-            if(!pathExist){return;}
+            if(!pathExist){
+                synchronized (Path.lock) {
+                    Log.d(TAG, "startTracker: No path, Thread paused");
+                    Path.lock.wait();
+                    Log.d(TAG, "startTracker: Thread Resumed");
+                }
+            }
             else {
                 //display landmark and known places that are close to the path;
-
-
             }
-
             if(!FindMe.location_service_enabled){
                 if( handler==null ){
                     startArrivalTimer();
@@ -90,17 +93,18 @@ public class Tracker extends Thread {
                 Location  location = FindMe.my_location;
                 if ( !(location.getAccuracy()>min_accurracy_error ||  location.hasAccuracy() )){
                     Log.d(" Tracker: ", "Not Accurate");
-                     Toast.makeText(instance, "Cant get accurate location", Toast.LENGTH_SHORT);
+                    Toast.makeText(instance, "Cant get accurate location", Toast.LENGTH_SHORT);
                 }else {
-                    if(handler!=null){handler.removeCallbacks(my_runnable);}
                     locationTracking();
                 }
             }
+
         }
 
-        if (hasArrived){
-            Log.d("startTracker: ", " Has arrived true");
-        }
+
+//        if (hasArrived){
+//            Log.d("startTracker: ", " Has arrived true");
+//        }
 
     }
 
@@ -113,15 +117,16 @@ public class Tracker extends Thread {
      * Based of the response it does the next required task.
      */
     public void startArrivalTimer(){
-
+        Looper.prepare();
         handler = new Handler();
         my_runnable = new Runnable() {
             @Override
             public void run() {
-                createDialog();
+                if(!FindMe.location_service_enabled){
+                    createDialog();
+                }
             }
         };
-
         handler.postDelayed(my_runnable, 10000);
         Looper.loop();
     }
@@ -155,10 +160,8 @@ public class Tracker extends Thread {
             //TODO create arrival dialog and increment familiarity clear path and land marks on arrival
             Toast.makeText(instance,"YOU HAVE ARRIVED AT YOUR DESTINATION", Toast.LENGTH_SHORT);
             hasArrived = true;
+            onArrival(FindMe.destination);
 
-
-
-            return;
         }else{// checks for known point and landMarks along the way
 
             //make variable local
@@ -184,7 +187,7 @@ public class Tracker extends Thread {
                     directionsSnackbar.setText(message);
                     directionsSnackbar.show();
 
-                    return;
+
                 }
             }
 
@@ -299,31 +302,38 @@ public class Tracker extends Thread {
     private void onArrival(Vertex node) {
 
         hasArrived = true;
-        Looper.myLooper().quit();
+        FindMe.trackerHandler.sendEmptyMessage(0);
+
+        //TODO Clear Path show pop up image of destination;
+
+        //Path.clearCurPath();
+
+
 
         Toast.makeText(instance, "You have arrived at " + node.getName(),Toast.LENGTH_SHORT);
 
-//        String message = "You have arrived at " + node.getName();
-//        directionsSnackbar.setText(message);
-//        directionsSnackbar.show();
       }
 
 
 
-      public void cancelHandler(){
-
-          if(handler!=null){
-              handler.removeCallbacks(my_runnable);
-          }
-         return;
-      }
+//      public void cancelHandler(){
+//
+//          if(handler!=null){
+//              handler.removeCallbacks(my_runnable);
+//          }
+//         return;
+//      }
 
 
 
 
     @Override
     public void run(){
-        startTracker();
+        try {
+            startTracker();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

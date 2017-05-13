@@ -11,6 +11,8 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -79,8 +81,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener,GoogleMap.OnMarkerClickListener
-        {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener,GoogleMap.OnMarkerClickListener{
+
 
 
 
@@ -92,9 +94,13 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     MapMarker mMarkers;
     BottomSheetBehavior sheetBehavior;
 
-
    //services
-            PolyUtil polyutil;
+    PolyUtil polyutil;
+
+
+
+
+
 
     //Map Objects
     Marker startMarker, destMarker, marker; //TODO let MapMarker class handle the creation of these markers
@@ -136,6 +142,19 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     public static Activity  get(){ return instance;}
 
 
+    public static Handler trackerHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+
+            //arrival message recieve from tracker so clear current path
+            Log.d(TAG, "handleMessage: MessageRecieved");
+
+
+
+
+        }
+    };
+
 
 
 
@@ -164,6 +183,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         mGoogleMap = googleMap;
         mUiSettings = mGoogleMap.getUiSettings();
         mMarkers = MapMarker.getInstance();
+        mapTracker = new Tracker(getActivity());
+        mapTracker.start();
         mGoogleMap.setOnMarkerClickListener(this);
         //mGoogleMap.setLatLngBoundsForCameraTarget();
 
@@ -551,7 +572,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 getSource.getText().clear();
                 getSource.setFocusable(false);
                 location_service_enabled = true;
-                if(mapTracker!=null){startTracking();}
+
 
 
             } else {
@@ -738,8 +759,12 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             Toast.makeText(this.getActivity(), "No Destination selected", Toast.LENGTH_LONG).show();
             return;
         } else {
-            route = path.getPath(start.getId(), destination.getId());
-                if(route==null){
+             try {
+                 route = path.getPath(start.getId(), destination.getId());
+             } catch (InterruptedException e) {
+                 e.printStackTrace();
+             }
+             if(route==null){
                     Toast.makeText(this.getActivity(), "Could not find path from "+ start.getName()+ " to " + destination.getName() + " found.", Toast.LENGTH_LONG).show();
                     return;
                 }else {
@@ -748,27 +773,13 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         }
 
         drawPath(route);
-        startTracking();
+        //startTracking();
    }
-
-private void startTracking() {
-//    if(mapTracker!=null){mapTracker.stop();}
-    //TODO anbandon handler for arival prompt
-    if(mapTracker!=null){ mapTracker.cancelHandler();    }
-
-
-    mapTracker = new Tracker(getActivity());
-    mapTracker.start();
-}
 
             /*
              * Draws a path with the provided the set of vertices
              */
     public void drawPath(LinkedList<Vertex> route){
-
-
-
-
         if(line != null)
             line.remove();
 
@@ -788,8 +799,6 @@ private void startTracking() {
                                     ;
 
         line = mGoogleMap.addPolyline(options);
-
-
 
     }
 

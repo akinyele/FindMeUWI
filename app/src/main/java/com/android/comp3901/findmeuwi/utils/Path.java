@@ -1,14 +1,17 @@
 package com.android.comp3901.findmeuwi.utils;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.android.comp3901.findmeuwi.activities.FindMe;
 import com.android.comp3901.findmeuwi.locations.Room;
 import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.android.comp3901.findmeuwi.services.DB_Helper;
 import com.android.comp3901.findmeuwi.services.Edge;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.PolyUtil;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +28,7 @@ import static junit.framework.Assert.assertTrue;
  */
 
 public class Path {
+    public static final String TAG = "com.android.comp3901.";
 
     // Used in Path Finding method
     private List<Vertex> nodes;
@@ -36,7 +40,12 @@ public class Path {
     private Graph graph;
     public static HashMap<String,Vertex> vertices; //List of all the vertices that are in the database
 
-    PolyUtil polyUtil;
+    private static Path instance = null;
+
+    public static final Object lock = new Object();
+
+
+    SphericalUtil polyUtil;
 
 
     /*
@@ -97,23 +106,27 @@ public class Path {
     }
 
 
-    /*
-     * Uses the dijkstra to generates the shortest path
-     *
+    /***
+     * This is when a path is created for the firt time
+     * Uses thstra to gee dijknerates the shortest path
+     * @param src
+     * @param dest
+     * @return
      */
-    public LinkedList<Vertex>   getPath(String src, String dest) {
+    public LinkedList<Vertex>   getPath(String src, String dest) throws InterruptedException {
 
         DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(graph);
 
         dijkstra.execute(vertices.get(src));
 
         currPath = dijkstra.getPath(vertices.get(dest));
-
-
-
         //assertNotNull(path);
         //assertTrue(path.size() > 0);
 
+        synchronized (lock){
+            Log.d(TAG, "getPath: Resuming Threads");
+            lock.notify();
+        }
         return currPath;
     }
 
@@ -141,7 +154,7 @@ public class Path {
     }
 
 
-
+    //TODO finish implementation
     public List<LatLng> getLatLngs(){
         ArrayList<LatLng> latLngs = new ArrayList<>();
 
@@ -205,10 +218,5 @@ public class Path {
 
         return Location;
     }
-
-
-
-
-
 
 }
