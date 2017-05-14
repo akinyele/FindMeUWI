@@ -24,6 +24,7 @@
             android:textSize="18sp" />
 
         <LinearLayout
+            android:id="@+id/adding_landmarks_name_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -31,14 +32,14 @@
             android:paddingBottom="5dp">
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/landmark_name_lable"
                 android:layout_width="70dp"
                 android:layout_height="match_parent"
                 android:paddingTop="15dp"
                 android:text="TextView" />
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/landmark_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -146,5 +147,7 @@
         app:layout_anchorGravity="bottom|center"
         android:elevation="6dp"
         app:srcCompat="@android:drawable/ic_menu_camera" />
+
+
 
 </android.support.design.widget.CoordinatorLayout>
