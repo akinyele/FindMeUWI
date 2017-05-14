@@ -986,6 +986,66 @@ public class DB_Helper extends SQLiteOpenHelper{
     }
 
 
+    public void genrateBuildings(SQLiteDatabase db){
+        ContentValues buildings = new ContentValues();
+
+        buildings.put(B_ID,"DOM");
+        buildings.put(B_NAME,"Department of Mathematics");
+        buildings.put(B_LAT,18.004807);
+        buildings.put(B_LONG,-76.749583);
+        buildings.put(B_ROOMS,"MLAB");
+        buildings.put(B_FLOORS,1);
+        buildings.put(B_KNOWN,0);
+        buildings.put(B_FAM,0);
+        db.insert(BUILDING_TABLE,null,buildings);
+        buildings.clear();
+
+        buildings.put(B_ID,"COMLABB");
+        buildings.put(B_NAME,"Computer Science Lab Building");
+        buildings.put(B_LAT,18.005242 );
+        buildings.put(B_LONG,-76.750182);
+        buildings.put(B_ROOMS,"CR2,CR1");
+        buildings.put(B_FLOORS,1);
+        buildings.put(B_KNOWN,0);
+        buildings.put(B_FAM,0);
+        db.insert(BUILDING_TABLE,null,buildings);
+        buildings.clear();
+
+        buildings.put(B_ID,"DOC");
+        buildings.put(B_NAME,"Department of Computing Building");
+        buildings.put(B_LAT,18.005749 );
+        buildings.put(B_LONG,-76.750067);
+        buildings.put(B_ROOMS,"");
+        buildings.put(B_FLOORS,3);
+        buildings.put(B_KNOWN,0);
+        buildings.put(B_FAM,0);
+        db.insert(BUILDING_TABLE,null,buildings);
+        buildings.clear();
+
+
+        buildings.put(B_ID,"DLSEB");
+        buildings.put(B_NAME,"DLS Entomology Lab Building");
+        buildings.put(B_LAT,18.006255 );
+        buildings.put(B_LONG,-76.749714);
+        buildings.put(B_ROOMS,"");
+        buildings.put(B_FLOORS,1);
+        buildings.put(B_KNOWN,0);
+        buildings.put(B_FAM,0);
+        db.insert(BUILDING_TABLE,null,buildings);
+        buildings.clear();
+
+//        buildings.put(B_ID," ");
+//        buildings.put(B_NAME,"");
+//        buildings.put(B_LAT, );
+//        buildings.put(B_LONG,);
+//        building.put(B_ROOMS,"");
+//        buildings.put(B_FLOORS,);
+//        buildings.put(B_KNOWN,0);
+//        buildings.put(B_FAM,0);
+//        db.insert(BUILDING_TABLE,null,buildings);
+//        buildings.clear();
+    }
+
 
     /*
      * Generate Vertices
