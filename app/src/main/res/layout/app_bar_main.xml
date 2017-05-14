@@ -55,7 +55,8 @@
         android:layout_width="match_parent"
         android:layout_height="290dp"
         android:layout_marginTop="0dp"
-        android:background="@color/LightGrey"
+        android:background="@drawable/layout_background"
+        android:backgroundTint="@color/LightGrey"
         android:elevation="10dp"
         android:hapticFeedbackEnabled="false"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
