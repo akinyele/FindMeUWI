@@ -42,6 +42,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.android.comp3901.findmeuwi.locations.Building;
+import com.android.comp3901.findmeuwi.locations.Place;
 import com.android.comp3901.findmeuwi.locations.Room;
 import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.android.comp3901.findmeuwi.R;
@@ -72,42 +73,38 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
+import com.google.maps.android.SphericalUtil;
 
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener,GoogleMap.OnMarkerClickListener{
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener,GoogleMap.OnMarkerClickListener,  GoogleMap.OnPolylineClickListener{
 
 
 
 
     //Map Clients
-    GoogleApiClient mGoogleApiClient;
-    UiSettings mUiSettings;
-    DB_Helper dbHelper;
-    Tracker mapTracker;
-    MapMarker mMarkers;
+    private GoogleApiClient mGoogleApiClient;
+    private UiSettings mUiSettings;
+    private DB_Helper dbHelper;
+    private Tracker mapTracker;
+    private static MapMarker mapMarkers;
     BottomSheetBehavior sheetBehavior;
 
-   //services
-    PolyUtil polyutil;
-
-
-
-
-
+   //Utils
 
     //Map Objects
     Marker startMarker, destMarker, marker; //TODO let MapMarker class handle the creation of these markers
     LinkedList<Polyline> graphLines;
     Vertex source, known;
     LinkedList<Vertex> route;
-    Polyline line;
+    private static Polyline line;
 
 
     private static final String TAG = "com.android.comp3901";
@@ -120,11 +117,12 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     private ToggleButton locatoin_toggle;
 
 
-    //Map State Variable
+
+    /**Map State Variable**/
     private boolean is_tracking = false;   //uses to tell when there is a path that is being tracked;
 
     //Finals
-    LatLng sci_tech = new LatLng(18.005072, -76.749544);
+    final LatLng sci_tech = new LatLng(18.005072, -76.749544);
 
 
     //Static Variables
@@ -142,17 +140,17 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     public static Activity  get(){ return instance;}
 
 
-    public static Handler trackerHandler = new Handler(){
+    public static final Handler trackerHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
 
             //arrival message recieve from tracker so clear current path
             Log.d(TAG, "handleMessage: MessageRecieved");
-
-
-
-
+            path.remove();
+            line.remove();
+            mapMarkers.removePOI();
         }
+
     };
 
 
@@ -182,7 +180,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
         mGoogleMap = googleMap;
         mUiSettings = mGoogleMap.getUiSettings();
-        mMarkers = MapMarker.getInstance();
+        mapMarkers = MapMarker.getInstance();
         mapTracker = new Tracker(getActivity());
         mapTracker.start();
         mGoogleMap.setOnMarkerClickListener(this);
@@ -205,6 +203,15 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             public void onMapClick(LatLng latLng) {
                  Log.d(TAG, "onMapClick: ");
 
+
+
+                for (Polyline polyline : graphLines) {
+                    if (PolyUtil.isLocationOnPath(latLng, polyline.getPoints(), true, 100)) {
+                        // user clicked on polyline
+                        Toast.makeText(getActivity()," Hello "+ polyline.getId(),Toast.LENGTH_SHORT);
+                    }
+                }
+
             }
         });
 
@@ -219,21 +226,21 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
                 Double level = Double.valueOf(mGoogleMap.getCameraPosition().zoom);
                 if(level < 20.0){
-                    mMarkers.showStairs(false);
+                    mapMarkers.showStairs(false);
                 }else{
-                    mMarkers.showStairs(true);
+                    mapMarkers.showStairs(true);
                 }
 
                 if(level < 18.58317 ){
-                    mMarkers.showBuildings(false);
+                    mapMarkers.showBuildings(false);
                 }else{
-                    mMarkers.showBuildings(true);
+                    mapMarkers.showBuildings(true);
                 }
 
                 if(level < 19.0){
-                    mMarkers.showJunctions(false);
+                    mapMarkers.showJunctions(false);
                 }else{
-                    mMarkers.showJunctions(true);
+                    mapMarkers.showJunctions(true);
                 }
             }
         });
@@ -296,7 +303,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 }
                 break;
             case R.id.getPath:
-                getPath(v);
+                getPath();
                 break;
             case R.id.locationToggle:
                 toggleLocations(v);
@@ -468,7 +475,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         EditText et = (EditText) getView().findViewById(R.id.classSearch);
         String clss = et.getText().toString();
 
-        Cursor res = dbHelper.findLocation(clss);
+        Cursor res = dbHelper. findLocation(clss);
         if (res.getCount() == 0) {
             // show message "no results found in class database"
             Toast.makeText(this.getActivity(), "Could not find " + clss, Toast.LENGTH_LONG).show();
@@ -482,8 +489,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             //new Vertex(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3),"Room");
 
             //TODO allow destination to be building as well;
-            destination = Path.vertices.get(res.getString(res.getColumnIndex(DB_Helper.RT_ID))); //takes teh result and uses the id to find the location
-            mMarkers.addMarker(destination, 2);
+            destination = path.getVertices().get(res.getString(res.getColumnIndex(DB_Helper.RT_ID))); //takes teh result and uses the id to find the location
+            mapMarkers.addMarker(destination, 2);
 
             update = CameraUpdateFactory.newLatLngZoom(destination.getLL(), 18);
             mGoogleMap.animateCamera(update);
@@ -537,7 +544,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
             //start = new Vertex(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3), "TEMP",0);
 
-            mMarkers.addMarker(start, 1);
+            mapMarkers.addMarker(start, 1);
             goToLocation(start.getLL());
         }
 
@@ -656,8 +663,9 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         }
 
         mGoogleMap.setMyLocationEnabled(true);          //Enables google tracking.
-        mUiSettings.setMyLocationButtonEnabled(false);  //Disable the google compass button.
 
+
+        mUiSettings.setMyLocationButtonEnabled(false);  //Disable the google compass button.
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity())
                     .addApi(LocationServices.API)
@@ -721,9 +729,9 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
     /***
      * This Method Performs the Dijkstras algorithm on the graph for the current source and destination selected.
-     * @param view
+     *
      */
-    public void getPath(View view) {
+    public void getPath() {
 
         location_service_enabled = ((ToggleButton) getView().findViewById(R.id.locationToggle)).isChecked(); //Finds out if user want to use their their location.
         Boolean isSourceSet;
@@ -773,7 +781,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         }
 
         drawPath(route);
-        //startTracking();
+        getPOI();
    }
 
             /*
@@ -799,6 +807,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                     ;
 
         line = mGoogleMap.addPolyline(options);
+
 
     }
 
@@ -833,9 +842,17 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                     .color(0x33606060)
                     .width(15)
                     .zIndex(01)
+                    .clickable(true)
                     .add(v1.getLL(),v2.getLL());
 
             lane =  mGoogleMap.addPolyline(options);
+            lane.setClickable(true);
+
+
+
+
+
+
             graphLines.add(lane);
 
 
@@ -850,7 +867,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
         //TODO pass the vertex object as parameter to addIcon
         for( Vertex node: vertexHashMap.values()){
-            mMarkers.addIcon(node);
+            mapMarkers.addIcon(node);
          }
     }
 
@@ -981,9 +998,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 @Override
                 public void onClick(View v) {
                     Log.d("more info", "onClick: ");
-
-                    create_info_dialog(rm);
-
+                        create_info_dialog(rm);
                     }
 
 
@@ -1011,7 +1026,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
     }
 
-            private void create_info_dialog(Vertex v) {
+    private void create_info_dialog(Vertex v) {
 
                 AlertDialog.Builder info_dialog = new AlertDialog.Builder(getActivity(),AlertDialog.BUTTON_POSITIVE);
                 View room_info_view = getActivity().getLayoutInflater().inflate(R.layout.place_info_dialog, null);
@@ -1082,6 +1097,81 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 });
 
             }
+
+    private void getPOI(){
+
+        LinkedList<Vertex> currPath = path.getCurrPath();
+        LinkedList<Vertex> closePoints = new LinkedList<>();
+
+//        Log.d(TAG, "getPOI: Start " + currPath.get(0).getLL());
+//        Log.d(TAG, "getPOI: Stop " + currPath.get(1).getLL());
+//        Log.d(TAG, "getPOI: " + midPoint);
+
+
+//        Log.d(TAG, "DISTANCE TEST : " + SphericalUtil.computeDistanceBetween(on,two) );
+
+        ArrayList<Vertex> POI = getPointsOfInterest();
+
+
+
+        for(int i = 0; i<currPath.size()-1; i++){
+
+            LatLng midPoint  = SphericalUtil.interpolate(currPath.get(i).getLL(),currPath.get(i).getLL(), 0.5 );
+            for( int n = 0 ; n< POI.size() ; n++){
+                if( SphericalUtil.computeDistanceBetween(midPoint,POI.get(n).getLL()) < 15.0){
+                    //closePoints.add(POI.remove(n));
+                    Log.d(TAG, "getPOI: distance midPoint-POI.get(n).getLL() " +  SphericalUtil.computeDistanceBetween(midPoint,POI.get(n).getLL()));
+
+                    mapMarkers.addMarker( POI.remove(n), 3);
+                }
+            }
+        }
+
+
+
+     }
+
+
+    private ArrayList<Vertex> getPointsOfInterest() {
+        ArrayList<Vertex> nodes = new ArrayList<>();
+        HashMap<String,Vertex> all_nodes = path.getVertices();
+        Boolean known;
+
+        Iterator iter = all_nodes.keySet().iterator();
+
+        while (iter.hasNext()){
+
+            String key = (String) iter.next();
+
+            Vertex v = all_nodes.get(key);
+
+
+            if( v instanceof Place){
+                known = ((Place) v).isKnown();
+            }else if( v.isLandmark() ){
+                known =true;
+            }else if(v instanceof Room){
+                known = ((Room) v).isKnown();
+            } else {
+                known = false;
+            }
+            if(known){
+                nodes.add(v);
+            }
+        }
+        return nodes;
+    }
+
+    @Override
+    public void onPolylineClick(Polyline polyline) {
+
+        int i = 0;
+
+        Log.d(TAG, "onPolylineClick:  CLICKED LINE");
+        String id =  polyline.getId();
+        Toast.makeText(getContext(),"LINE  "+ id, Toast.LENGTH_SHORT);
+
+    }
 
 
 //    AddPlaceRequest place = new AddPlaceRequest("C5",

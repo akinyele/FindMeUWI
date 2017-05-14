@@ -72,13 +72,9 @@ public class DB_Helper extends SQLiteOpenHelper{
     public static final String B_LANDMARK="B_Landmark";
 
 
-    private Context mCxt;
-
     private static DB_Helper mInstance = null;
 
-
-
-    public static synchronized DB_Helper getInstance(Context ctx){
+    public static DB_Helper getInstance(Context ctx){
 
         if (mInstance == null) {
             mInstance = new DB_Helper(ctx.getApplicationContext());
@@ -89,8 +85,6 @@ public class DB_Helper extends SQLiteOpenHelper{
 
     private DB_Helper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.mCxt = context;
-
     }
 
 
@@ -2928,31 +2922,52 @@ public class DB_Helper extends SQLiteOpenHelper{
     }
 
 
-    /*
-     * Takes a string and query it for a room.
+    /**
+     *
+     * Takes a string and query it for a room or a building withing the database.
+     * @param location
+     * @return returns the row/s that math or contains the query string;
      */
-    public Cursor findLocation(String rm ){
-
-        rm.toLowerCase();
-
+    public Cursor findLocation(String location ){
+        location.toLowerCase();
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery( "SELECT * FROM " + ROOM_TABLE + " WHERE LOWER("+ RT_NAME + ") like LOWER('%"+ rm +"%') " +
-                "OR  LOWER("+ RT_ID + ") like LOWER('%"+ rm +"%');", null);
+        Cursor res = db.rawQuery( "SELECT * FROM " + ROOM_TABLE + " WHERE LOWER("+ RT_NAME + ") = LOWER('%"+ location +"%') " +
+                "OR  LOWER("+ RT_ID + ") like LOWER('%"+ location +"%');", null);
 
 
         if(res.getCount()<1){
-            res = db.rawQuery( "SELECT * FROM " + BUILDING_TABLE + " WHERE LOWER("+ B_NAME + ") like LOWER('%"+ rm +"%') " +
-                    "OR  LOWER("+ B_ID + ") like LOWER('%"+ rm +"%');", null);
+            res = db.rawQuery( "SELECT * FROM " + BUILDING_TABLE + " WHERE LOWER("+ B_NAME + ") like LOWER('%"+ location +"%') " +
+                    "OR  LOWER("+ B_ID + ") like LOWER('%"+ location +"%');", null);
 
         }
-
         res.moveToFirst();
-
-
-
-
         return res;
     }
+
+
+    /**
+     * Returns a specific location from withing the database base
+     * @param lat
+     * @param lng
+     * @param id
+     * @return
+     */
+    public Cursor findLocation(double lat ,double lng, String id) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery( "SELECT * FROM " + ROOM_TABLE + " WHERE '"+ RT_LAT + "' = "+ lat +" " +
+                " AND  '"+ RT_LONG + "' = "+ lng +"   AND LOWER('"+ RT_ID+"') = LOWER('"+ id+"');", null);
+
+
+        if(res.getCount()<1){
+            res = db.rawQuery( "SELECT * FROM " + BUILDING_TABLE + " WHERE LOWER('"+ B_ID + "') = LOWER('"+ id +"')" +
+                    "AND "+ B_LAT  +" = "+ lat + " AND "+B_LONG+" = "+ lng+";", null);
+        }
+        res.moveToFirst();
+        return res;
+    }
+
+
 
     public Cursor getVertices(){
 
@@ -3108,6 +3123,7 @@ public class DB_Helper extends SQLiteOpenHelper{
             }
         }
     }
+
 
 
 }//END of DB_HELPER

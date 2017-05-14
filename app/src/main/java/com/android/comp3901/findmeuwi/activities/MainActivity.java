@@ -18,18 +18,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.app.Fragment;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.comp3901.findmeuwi.R;
-import com.android.comp3901.findmeuwi.services.DB_Helper;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnSuggestionListener, NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
 
     FragmentManager fragmentManager = getFragmentManager();
-    DB_Helper db_helper;
 
     private SearchView searchView;
 
@@ -45,10 +42,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
 
 
         fragmentManager.beginTransaction().replace(R.id.content_frame, new FindMe(), "mapFrag" ).commit();
-
-
-
-        db_helper = DB_Helper.getInstance(this);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
                 FindMe mapFrag = (FindMe) getFragmentManager().findFragmentByTag("mapFrag");
 
                 if(mapFrag.isAdded()){
-                    mapFrag.getPath(view);
+                    mapFrag.getPath();
                 }
 
             }
