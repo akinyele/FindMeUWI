@@ -1,5 +1,7 @@
 package com.android.comp3901.findmeuwi.services;
 
+import android.util.Log;
+
 import com.android.comp3901.findmeuwi.activities.FindMe;
 import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.android.comp3901.findmeuwi.R;
@@ -8,6 +10,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PointOfInterest;
 
 import java.util.LinkedList;
 
@@ -22,6 +25,7 @@ import java.util.LinkedList;
 
 public class MapMarker {
 
+    private static final String TAG = "com.android.comp3901";
 
 
     GoogleMap mGoogleMap;
@@ -34,6 +38,8 @@ public class MapMarker {
      LinkedList<Marker> junction_markers ;
      LinkedList<Marker> knownMarkers;
      LinkedList<Marker> landMarkers;
+
+
 
 
 
@@ -64,32 +70,61 @@ public class MapMarker {
         LatLng ll = vertex.getLL();
         String title = vertex.getName();
         String snip = vertex.getType();
+        MarkerOptions option;
 
+        switch (type){
+            case 1:
+                if (startMarker != null)
+                    startMarker.remove();
+
+                option= new MarkerOptions()
+                        .title(title)
+                        .snippet(snip)
+                        //.icon(BitmapDescriptorFactory.fromResource(R.))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                        .position(ll);
+                startMarker = mGoogleMap.addMarker(option);
+                startMarker.setTag(vertex);
+                break;
+            case 2:
+                if (destMarker != null)
+                destMarker.remove();
+                option = new MarkerOptions()
+                        .title(title)
+                        .snippet(snip)
+                        //.icon(BitmapDescriptorFactory.fromResource(R.))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                        .position(ll);
+                destMarker = mGoogleMap.addMarker(option);
+                destMarker.setTag(vertex);
+                break;
+            case 3:
+                Log.d(TAG, "addMarker: " + ll +" "+ startMarker.getPosition() );
+                    if(ll.equals(destMarker.getPosition())
+                            || ll.equals(startMarker.getPosition() )){ break;}
+
+                option = new MarkerOptions()
+                        .position(vertex.getLL())
+                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.chat_bubble))
+                        .snippet("POI")
+                        .title(vertex.getName());
+                marker = mGoogleMap.addMarker(option);
+                marker.setTag(vertex);
+
+                knownMarkers.add(marker);
+                break;
+            default:
+                break;
+        }
         if (type == 1) {//Start marker
-            if (startMarker != null)
-                startMarker.remove();
 
-            MarkerOptions option = new MarkerOptions()
-                    .title(title)
-                    .snippet(snip)
-                    //.icon(BitmapDescriptorFactory.fromResource(R.))
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-                    .position(ll);
-            startMarker = mGoogleMap.addMarker(option);
-            startMarker.setTag(vertex);
 
         } else if (type == 2) {//end marker
-            if (destMarker != null)
-                destMarker.remove();
-            MarkerOptions option = new MarkerOptions()
-                    .title(title)
-                    .snippet(snip)
-                    //.icon(BitmapDescriptorFactory.fromResource(R.))
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                    .position(ll);
-            destMarker = mGoogleMap.addMarker(option);
-            destMarker.setTag(vertex);
+
         } else {}
+
+
+
     }
 
     public void addIcon(Vertex node){
@@ -99,12 +134,13 @@ public class MapMarker {
         String type = node.getType();
         String snip = "Snip";
 
-        switch (type.replaceAll("\\s","").toLowerCase()){
+        MarkerOptions options;
+        options = new MarkerOptions().position(ll).title(title).snippet(snip);
 
+        switch (type.replaceAll("\\s","").toLowerCase()){
             case "building":
-                MarkerOptions building;
-                building = new MarkerOptions().position(ll).icon(BitmapDescriptorFactory.fromResource(R.mipmap.building)).title(title).snippet(snip);
-                marker = mGoogleMap.addMarker(building);
+                options.icon(BitmapDescriptorFactory.fromResource(R.mipmap.building));
+                marker = mGoogleMap.addMarker(options);
                 marker.setTag(node);
                 if(node.isLandmark()){landMarkers.add(marker);}
                 building_markers.add(marker);
@@ -136,17 +172,21 @@ public class MapMarker {
 
 
 
+    //TODO No longer need this method
     public void addPointOfInterestMarker(Vertex knownPoint){
 
         MarkerOptions known_place_options;
         known_place_options = new MarkerOptions()
-                                    .position(knownPoint.getLL())
-                                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.chat_bubble))
-                                    .title(knownPoint.getName());
+                .position(knownPoint.getLL())
+                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.chat_bubble))
+                .snippet("POI")
+                .title(knownPoint.getName());
         marker.setTag(knownPoint);
         marker = mGoogleMap.addMarker(known_place_options);
 
         knownMarkers.add(marker);
+
+
     }
 
 
@@ -171,8 +211,21 @@ public class MapMarker {
         for ( Marker junction: junction_markers) {
             junction.setVisible(b);
         }
-
     }
+
+
+    public void removePOI(){
+
+        if(!(knownMarkers.size() <1))
+        {
+             for (Marker marker: knownMarkers) {
+                marker.remove();
+                knownMarkers=new LinkedList<>();
+            }
+        }
+    }
+
+
 
 
 }//End of Marker Class

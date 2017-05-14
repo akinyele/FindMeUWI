@@ -36,16 +36,19 @@ public class Path {
     private List<Edge> edges;
     DB_Helper dbHelper;
 
-    public static LinkedList<Vertex> currPath;
-    private Graph graph;
-    public static HashMap<String,Vertex> vertices; //List of all the vertices that are in the database
+    public static List<Vertex> getConnectedNodes() {
+        return connectedNodes;
+    }
 
-    private static Path instance = null;
+    public LinkedList<Vertex> getCurrPath() {
+        return currPath;
+    }
+
+    private LinkedList<Vertex> currPath;
+    private Graph graph;
+    private HashMap<String,Vertex> vertices; //List of all the vertices that are in the database
 
     public static final Object lock = new Object();
-
-
-    SphericalUtil polyUtil;
 
 
     /*
@@ -182,7 +185,10 @@ public class Path {
         switch (type){
 
             case "room":
-                Cursor res = dbHelper.findLocation( verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_ID)) );
+                Cursor res = dbHelper.findLocation( verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LAT)),
+                                                    verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LONG)),
+                                                    verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_ID)).toLowerCase().replaceAll("\\s","")
+                );
 
                 if(res.getCount() == 0){
                     Log.d("GET ROOM", test);
@@ -219,4 +225,7 @@ public class Path {
         return Location;
     }
 
+    public void remove() {
+        currPath = null;
+    }
 }

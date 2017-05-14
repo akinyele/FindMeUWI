@@ -20,6 +20,7 @@ import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.android.comp3901.findmeuwi.R;
 import com.android.comp3901.findmeuwi.utils.Path;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.nearby.messages.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +42,12 @@ public class Tracker extends Thread {
     MapMarker mapMarker;
     Learner learner;
     private Runnable my_runnable;
+    boolean arrival_timer_sent = false;
+
+
+
+    Message msg;
+
 
 
 
@@ -59,22 +66,22 @@ public class Tracker extends Thread {
 
     public Tracker(Activity instance){
 
-        this.knownNodes =  this.getPointsOfInterest();
+        this.path = FindMe.path;
         this.instance = instance;
+        this.knownNodes =  this.getPointsOfInterest();
         this.mapMarker = MapMarker.getInstance();
         this.learner = new Learner(instance);
         directionsSnackbar = Snackbar.make(instance.findViewById(R.id.app_bar_main), " ", Snackbar.LENGTH_LONG );
-
     }
 
 
     public void startTracker() throws InterruptedException {
 
-        while(true){
+       // while(true){
             sleep(2000);
 
-            Log.d(TAG, "startTracker: Thread Started");
-            boolean pathExist = (Path.currPath != null);
+            Log.d(TAG, "startTracker: Thread Running");
+            boolean pathExist = (path.getCurrPath() != null);
             if(!pathExist){
                 synchronized (Path.lock) {
                     Log.d(TAG, "startTracker: No path, Thread paused");
@@ -82,62 +89,63 @@ public class Tracker extends Thread {
                     Log.d(TAG, "startTracker: Thread Resumed");
                 }
             }
-            else {
-                //display landmark and known places that are close to the path;
+
+
+            if(!FindMe.location_service_enabled && !arrival_timer_sent){
+                arrival_timer_sent = true;
+                FindMe.get().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "run: ui thread");
+                        startArrivalTimer();//Send arrival timer to main thread
+                    }
+                });
+
             }
-            if(!FindMe.location_service_enabled){
-                if( handler==null ){
-                    startArrivalTimer();
-                }
-            }else{
-                Location  location = FindMe.my_location;
-                if ( !(location.getAccuracy()>min_accurracy_error ||  location.hasAccuracy() )){
-                    Log.d(" Tracker: ", "Not Accurate");
-                    Toast.makeText(instance, "Cant get accurate location", Toast.LENGTH_SHORT);
-                }else {
-                    locationTracking();
-                }
-            }
+//          else{
+//                Location  location = FindMe.my_location;
+//                if ( !(location.getAccuracy()>min_accurracy_error ||  location.hasAccuracy() )){
+//                    Log.d(" Tracker: ", "Not Accurate");
+//                    Toast.makeText(instance, "Cant get accurate location", Toast.LENGTH_SHORT);
+//                }else {
+//                    locationTracking();
+//                }
+//            }
 
-        }
-
-
-//        if (hasArrived){
-//            Log.d("startTracker: ", " Has arrived true");
-//        }
-
+        //}
     }
 
 
 
     /**
      * This method is used when the user is not tracking by location
-     * it start a timer that when finish prompt the user and ask them
+     * it starts a timer that when finished prompts the user and ask them
      * if the have arrived.
      * Based of the response it does the next required task.
+     * NOTE that this method is ran with the the UI thread because it needs a
+     * handle and it creates a dialog;
      */
     public void startArrivalTimer(){
-        Looper.prepare();
         handler = new Handler();
         my_runnable = new Runnable() {
             @Override
             public void run() {
                 if(!FindMe.location_service_enabled){
+                    arrival_timer_sent = false;
                     createDialog();
                 }
             }
         };
         handler.postDelayed(my_runnable, 10000);
-        Looper.loop();
+
     }
 
 
     /***
-     * This mehthod is used to keep track of the user and pop of known
+     * This method is used to keep track of the user and pop of known
      * place the they are close to.
      */
     public void locationTracking(){
-
         try {
             sleep(1000);
         } catch (InterruptedException e) {
@@ -175,8 +183,8 @@ public class Tracker extends Thread {
                     String nodeType = node.getType().replaceAll("\\s","").toLowerCase();
 
                     //only pop up know rooms and land marks since building are always shown;
-                    if(!nodeType.equals("building"))
-                        mapMarker.addPointOfInterestMarker(node);
+                       if(!nodeType.equals("building"))
+                            //mapMarker.addPointOfInterestMarker(node);
 
                 //TODO show a snack bar showing the tell what just popped up and where it is relative to you
 
@@ -190,9 +198,7 @@ public class Tracker extends Thread {
 
                 }
             }
-
         }
-
     }
 
 
@@ -206,12 +212,13 @@ public class Tracker extends Thread {
      * Gets the Landmarks and known nodes that will be pop during a tracking phase.
      *
      * @return the arrayList
+     * //TODO delete method,(carried it over to findME)
      */
     private ArrayList<Vertex> getPointsOfInterest() {
 
 
         ArrayList<Vertex> nodes = new ArrayList<>();
-        HashMap<String,Vertex> all_nodes = Path.vertices;
+        HashMap<String,Vertex> all_nodes = path.getVertices();
         Boolean known;
 
         Iterator iter = all_nodes.keySet().iterator();
@@ -299,9 +306,13 @@ public class Tracker extends Thread {
 
         }
 
+
+
     private void onArrival(Vertex node) {
 
+        //RESET FLAGS NEEDED IN THE LOOP
         hasArrived = true;
+        arrival_timer_sent = false;
         FindMe.trackerHandler.sendEmptyMessage(0);
 
         //TODO Clear Path show pop up image of destination;
@@ -329,11 +340,17 @@ public class Tracker extends Thread {
 
     @Override
     public void run(){
-        try {
-            startTracker();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        while(true){
+            try {
+                startTracker();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
+
+
+
+
 
 }
