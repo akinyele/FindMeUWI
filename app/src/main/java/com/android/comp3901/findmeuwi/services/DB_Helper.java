@@ -2543,7 +2543,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 //
 //        db.insert(VERTICES_TABLE,null,vertices);
 //        vertices.clear();
-//change
+//changes made
 
 
       vertices.clear();
