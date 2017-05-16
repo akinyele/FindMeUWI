@@ -1026,6 +1026,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         buildings.clear();
 
 
+
         buildings.put(B_ID,"DLSEB");
         buildings.put(B_NAME,"DLS Entomology Lab Building");
         buildings.put(B_LAT,18.006255 );
