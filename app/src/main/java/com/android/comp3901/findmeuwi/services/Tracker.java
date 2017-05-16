@@ -273,15 +273,13 @@ public class Tracker extends Thread {
 
 
                  // TODO: Check which class instance the destination is and increment the familiarity
-                     if( FindMe.destination instanceof Place){
 
+                 if( FindMe.destination instanceof Place){
                          Log.d("ROOM TYPE  ", "TRUE");
                          learner.learner1(FindMe.destination);
-                         ((Room) FindMe.destination).updateDB();
-                         Log.d("NEW Familiarity  ", ""+((Room) FindMe.destination).getFamiliarity());
-
-
-                     }
+                         ((Place) FindMe.destination).updateDB();
+                         Log.d("NEW Familiarity  ", ""+((Place) FindMe.destination).getFamiliarity());
+                    }
 
 
 

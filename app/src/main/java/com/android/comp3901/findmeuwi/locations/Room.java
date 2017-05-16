@@ -26,16 +26,13 @@ public class Room  extends Place{
     public Room(String id, String rmName, double mLatitude, double mLongitude,int known, double familiarity, double floor, String desc,int landmark) {
         super(id, rmName, mLatitude, mLongitude, "ROOM", known, familiarity, landmark);
 
-        this.familiarity = familiarity;
-        this.known = known;
         this.floor = floor;
         this.Description = desc;
     }
 
+    @Override
     public void updateDB(){
-
-        DB_Helper.getInstance(FindMe.get()).updateRoom(super.getId(),known,familiarity);
-
+         DB_Helper.getInstance(FindMe.get()).updateRoom(super.getId(),known,familiarity);
     }
 
 
@@ -47,6 +44,20 @@ public class Room  extends Place{
     public double getFloor() {
         return floor;
     }
+
+
+    @Override
+    public String getInfo() {
+        String info =  super.getInfo()+ "\r\n" +
+                "Floor: " + getFloor()+ "\r\n" +
+                "Building: " +getBuilding();
+        return info;
+    }
+
+
+
+
+
 
     public String getDescription() {
         return Description;

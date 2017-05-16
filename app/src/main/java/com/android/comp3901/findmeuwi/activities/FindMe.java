@@ -483,13 +483,15 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         } else if (res.getCount() > 1) {
             //TODO more than one possible classes found. Create method to let them choose
             Toast.makeText(this.getActivity(), " Select a Class", Toast.LENGTH_LONG).show();
+
+
             return;
         } else {
             // create the room
             //new Vertex(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3),"Room");
 
             //TODO allow destination to be building as well;
-            destination = path.getVertices().get(res.getString(res.getColumnIndex(DB_Helper.RT_ID))); //takes teh result and uses the id to find the location
+            destination = path.getVertices().get(res.getString(0)); //takes the result and uses the id to find the location
             mapMarkers.addMarker(destination, 2);
 
             update = CameraUpdateFactory.newLatLngZoom(destination.getLL(), 18);
@@ -529,17 +531,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             return false;
         } else {
             // create the starting node
-            switch (res.getColumnName(0)){
-                case DB_Helper.RT_ID:
-                    Log.d(TAG, " Table: room table ");
-                    start = path.getVertices().get(res.getString(res.getColumnIndex(DB_Helper.RT_ID)));
-                    break;
-                case DB_Helper.B_ID:
-                    Log.d(TAG, "Table: Building: ");
-                    break;
-                default:
-                    Log.d(TAG, "Table: Default: ");
-            }
+                   start = path.getVertices().get(res.getString(0));
+                 
 
 
             //start = new Vertex(res.getString(0), res.getString(1), res.getDouble(2), res.getDouble(3), "TEMP",0);
@@ -973,24 +966,24 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         ImageButton image_button = (ImageButton) getActivity().findViewById(R.id.bottom_sheet_add_image);
         TextView place_title = (TextView) getActivity().findViewById(R.id.bottom_sheet_title);
         TextView place_info1 = (TextView) getActivity().findViewById(R.id.place_info1);
-        TextView place_info2 = (TextView) getActivity().findViewById(R.id.place_info2);
-        ImageView explore_icon = (ImageView) getActivity().findViewById(R.id.show_info);
+
+//        TextView place_info2 = (TextView) getActivity().findViewById(R.id.place_info2);
+//        ImageView explore_icon = (ImageView) getActivity().findViewById(R.id.show_info);
+
         View moreinfo = getActivity().findViewById(R.id.more_info_layout);
 
 
-        Vertex markerObject = (Vertex) marker.getTag();
+        final Place place = (Place) marker.getTag();
 
 
 
-        if(markerObject instanceof Room){
             Log.d("Marker Object", " Room Instance: ");
-            final Room rm = (Room) markerObject;
 
             //TODO ADD BUILDING TO SECOND INFO VIEW
-            place_title.setText(rm.getName());
-            place_info1.setText(rm.getId());
-            place_info2.setText("{building name}");
-            explore_icon.setVisibility(View.INVISIBLE);
+            place_title.setText(place.getName());
+            place_info1.setText(place.getInfo());
+//            place_info2.setText("{building name}");
+//            explore_icon.setVisibility(View.INVISIBLE);
 
 
             //TODO Start activity that shows the room info;
@@ -998,27 +991,26 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 @Override
                 public void onClick(View v) {
                     Log.d("more info", "onClick: ");
-                        create_info_dialog(rm);
+                        create_info_dialog(place);
                     }
 
 
             });
 
-
-        }else if(markerObject instanceof com.android.comp3901.findmeuwi.locations.Building){
-            Log.d("Marker Object", "Building Instance ");
-            com.android.comp3901.findmeuwi.locations.Building building = (com.android.comp3901.findmeuwi.locations.Building) markerObject;
-
-
-        }else {
-            Log.d("Marker Object", "Vertex Instance ");
-
-            place_title.setText(marker.getTitle());
-            place_info1.setText(marker.getId());
-            place_info2.setVisibility(View.INVISIBLE);
-            explore_icon.setVisibility(View.INVISIBLE);
-
-        }
+//
+//        }else if(markerObject instanceof com.android.comp3901.findmeuwi.locations.Building){
+//            Log.d("Marker Object", "Building Instance ");
+//
+//
+//        }else {
+//            Log.d("Marker Object", "Vertex Instance ");
+//
+//            place_title.setText(marker.getTitle());
+//            place_info1.setText(marker.getId());
+//            place_info2.setVisibility(View.INVISIBLE);
+//            explore_icon.setVisibility(View.INVISIBLE);
+//
+//        }
 
 
 
@@ -1033,55 +1025,56 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
 
                 //Instantiate Layout Views
-                TextView name_text = (TextView) room_info_view.findViewById(R.id.plac_name_info);
-                TextView id_text = (TextView) room_info_view.findViewById(R.id.place_id_info);
-                TextView building_text = (TextView) room_info_view.findViewById(R.id.place_building_info);
-                TextView floor_text = (TextView) room_info_view.findViewById(R.id.place_floor_info);
-                TextView rooms_text = (TextView) room_info_view.findViewById(R.id.places_room_info);
+//                TextView name_text = (TextView) room_info_view.findViewById(R.id.plac_name_info);
+//                TextView id_text = (TextView) room_info_view.findViewById(R.id.place_id_info);
+//                TextView building_text = (TextView) room_info_view.findViewById(R.id.place_building_info);
+//                TextView floor_text = (TextView) room_info_view.findViewById(R.id.place_floor_info);
+                TextView info_text = (TextView) room_info_view.findViewById(R.id.place_dialog_info);
                 Switch known_switch = (Switch) room_info_view.findViewById(R.id.place_info_known_swittch);
 
-                View rooms_view = room_info_view.findViewById(R.id.info_building_rooms_layout);
-                rooms_view.setVisibility(View.GONE);
+//                View rooms_view = room_info_view.findViewById(R.id.info_building_rooms_layout);
+//                rooms_view.setVisibility(View.GONE);
 
                 Button dissmiss = (Button) room_info_view.findViewById(R.id.plac_info_dismiss);
 
 
 
 
-                //check check the instance of the vertex and set the view accordingly
                 //TODO change the test to instance of when buildings  database fully are implemented
-                if(v.getType().replaceAll("\\s","").toLowerCase().equals("room")){
-                    final Room rm = ((Room)v );
+//                if(v.getType().replaceAll("\\s","").toLowerCase().equals("room")){
+                    final Place place = ((Place) v );
 
-                    name_text.setText(rm.getName());
-                    id_text.setText(rm.getId());
-                    building_text.setText(rm.getBuilding());
-                    floor_text.setText(""+rm.getFloor());
-                    known_switch.setChecked(rm.isKnown());
+                    info_text.setText(place.getInfo());
+//                    id_text.setText(place.getId());
+//                    building_text.setText(place.getBuilding());
+//                    floor_text.setText(""+place.getFloor());
+                    known_switch.setChecked(place.isKnown());
 
                     known_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                             if(isChecked){
-                                rm.setKnown(1);
+                                place.setKnown(1);
                             }else{
-                                rm.setKnown(0);
+                                place.setKnown(0);
                             }
-                            rm.updateDB();
+                            place.updateDB();
 
                         }
                     });
 
 
 
-                }else if(v.getType().replaceAll("\\s","").toLowerCase().equals("<na>building")){
-                    Building build = ((Building) v );
+//                }
 
-                    name_text.setText(build.getName());
-                    id_text.setText(build.getId());
-                    floor_text.setText(""+build.getFloors());
-                }
+//                else if(v.getType().replaceAll("\\s","").toLowerCase().equals("<na>building")){
+//                    Building build = ((Building) v );
+//
+//                    name_text.setText(build.getName());
+//                    id_text.setText(build.getId());
+//                    floor_text.setText(""+build.getFloors());
+//                }
 
 
                 info_dialog.setView(room_info_view);

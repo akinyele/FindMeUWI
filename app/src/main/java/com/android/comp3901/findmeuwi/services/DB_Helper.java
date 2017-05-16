@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
  */
 
 public class DB_Helper extends SQLiteOpenHelper{
+    private static final String TAG = "com.android.comp3901";
 
     public static final Integer DATABASE_VERSION = 36;
     public static final String DATABASE_NAME = "findme.db";
@@ -159,6 +161,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         generateRooms(db);
         generateEdges(db);
         generateVertices(db);
+        genrateBuildings(db);
         return ;
     }
 
@@ -378,7 +381,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         rooms.put(RT_ID,"CR1");
         rooms.put(RT_NAME,"Computer Science Tutorial Room 1");
-        rooms.put(RT_LAT,18.005032);
+        rooms.put(RT_LAT,18.005032); //18.005032,-76.750159
         rooms.put(RT_LONG,-76.750159);
         rooms.put(RT_DESC,"Description");
         rooms.put(RT_FLOOR,1 );
@@ -389,7 +392,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         rooms.put(RT_ID,"CR2");
         rooms.put(RT_NAME,"Computer Science Tutorial Room 2");
-        rooms.put(RT_LAT,18.005068);
+        rooms.put(RT_LAT,18.005068);//18.005068,-76.750106
         rooms.put(RT_LONG,-76.750106);
         rooms.put(RT_DESC,"Description");
         rooms.put(RT_FLOOR,1 );
@@ -456,7 +459,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         rooms.put(RT_ID,"MLT1");
         rooms.put(RT_NAME,"Math Lecture Theatre 1");
-        rooms.put(RT_LAT,18.004945);
+        rooms.put(RT_LAT,18.004945); //18.004945,-76.749473
         rooms.put(RT_LONG,-76.749473);
         rooms.put(RT_DESC,"Description");
         rooms.put(RT_FLOOR,1 );
@@ -556,7 +559,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         rooms.put(RT_ID,"DLSFOR");
         rooms.put(RT_NAME,"DLS Forestry Eco Lab");
-        rooms.put(RT_LAT,18.005850);
+        rooms.put(RT_LAT,18.005850);//18.005850,-76.749936
         rooms.put(RT_LONG,-76.749936);
         rooms.put(RT_DESC,"Description");
         rooms.put(RT_FLOOR,1 );
@@ -567,7 +570,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         rooms.put(RT_ID,"DLSINT");
         rooms.put(RT_NAME,"DLS Introductory Lab 13");
-        rooms.put(RT_LAT,18.006448);
+        rooms.put(RT_LAT,18.006448);//18.006448,-76.750304
         rooms.put(RT_LONG,-76.750304);
         rooms.put(RT_DESC,"Description");
         rooms.put(RT_FLOOR,1 );
@@ -813,7 +816,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         rooms.put(RT_ID,"PHYS-B");
         rooms.put(RT_NAME,"Physics Lecture Room B");
-        rooms.put(RT_LAT,18.005219);
+        rooms.put(RT_LAT,18.005219);//18.005219,-76.749027
         rooms.put(RT_LONG,-76.749027);
         rooms.put(RT_DESC,"Description");
         rooms.put(RT_FLOOR,2 );
@@ -835,7 +838,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         rooms.put(RT_ID,"PHYS-D");
         rooms.put(RT_NAME,"Physics Lecture Room D");
-        rooms.put(RT_LAT,18.004503);
+        rooms.put(RT_LAT,18.004503);//18.004503,-76.749008
         rooms.put(RT_LONG,-76.749008);
         rooms.put(RT_DESC,"Description");
         rooms.put(RT_FLOOR,1 );
@@ -890,8 +893,8 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         rooms.put(RT_ID,"VIRLAB");
         rooms.put(RT_NAME,"Virtual Computer Lab");
-        rooms.put(RT_LAT,18.004736);
-        rooms.put(RT_LONG,-76748973);
+        rooms.put(RT_LAT,18.004736); //18.004736,-76.748973
+        rooms.put(RT_LONG,-76.748973);
         rooms.put(RT_DESC,"Description");
         rooms.put(RT_FLOOR,1 );
         rooms.put(RT_KNOWN,0 );
@@ -1002,7 +1005,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         buildings.put(B_ID,"COMLABB");
         buildings.put(B_NAME,"Computer Science Lab Building");
-        buildings.put(B_LAT,18.005242 );
+        buildings.put(B_LAT,18.005242 ); //18.005242,-76.750182
         buildings.put(B_LONG,-76.750182);
         buildings.put(B_ROOMS,"CR2,CR1");
         buildings.put(B_FLOORS,1);
@@ -1188,28 +1191,28 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
-        vertices.put(V_ID,"COMLABB"  );
+        vertices.put(V_ID,"COMLABB");
         vertices.put(V_NAME,"Computer Science Lab Building"  );
-        vertices.put(V_LAT,18.005242);
+        vertices.put(V_LAT,18.005242);//18.005242,-76.750182
         vertices.put(V_LONG,-76.750182);
         vertices.put(V_TYPE ,"Building" );
 
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
-        vertices.put(V_ID,"CR1"  );
+        vertices.put(V_ID,"CR1");
         vertices.put(V_NAME,"Computer Science Tutorial Room 1"  );
-        vertices.put(V_LAT,18.005032);
-        vertices.put(V_LONG, -76.750106);
-        vertices.put(V_TYPE ,"ROOM" );
+        vertices.put(V_LAT,18.005032);//18.005032,-76.750159
+        vertices.put(V_LONG,-76.750159);
+        vertices.put(V_TYPE ,"ROOM");
 
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
-        vertices.put(V_ID,"CR2"  );
-        vertices.put(V_NAME,"Computer Science Tutorial Room 2"  );
-        vertices.put(V_LAT,18.005028);
-        vertices.put(V_LONG,-76.750156);
+        vertices.put(V_ID,"CR2");
+        vertices.put(V_NAME,"Computer Science Tutorial Room 2");
+        vertices.put(V_LAT,18.005068);//18.005068,-76.750106
+        vertices.put(V_LONG,-76.750106);
         vertices.put(V_TYPE ,"ROOM" );
 
         db.insert(VERTICES_TABLE,null,vertices);
@@ -1359,7 +1362,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         vertices.put(V_ID,"DLSFOR"  );
         vertices.put(V_NAME,"DLS Forestry Eco Lab"  );
-        vertices.put(V_LAT,18.0058501);
+        vertices.put(V_LAT,18.005850);//18.005850,-76.749936
         vertices.put(V_LONG,-76.749936);
         vertices.put(V_TYPE ,"ROOM" );
 
@@ -1368,8 +1371,8 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         vertices.put(V_ID,"DLSINT"  );
         vertices.put(V_NAME,"DLS Introductory Lab 13"  );
-        vertices.put(V_LAT,18.006471);
-        vertices.put(V_LONG,-76.750275);
+        vertices.put(V_LAT,18.006448);//18.006448,-76.750304
+        vertices.put(V_LONG,-76.750304);
         vertices.put(V_TYPE ,"ROOM" );
 
         db.insert(VERTICES_TABLE,null,vertices);
@@ -1638,8 +1641,8 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         vertices.put(V_ID,"MLT1"  );
         vertices.put(V_NAME,"Math Lecture Theatre 1"  );
-        vertices.put(V_LAT,18.004909);
-        vertices.put(V_LONG,-76.749446);
+        vertices.put(V_LAT,18.004945); //18.004945,-76.749473
+        vertices.put(V_LONG,-76.749473);
         vertices.put(V_TYPE,"ROOM" );
 
         db.insert(VERTICES_TABLE,null,vertices);
@@ -1684,7 +1687,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         vertices.put(V_ID,"PHYS-B");
         vertices.put(V_NAME,"PHYSICS LECTURE ROOM B" );
-        vertices.put(V_LAT,18.005168);
+        vertices.put(V_LAT,18.005219); //18.005219,-76.749027
         vertices.put(V_LONG,-76.749027);
         vertices.put(V_TYPE ,"ROOM" );
 
@@ -1701,8 +1704,8 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         vertices.put(V_ID,"PHYS-D");
         vertices.put(V_NAME,"PHYSICS LECTURE ROOM D" );
-        vertices.put(V_LAT,18.005132);
-        vertices.put(V_LONG,-76.750145);
+        vertices.put(V_LAT,18.004503);////18.004503,-76.749008
+        vertices.put(V_LONG,-76.749008);
         vertices.put(V_TYPE ,"ROOM" );
 
         db.insert(VERTICES_TABLE,null,vertices);
@@ -1737,7 +1740,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         vertices.put(V_ID,"VIRLAB" );
         vertices.put(V_NAME,"Virtual Computer Lab"  );
-        vertices.put(V_LAT,18.004736);
+        vertices.put(V_LAT,18.004736);// //18.004736,-76.748973
         vertices.put(V_LONG,-76.748973);
         vertices.put(V_TYPE,"ROOM" );
 
@@ -2521,7 +2524,7 @@ public class DB_Helper extends SQLiteOpenHelper{
          * CUSTOM LANDMARKS
          */
 
-        vertices.put(V_ID,"Jackie's");
+        vertices.put(V_ID,"Jackie");
         vertices.put(V_NAME,"Jackie's Stall");
         vertices.put(V_LAT,18.005010 );
         vertices.put(V_LONG,-76.749584);
@@ -3005,6 +3008,12 @@ public class DB_Helper extends SQLiteOpenHelper{
     }
 
 
+
+
+
+
+
+
     /**
      * Returns a specific location from withing the database base
      * @param lat
@@ -3014,14 +3023,15 @@ public class DB_Helper extends SQLiteOpenHelper{
      */
     public Cursor findLocation(double lat ,double lng, String id) {
 
+        Log.d(TAG, "findLocation: " + id+" " + lat +" "+ lng);
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery( "SELECT * FROM " + ROOM_TABLE + " WHERE '"+ RT_LAT + "' = "+ lat +" " +
-                " AND  '"+ RT_LONG + "' = "+ lng +"   AND LOWER('"+ RT_ID+"') = LOWER('"+ id+"');", null);
+        Cursor res = db.rawQuery( "SELECT * FROM " + ROOM_TABLE + " WHERE "+ RT_LAT + " == "+ lat +" " +
+                " AND "+ RT_LONG +" == "+ lng +" AND "+RT_ID+" LIKE '"+id+"';", null);
 
 
         if(res.getCount()<1){
-            res = db.rawQuery( "SELECT * FROM " + BUILDING_TABLE + " WHERE LOWER('"+ B_ID + "') = LOWER('"+ id +"')" +
-                    "AND "+ B_LAT  +" = "+ lat + " AND "+B_LONG+" = "+ lng+";", null);
+            res = db.rawQuery( "SELECT * FROM " + BUILDING_TABLE + " WHERE "+ B_ID +" LIKE '"+ id +"' " +
+                    " AND "+ B_LAT  +" == "+ lat + " AND "+B_LONG+" == "+ lng+";", null);
         }
         res.moveToFirst();
         return res;

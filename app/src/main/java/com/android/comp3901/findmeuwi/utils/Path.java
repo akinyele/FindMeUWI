@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.android.comp3901.findmeuwi.activities.FindMe;
+import com.android.comp3901.findmeuwi.locations.Building;
 import com.android.comp3901.findmeuwi.locations.Room;
 import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.android.comp3901.findmeuwi.services.DB_Helper;
@@ -182,14 +183,13 @@ public class Path {
         String type =verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_TYPE)).toLowerCase().replaceAll("\\s+","");
         String test =verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_ID));
 
+        Cursor res = dbHelper.findLocation( verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LAT)),
+                verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LONG)),
+                verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_ID))
+        );
+
         switch (type){
-
             case "room":
-                Cursor res = dbHelper.findLocation( verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LAT)),
-                                                    verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LONG)),
-                                                    verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_ID)).toLowerCase().replaceAll("\\s","")
-                );
-
                 if(res.getCount() == 0){
                     Log.d("GET ROOM", test);
                     assertEquals(1,res.getCount());
@@ -208,9 +208,22 @@ public class Path {
                 break;
 
             //TODO add when building have been added to the database.
-//           case "building":
-//                Location = new Building()
-//                        break;
+           case "building":
+
+               if(res.getCount() == 0){
+                   Log.d("GET BUILDING", test);
+                   assertEquals(1,res.getCount());
+               }
+                Location = new Building( res.getString(res.getColumnIndex(DB_Helper.B_ID)),
+                        res.getString(res.getColumnIndex(DB_Helper.B_NAME)),
+                        res.getDouble(res.getColumnIndex(DB_Helper.B_LAT)),
+                        res.getDouble(res.getColumnIndex(DB_Helper.B_LONG)),
+                        res.getString(res.getColumnIndex(DB_Helper.B_ROOMS)).split(","),
+                        res.getInt(res.getColumnIndex(DB_Helper.B_FLOORS)),
+                        res.getInt(res.getColumnIndex(DB_Helper.B_KNOWN)),
+                        res.getDouble(res.getColumnIndex(DB_Helper.B_FAM)),
+                        res.getInt(res.getColumnIndex(DB_Helper.B_LANDMARK)));
+                        break;
             default:
                 Location = new Vertex(verticesDB.getString(0),  //Vid
                         verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_NAME)),//Vname

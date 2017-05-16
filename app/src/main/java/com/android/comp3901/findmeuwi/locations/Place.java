@@ -14,17 +14,17 @@ public class Place extends Vertex {
     Double familiarity;
 
 
+
+
     public Place(String id, String name, double lat, double lng, String Type, Integer known, Double familiarity, int landMark) {
         super(id, name, lat, lng, Type, landMark);
         this.known= known;
         this.familiarity = familiarity;
     }
 
-
     public boolean isKnown(){
         return known>=1;
     }
-
 
 
     public int getKnown() {
@@ -44,9 +44,15 @@ public class Place extends Vertex {
     }
 
     public String getInfo(){
+       String info = "Name : "+getName() +" " +
+               "ID :"+getId() ;
 
+        return info;
+    }
 
-        return "";
+    public void updateDB(){
+
+        return;
     }
 
 

@@ -7,26 +7,20 @@ package com.android.comp3901.findmeuwi.locations;
 
 
 
-public class Building extends Vertex {
+public class Building extends Place {
 
     private String[] rooms;
     private  int floors;
-    private  int known;
-    private  double familiarity;
 
 
 
 
 
     public Building(String id, String name, double lat, double lng,String[] rooms, int floors, int known, double fam , int landmark) {
-        super(id, name, lat, lng, "Building", landmark);
+        super(id, name, lat, lng, "Building",known,fam, landmark);
 
         this.rooms=rooms;
         this.floors = floors;
-        this.known = known;
-        this.familiarity = fam;
-
-
     }
 
     public boolean isKnown() {
@@ -37,10 +31,6 @@ public class Building extends Vertex {
         return rooms;
     }
 
-    public void setRooms(String[] rooms) {
-        this.rooms = rooms;
-    }
-
     public int getFloors() {
        return this.floors;
     }
@@ -49,15 +39,13 @@ public class Building extends Vertex {
         this.floors = floors;
     }
 
-    public void setKnown(int known) {
-        this.known = known;
+
+    @Override
+    public String getInfo() {
+        String info = super.getInfo()+"\r\n" +
+                "Floors: "+getFloors()+ "\r\n" +
+                "Rooms: "+ getRooms();
+        return info;
     }
 
-    public double getFamiliarity() {
-       return this.familiarity;
-    }
-
-    public void setFamiliarity(double familiarity) {
-        this.familiarity = familiarity;
-    }
 }
