@@ -80,6 +80,8 @@ public class MapPolylines {
 
                 case 0:
                     lane.setColor(R.color.groundFloorColor);
+                    lane.setVisible(false);
+
                     descendingEdges.add(lane);
                     break;
                 case 1:
@@ -88,10 +90,12 @@ public class MapPolylines {
                     break;
                 case 2:
                     lane.setColor(R.color.secondFloorColor);
+                    lane.setVisible(false);
                     secondFloorEdges.add(lane);
                     break;
                 case 3:
                     lane.setColor(R.color.colorAccent);
+                    lane.setVisible(false);
                     thirdFloorEdges.add(lane);
                     break;
                 default:
