@@ -77,7 +77,6 @@ public class Tracker extends Thread {
 
     public void startTracker() throws InterruptedException {
 
-       // while(true){
             sleep(2000);
 
             Log.d(TAG, "startTracker: Thread Running");
@@ -111,9 +110,7 @@ public class Tracker extends Thread {
 //                    locationTracking();
 //                }
 //            }
-
-        //}
-    }
+  }
 
 
 
@@ -280,10 +277,7 @@ public class Tracker extends Thread {
                          ((Place) FindMe.destination).updateDB();
                          Log.d("NEW Familiarity  ", ""+((Place) FindMe.destination).getFamiliarity());
                     }
-
-
-
-                 //TODO toast message
+                //TODO toast message
                  onArrival(FindMe.destination);
              }
          });
@@ -292,17 +286,12 @@ public class Tracker extends Thread {
          noBtn.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 Toast.makeText(instance.getApplicationContext(),"Not Arrived",Toast.LENGTH_SHORT).show();
-
-                 dialog.dismiss();
-
-                 //TODO: restart the timer
+                Toast.makeText(instance.getApplicationContext(),"Not Arrived",Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                //TODO: restart the timer
              }
          });
-
-
-
-        }
+    }
 
 
 

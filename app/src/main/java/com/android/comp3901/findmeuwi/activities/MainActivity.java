@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
 
 
 
-        //Needs fixing
+        // TODO Needs fixing
 
 
         if(findMeFrag != null){
@@ -187,6 +188,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
             intent.putExtra(MediaStore.EXTRA_OUTPUT,
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath());
             startActivityForResult(intent, 1);*/
+
+            Intent i = new Intent(MainActivity.this, add_landmarks.class);
+            startActivity(i);
+
+
         } else if (id == R.id.nav_gallery) {
             /*fm.beginTransaction().replace(R.id.content_frame, new gmapsfrag()).commit();*/
 

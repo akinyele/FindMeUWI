@@ -42,10 +42,6 @@ public class MapMarker {
 
 
 
-
-
-
-
     private MapMarker(GoogleMap map){
         mGoogleMap = map;
         this.stairs_markers = new LinkedList<>();
@@ -80,8 +76,7 @@ public class MapMarker {
                 option= new MarkerOptions()
                         .title(title)
                         .snippet(snip)
-                        //.icon(BitmapDescriptorFactory.fromResource(R.))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.start_marker))
                         .position(ll);
                 startMarker = mGoogleMap.addMarker(option);
                 startMarker.setTag(vertex);
@@ -92,8 +87,7 @@ public class MapMarker {
                 option = new MarkerOptions()
                         .title(title)
                         .snippet(snip)
-                        //.icon(BitmapDescriptorFactory.fromResource(R.))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.dest_marker_blue))
                         .position(ll);
                 destMarker = mGoogleMap.addMarker(option);
                 destMarker.setTag(vertex);

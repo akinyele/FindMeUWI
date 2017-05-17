@@ -76,7 +76,4 @@ public class Learner {
         place.setKnown(1);
     }
 
-
-
-
 }

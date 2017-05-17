@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.android.comp3901.findmeuwi.activities.FindMe;
 import com.android.comp3901.findmeuwi.locations.Building;
+import com.android.comp3901.findmeuwi.locations.Place;
 import com.android.comp3901.findmeuwi.locations.Room;
 import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.android.comp3901.findmeuwi.services.DB_Helper;
@@ -89,12 +90,12 @@ public class Path {
             Edge lane1 = new Edge(edgesDB.getString(0) + " -> " + edgesDB.getString(1),
                     vertices.get(edgesDB.getString(0)),
                     vertices.get(edgesDB.getString(1)),
-                    (int) edgesDB.getDouble(2));
+                    (int) edgesDB.getDouble(2), edgesDB.getInt(edgesDB.getColumnIndex(DB_Helper.E_LEVEL)));
 
             Edge lane2 = new Edge(edgesDB.getString(1) + " -> " + edgesDB.getString(0),
                     vertices.get(edgesDB.getString(1)),
                     vertices.get(edgesDB.getString(0)),
-                    (int) edgesDB.getDouble(2));
+                    (int) edgesDB.getDouble(2), edgesDB.getInt(edgesDB.getColumnIndex(DB_Helper.E_LEVEL)));
 
 
             connectedNodes.add(vertices.get(edgesDB.getString(0)));
@@ -224,6 +225,15 @@ public class Path {
                         res.getDouble(res.getColumnIndex(DB_Helper.B_FAM)),
                         res.getInt(res.getColumnIndex(DB_Helper.B_LANDMARK)));
                         break;
+            case "place":
+                Location = new Place(verticesDB.getString(0),  //Vid
+                        verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_NAME)),//Vname
+                        verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LAT)), //latitude
+                        verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LONG)),//longtude
+                        verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_TYPE)),//type
+                        1,0.0,
+                        verticesDB.getInt(verticesDB.getColumnIndex(DB_Helper.V_LANDMARK)));//Landmark
+                break;
             default:
                 Location = new Vertex(verticesDB.getString(0),  //Vid
                         verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_NAME)),//Vname

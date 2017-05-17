@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class DB_Helper extends SQLiteOpenHelper{
     private static final String TAG = "com.android.comp3901";
 
-    public static final Integer DATABASE_VERSION = 37;
+    public static final Integer DATABASE_VERSION = 38;
     public static final String DATABASE_NAME = "findme.db";
     private static String DB_PATH = "";
 
@@ -163,7 +163,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         generateRooms(db);
         generateEdges(db);
         generateVertices(db);
-        genrateBuildings(db);
+        generateBuildings(db);
         return ;
     }
 
@@ -991,7 +991,7 @@ public class DB_Helper extends SQLiteOpenHelper{
     }
 
 
-    public void genrateBuildings(SQLiteDatabase db){
+    public void generateBuildings(SQLiteDatabase db){
         ContentValues buildings = new ContentValues();
 
         buildings.put(B_ID,"DOM");
@@ -2573,7 +2573,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 //
 //        db.insert(VERTICES_TABLE,null,vertices);
 //        vertices.clear();
-//changes made
+//
 
 
       vertices.clear();
@@ -3546,7 +3546,8 @@ public class DB_Helper extends SQLiteOpenHelper{
     public Cursor findLocation(String location ){
         location.toLowerCase();
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery( "SELECT * FROM " + ROOM_TABLE + " WHERE LOWER("+ RT_NAME + ") = LOWER('%"+ location +"%') " +
+
+        Cursor res = db.rawQuery( "SELECT * FROM " + ROOM_TABLE + " WHERE LOWER("+ RT_NAME + ") like LOWER('%"+ location +"%') " +
                 "OR  LOWER("+ RT_ID + ") like LOWER('%"+ location +"%');", null);
 
 
@@ -3561,11 +3562,6 @@ public class DB_Helper extends SQLiteOpenHelper{
 
 
 
-
-
-
-
-
     /**
      * Returns a specific location from withing the database base
      * @param lat
@@ -3575,7 +3571,7 @@ public class DB_Helper extends SQLiteOpenHelper{
      */
     public Cursor findLocation(double lat ,double lng, String id) {
 
-        Log.d(TAG, "findLocation: " + id+" " + lat +" "+ lng);
+       // Log.d(TAG, "findLocation: " + id+" " + lat +" "+ lng);
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery( "SELECT * FROM " + ROOM_TABLE + " WHERE "+ RT_LAT + " == "+ lat +" " +
                 " AND "+ RT_LONG +" == "+ lng +" AND "+RT_ID+" LIKE '"+id+"';", null);
@@ -3717,7 +3713,7 @@ public class DB_Helper extends SQLiteOpenHelper{
     }
 
 
-    /***
+    /**
      *   For debugging purposes to get database.
      */
      public void writeToSD(Context context) throws IOException {
