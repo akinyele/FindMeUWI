@@ -249,7 +249,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         displayIcons(); // Diplay the node icons
         goToLocation(sci_tech);
 
-        boolean success = googleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_icyBlue)));
+        boolean success = googleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_Rainforest_Fringe)));
         if (!success) {Toast.makeText(this.getActivity(), "Style parsing failed.", Toast.LENGTH_LONG).show();}
 
     }
