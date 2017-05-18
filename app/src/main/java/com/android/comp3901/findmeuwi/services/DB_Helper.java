@@ -358,17 +358,17 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(ROOM_TABLE,null, rooms);
         rooms.clear();
 
-//        //TODO changed room name to match vertex name
-//        rooms.put(RT_ID,"COMLAB");
-//        rooms.put(RT_NAME,"Computer Science Lab Room" );
-//        rooms.put(RT_LAT,18.005132);
-//        rooms.put(RT_LONG,-76.750145);
-//        rooms.put(RT_DESC,"Description");
-//        rooms.put(RT_FLOOR,1 );
-//        rooms.put(RT_KNOWN,0 );
-//        rooms.put(RT_FAM,0 );
-//        db.insert(ROOM_TABLE,null, rooms);
-//        rooms.clear();
+        //TODO changed room name to match vertex name
+        rooms.put(RT_ID,"COMLAB");
+        rooms.put(RT_NAME,"Computer Science Lab Room" );
+        rooms.put(RT_LAT,18.005164);//18.005164, -76.750173
+        rooms.put(RT_LONG,-76.750173);
+        rooms.put(RT_DESC,"Description");
+        rooms.put(RT_FLOOR,1 );
+        rooms.put(RT_KNOWN,0 );
+        rooms.put(RT_FAM,0 );
+        db.insert(ROOM_TABLE,null, rooms);
+        rooms.clear();
 
         rooms.put(RT_ID,"CPGR");
         rooms.put(RT_NAME,"Computing Post-Graduate Room");
@@ -1222,14 +1222,14 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.clear();
 
 
-//        vertices.put(V_ID,"COMLAB");
-//        vertices.put(V_NAME,"Computer Science Lab Room" );
-//        vertices.put(V_LAT,18.005132);
-//        vertices.put(V_LONG,-76.750145);
-//        vertices.put(V_TYPE ,"ROOM" );
-//
-//        db.insert(VERTICES_TABLE,null,vertices);
-//        vertices.clear();
+        vertices.put(V_ID,"COMLAB");
+        vertices.put(V_NAME,"Computer Science Lab Room" );
+        vertices.put(V_LAT,18.005164);//18.005164, -76.750173
+        vertices.put(V_LONG,-76.750173);
+        vertices.put(V_TYPE ,"ROOM" );
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
 
 
         vertices.put(V_ID,"COMPLR"  );
@@ -2886,6 +2886,13 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         edges.put(E_SOURCE,"COMLABB");
         edges.put(E_DESTINATION,"CS3");
+        edges.put(E_WEIGHT, 1);
+        edges.put(E_LEVEL,1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE,"CS3");
+        edges.put(E_DESTINATION,"COMLAB");
         edges.put(E_WEIGHT, 1);
         edges.put(E_LEVEL,1);
         db.insert(EDGES_TABLE,null,edges);
