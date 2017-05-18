@@ -95,6 +95,7 @@ public class add_landmarks extends Activity {
            }
         });
 
+        /* Image intent */
         fab = (FloatingActionButton) findViewById(R.id.add_landmark_imageBtn);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +104,10 @@ public class add_landmarks extends Activity {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath());
                 startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+
+
+
+
             }
         });
     }

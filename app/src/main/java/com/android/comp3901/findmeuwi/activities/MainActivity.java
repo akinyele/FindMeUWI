@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.multidex.MultiDex;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
     FragmentManager fragmentManager = getFragmentManager();
 
     private SearchView searchView;
+    FindMe mapFrag;
 
 
     @Override
@@ -44,32 +46,17 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
 
 
         fragmentManager.beginTransaction().replace(R.id.content_frame, new FindMe(), "mapFrag" ).commit();
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                intent.putExtra(MediaStore.EXTRA_OUTPUT,
-//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath());
-//                startActivityForResult(intent, 1);
-//                /*Snackbar.make(view, "Add landmark?", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();*/
-//            }
-//        });
-
         FloatingActionButton route = (FloatingActionButton) findViewById(R.id.fbPath);
+
         route.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-
                 FindMe mapFrag = (FindMe) getFragmentManager().findFragmentByTag("mapFrag");
 
                 if(mapFrag.isAdded()){
                     mapFrag.getPath();
                 }
-
             }
         });
 
@@ -93,7 +80,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if(mapFrag.sheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN ){
+            mapFrag.sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
+        else{
             super.onBackPressed();
         }
     }

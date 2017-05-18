@@ -97,7 +97,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     private Tracker mapTracker;
     private static MapMarker mapMarkers;
     private static MapPolylines mapPolylines;
-    BottomSheetBehavior sheetBehavior;
+    public static BottomSheetBehavior sheetBehavior;
 
     //Utils
 
@@ -115,6 +115,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     private AutoCompleteTextView getSourceView;
     private AutoCompleteTextView classSearchView;
     private NestedScrollView nestedView;
+    private View searchView;
 
 
     boolean isSourceSet;
@@ -213,12 +214,12 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
             @Override
             public View getInfoContents(Marker marker) {
+                if(marker.getSnippet().equals("stairs")  ){
+                    return null;
+                }
                 View v = getActivity().getLayoutInflater().inflate(R.layout.info_window_layout,null);
-
                 TextView infoTitle = (TextView) v.findViewById(R.id.info_window_title);
                 ImageView infoImage = (ImageView) v.findViewById(R.id.info_window_image_view);
-
-
                 infoTitle.setText(((Place)marker.getTag()).getName());
 
                 return v;
@@ -240,6 +241,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 // TODO hide all views but the map view
 
                 Log.d(TAG, "onCameraIdle:");
+//                searchView.animate().translationY(10);
+//                searchView.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -247,6 +250,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             @Override
             public void onMapClick(LatLng latLng) {
                 Log.d(TAG, "onMapClick: ");
+
+                toggleSearchView();
 
             }
         });
@@ -362,11 +367,23 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
             setTextViews();
 
+            searchView = getView().findViewById(R.id.search_view_layout);
 
         }
     }
 
 
+    public void toggleSearchView(){
+
+        if(searchView.getVisibility() == View.VISIBLE){
+            searchView.animate().translationY(10);
+            searchView.setVisibility(View.INVISIBLE);
+        }else{
+            searchView.animate().translationY(0);
+            searchView.setVisibility(View.VISIBLE);
+        }
+
+    }
     /*
     This methods sets the text views.
  */
@@ -1103,6 +1120,9 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         }
         return nodes;
     }
+
+
+
 
 
 //}

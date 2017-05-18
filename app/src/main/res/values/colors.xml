@@ -2,12 +2,14 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#303F9F</color>
 
     <color name="groundFloorColor">#CC000000</color>
     <color name="secondFloorColor">#cc303f9f</color>
     <color name="thirdFloorColor">#b9fcf800</color>
     <color name="undergroundFloorColor">#eb5400fc</color>
+
+    <color name="Background">#d2060714</color>
 
     <color name="White">#FFFFFF</color>
     <color name="Ivory">#FFFFF0</color>

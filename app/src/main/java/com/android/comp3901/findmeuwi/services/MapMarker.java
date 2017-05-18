@@ -76,7 +76,7 @@ public class MapMarker {
                 option= new MarkerOptions()
                         .title(title)
                         .snippet(snip)
-                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.start_marker))
+                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.start_marker_red_round))
                         .position(ll);
                 startMarker = mGoogleMap.addMarker(option);
                 startMarker.setTag(vertex);

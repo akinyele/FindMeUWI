@@ -259,7 +259,12 @@ public class Tracker extends Thread {
 
          arrivalDialog.setView(mView);
          final AlertDialog dialog = arrivalDialog.create();
-         dialog.show();
+
+        if(!(instance).isFinishing())
+        {
+            //show dialog
+            dialog.show();
+        }
 
          Button yesBtn = (Button) mView.findViewById(R.id.arrival_dialog_yesBtn);
          yesBtn.setOnClickListener(new View.OnClickListener() {
