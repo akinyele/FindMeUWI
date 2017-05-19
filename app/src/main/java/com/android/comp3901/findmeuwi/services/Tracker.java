@@ -36,6 +36,7 @@ import java.util.Iterator;
 
 public class Tracker extends Thread {
     private static final String TAG = "com.android.comp3901";
+    private static final int TIMER = 25000;
 
     Activity instance;
     Handler handler;
@@ -131,7 +132,7 @@ public class Tracker extends Thread {
                 }
             }
         };
-        handler.postDelayed(my_runnable, 10000);
+        handler.postDelayed(my_runnable, TIMER);
 
     }
 

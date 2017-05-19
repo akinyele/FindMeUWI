@@ -2767,6 +2767,39 @@ public class DB_Helper extends SQLiteOpenHelper{
         
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
+
+        vertices.put(V_ID,"library");
+        vertices.put(V_NAME,"Science and Technology Library");
+        vertices.put(V_LAT,18.005293 );//18.005293, -76.749455
+        vertices.put(V_LONG,-76.749455);
+        vertices.put(V_TYPE ,"Place");
+        vertices.put(V_LANDMARK, 1);
+        vertices.put(V_LEVEL,1);
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"facultyoffice");
+        vertices.put(V_NAME,"Science and Technology Faculty office");
+        vertices.put(V_LAT,18.005362 );//18.005362, -76.749884
+        vertices.put(V_LONG,-76.749884);
+        vertices.put(V_TYPE ,"Place");
+        vertices.put(V_LANDMARK, 1);
+        vertices.put(V_LEVEL,1);
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+        vertices.put(V_ID,"juici");
+        vertices.put(V_NAME,"Juici Patty");
+        vertices.put(V_LAT,18.005007);//18.005007, -76.748527
+        vertices.put(V_LONG,-76.748527);
+        vertices.put(V_TYPE ,"Place");
+        vertices.put(V_LANDMARK, 1);
+        vertices.put(V_LEVEL,1);
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
 //
 //        vertices.put(V_ID,""  );    18.005010, -76.749584
 //        vertices.put(V_NAME,""  );

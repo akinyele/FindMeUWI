@@ -131,11 +131,10 @@ public class MapPolylines {
                     options.color(Color.MAGENTA);
                 }else if(route.get(i).getLevel()==2){
                     options.color(Color.YELLOW);
-                }else if(route.get(i).getLevel()==0){
-                    options.color(Color.BLUE);
-                    }else {
-                        options.color(Color.GREEN);
-                    }
+                }
+                else{
+                 options.color(Color.GREEN);
+        }
 
                     Polyline line = mGoogleMap.addPolyline(options);
                     currPath.add(line);
