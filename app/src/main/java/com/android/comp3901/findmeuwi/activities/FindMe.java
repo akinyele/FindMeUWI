@@ -794,7 +794,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 }
         }
 
-        drawPath(route);
+        mapPolylines.createPath(route);
+//      drawPath(route);
         getPOI();
    }
 

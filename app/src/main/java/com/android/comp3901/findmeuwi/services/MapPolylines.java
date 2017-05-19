@@ -7,12 +7,15 @@ import com.android.comp3901.findmeuwi.R;
 import com.android.comp3901.findmeuwi.activities.FindMe;
 import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.android.comp3901.findmeuwi.activities.FindMe.mGoogleMap;
 
 /**
  * Created by Kyzer on 5/12/2017.
@@ -32,6 +35,7 @@ public class MapPolylines {
 
 
     GoogleMap googleMap;
+    Polyline currPath = null;
 
 
     public MapPolylines(GoogleMap map) {
@@ -106,7 +110,33 @@ public class MapPolylines {
         }
     }
 
-    public void createPath(){
+    public void createPath(LinkedList<Vertex> route){
+
+           if(currPath != null)
+               currPath.remove();
+
+            route.size();
+            LinkedList<LatLng> pnts = new LinkedList<>();
+
+            for( int i = 0; i<route.size()-1; i++ ){
+                LatLng  ll =  route.get(i).getLL();
+                LatLng  ll2 =  route.get(i+1).getLL();
+                PolylineOptions  options = new PolylineOptions()
+                .width(5)
+                .add(ll, ll2 )
+                .zIndex(02);
+
+                if(route.get(i).getLevel()==3){
+                    options.color(Color.MAGENTA);
+                }else if(route.get(i).getLevel()==3){
+                    options.color(Color.YELLOW);
+                }else {
+                    options.color(Color.GREEN);
+                }
+
+                currPath = mGoogleMap.addPolyline(options);
+            }
+
 
     }
 
