@@ -8,10 +8,13 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
@@ -79,6 +82,8 @@ import com.google.maps.android.PolyUtil;
 import com.google.maps.android.SphericalUtil;
 
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,7 +100,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     private UiSettings mUiSettings;
     private DB_Helper dbHelper;
     private Tracker mapTracker;
-    private static MapMarker mapMarkers;
+    public static MapMarker mapMarkers;
     private static MapPolylines mapPolylines;
     public static BottomSheetBehavior sheetBehavior;
 
@@ -217,10 +222,24 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 if(marker.getSnippet().equals("stairs")  ){
                     return null;
                 }
+                Place location = (Place) marker.getTag();
                 View v = getActivity().getLayoutInflater().inflate(R.layout.info_window_layout,null);
                 TextView infoTitle = (TextView) v.findViewById(R.id.info_window_title);
                 ImageView infoImage = (ImageView) v.findViewById(R.id.info_window_image_view);
                 infoTitle.setText(((Place)marker.getTag()).getName());
+
+                String filepath = Environment.getExternalStorageDirectory()+File.separator+ location.getId();
+                File f = new File(getActivity().getApplicationContext().getFilesDir(), location.getId());
+                int img = getActivity().getResources().getIdentifier(location.getId(),"mipmap",getActivity().getPackageName() );
+
+                if(f.exists()){
+                    setPic(infoImage,filepath);
+                }else if(img >0){
+                    infoImage.setImageResource(img);
+                }
+                else{
+                    infoImage.setImageResource(R.mipmap.photos_coming_soon);
+                }
 
                 return v;
             }
@@ -295,6 +314,30 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             Toast.makeText(this.getActivity(), "Style parsing failed.", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private void setPic(ImageView mImageView, String mCurrentPhotoPath) {
+        // Get the dimensions of the View
+        int targetW = mImageView.getWidth();
+        int targetH = mImageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        mImageView.setImageBitmap(bitmap);
     }
 
 
@@ -1121,11 +1164,67 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         return nodes;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //TODO reloads landmarks
+    }
 
 
 
+//    public boolean isSdReadable() {
+//
+//        boolean mExternalStorageAvailable = false;
+//        String state = Environment.getExternalStorageState();
+//
+//        if (Environment.MEDIA_MOUNTED.equals(state)) {
+//// We can read and write the media
+//            mExternalStorageAvailable = true;
+//            Log.i("isSdReadable", "External storage card is readable.");
+//        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+//// We can only read the media
+//            Log.i("isSdReadable", "External storage card is readable.");
+//            mExternalStorageAvailable = true;
+//        } else {
+//// Something else is wrong. It may be one of many other
+//// states, but all we need to know is we can neither read nor write
+//            mExternalStorageAvailable = false;
+//        }
+//
+//        return mExternalStorageAvailable;
+//    }
 
-//}
+
+
+//    public Bitmap getThumbnail(String filename) {
+//
+//        String fullPath = Environment.getExternalStorageDirectory().getAbsolutePath() ;
+//        Bitmap thumbnail = null;
+//
+//// Look for the file on the external storage
+//        try {
+//            if (tools.isSdReadable() == true) {
+//                thumbnail = BitmapFactory.decodeFile(fullPath + "/" + filename);
+//            }
+//        } catch (Exception e) {
+//            Log.e("on external storage", e.getMessage());
+//        }
+//
+//// If no file on external storage, look in internal storage
+//        if (thumbnail == null) {
+//            try {
+//                File filePath = getActivity().getApplicationContext().getFileStreamPath(filename);
+//                FileInputStream fi = new FileInputStream(filePath);
+//                thumbnail = BitmapFactory.decodeStream(fi);
+//            } catch (Exception ex) {
+//                Log.d("on internal storage", ex.getMessage());
+//            }
+//        }
+//        return thumbnail;
+//    }
+
+    //}
 
 
 }//End of FINDFME

@@ -2577,7 +2577,7 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_NAME,"Comp sci node 2");
         vertices.put(V_LAT,18.005820);//18.005820, -76.750039
         vertices.put(V_LONG,-76.750039);
-        vertices.put(V_TYPE ,"Unimportant Node " );
+        vertices.put(V_TYPE ,"Unimportant Node");
 
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
@@ -2589,8 +2589,8 @@ public class DB_Helper extends SQLiteOpenHelper{
          * CUSTOM LANDMARKS
          */
 
-        vertices.put(V_ID,"Jackie");
-        vertices.put(V_NAME,"Jackie's Stall");
+        vertices.put(V_ID,"jackie");
+        vertices.put(V_NAME,"jackie's Stall");
         vertices.put(V_LAT,18.005010 );
         vertices.put(V_LONG,-76.749584);
         vertices.put(V_TYPE ,"Place");
@@ -3707,6 +3707,31 @@ public class DB_Helper extends SQLiteOpenHelper{
     }
 
 
+    /**
+     * This method is used to insert the user inserted landmarks
+     * @param latitude
+     * @param longitude
+     * @param name
+     * @param desc
+     * @param image_id unique image id thate is use to find the image of the landmark
+     */
+    public void insertLandmark(double latitude, double longitude, String name, String desc, String image_id){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues vertices = new ContentValues();
+        vertices.put(V_ID,image_id);
+        vertices.put(V_NAME,name);
+        vertices.put(V_LAT,latitude);
+        vertices.put(V_LONG,longitude);
+        vertices.put(V_TYPE ,"Place" );
+        vertices.put(V_LANDMARK, 1);
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+        db.close();
+
+        Log.d(TAG, "insertLandmark: Landmark saved");
+     }
+
+
 
     /**
      * Returns a specific location from withing the database base
@@ -3841,8 +3866,6 @@ public class DB_Helper extends SQLiteOpenHelper{
         return res;
 
     }
-
-
 
     public void updateRoom(String id, Integer known, double familiarity) {
 

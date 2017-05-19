@@ -6,6 +6,9 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import com.android.comp3901.findmeuwi.R;
+import com.android.comp3901.findmeuwi.services.DB_Helper;
+import com.android.comp3901.findmeuwi.utils.PhotoScalerAndSaver;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.vision.face.Landmark;
 
 import android.os.Environment;
@@ -23,6 +26,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Kyzer on 5/14/2017.
@@ -31,6 +36,7 @@ import java.io.IOException;
 public class add_landmarks extends Activity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final String TAG = "com.android.comp3901.";
+    private static DB_Helper db;
 
     private String mCurrentPhotoPath;
 
@@ -45,6 +51,12 @@ public class add_landmarks extends Activity {
 
 
 
+    /** data**/
+    Bitmap imageBitmap;
+    Location landmark_location;
+
+
+
     private boolean hasLocation = false;
 
 
@@ -52,6 +64,9 @@ public class add_landmarks extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_landmark_activity);
+
+        /**Objects Initialisation **/
+        db = DB_Helper.getInstance(getApplicationContext());
 
         /**Inittialising views*/
         landmarkImage = (ImageView)findViewById(R.id.landmark_preview);
@@ -67,7 +82,7 @@ public class add_landmarks extends Activity {
             @Override
             public void onClick(View v) {
 
-            Location landmark_location = FindMe.getLocation(getApplication() );
+            landmark_location = FindMe.getLocation(getApplication() );
             //Log.d(TAG, "onClick: GetMy Location "+ FindMe.my_location);
             if(landmark_location == null){
                 Toast.makeText(add_landmarks.this,"Unable to Obtain Location, Ensure GPS is turned on", Toast.LENGTH_SHORT).show();
@@ -84,15 +99,22 @@ public class add_landmarks extends Activity {
             public void onClick(View v) {
                 String name = landmarkName.getText().toString().trim();
                 String desc = landmarkDesc.getText().toString().trim();
+                Log.d(TAG, "onClick: "+name+" "+desc);
 
                 if(!name.equals("") && !desc.equals("") && hasLocation && landmarkImage.getDrawable()!=null ){
-                    Log.d(TAG, "onClick: "+ landmarkName.getTextSize() + " " + landmarkDesc.getTextSize() );
+                    //check to see if all the fields have info in them
+                    Log.d(TAG, "onClick: "+ landmarkName.getTextSize() + " " + landmarkDesc.getTextSize());
+                    saveLandmark(name, desc, landmark_location.getLatitude(), landmark_location.getLongitude(), imageBitmap);
                     setToast("Saved");
                     finish();
                 }else{
                     setToast("Please Fill Out info");
                 }
            }
+
+
+
+
         });
 
         /* Image intent */
@@ -113,36 +135,28 @@ public class add_landmarks extends Activity {
     }
 
 
+    public void saveLandmark(String name, String desc, double lat, double lng, Bitmap img ){
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String image_id = name+"_"+timeStamp;
+
+        PhotoScalerAndSaver.saveScaledPhotoToFile(img,image_id, getApplicationContext() );
+
+        db.insertLandmark(lat,lng, name,desc,image_id);
+    }
+
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageBitmap = (Bitmap) extras.get("data");
             landmarkImage.setImageBitmap(imageBitmap);
 
         }
     }
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-
-
-        String image_name = "";
-
-        String imageFileName = "Landmark_" + image_name + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
-
 
     private void setToast(String msg){
         Toast.makeText(this, msg,Toast.LENGTH_SHORT).show();

@@ -17,11 +17,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
     private SearchView searchView;
     FindMe mapFrag;
 
+    SwitchCompat landmark_switch;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        /**views**/
 
 
 
@@ -71,6 +77,19 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Menu menu = navigationView.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.nav_landmark);
+        View actionview = MenuItemCompat.getActionView(menuItem);
+
+
+        landmark_switch = (SwitchCompat) actionview.findViewById(R.id.drawer_landmark_switch);
+        landmark_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mapFrag.mapMarkers.showLandmarks(landmark_switch.isChecked());
+            }
+        });
 
 
     }
@@ -130,16 +149,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //mapFrag = fragmentManager.findFragmentByTag("mapFrag");
-
         FindMe findMeFrag = (FindMe) getFragmentManager().findFragmentByTag("mapFrag");
-
-
-
-        // TODO Needs fixing
-
-
-        if(findMeFrag != null){
+        //TODO Needs fixing
+      if(findMeFrag != null){
 
             switch (item.getItemId()) {
                 case R.id.mapTypeNone:
@@ -192,8 +204,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
 
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_landmark) {
+            landmark_switch.setChecked(!(landmark_switch.isChecked()));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

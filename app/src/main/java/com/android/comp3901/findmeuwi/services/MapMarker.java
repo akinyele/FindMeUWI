@@ -12,7 +12,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 /**
  * Created by Kyzer on 3/20/2017.
@@ -39,6 +42,8 @@ public class MapMarker {
      LinkedList<Marker> knownMarkers;
      LinkedList<Marker> landMarkers;
 
+    Set<LatLng> latLngs;// keeps a track of off the latlng that are already on the map.
+
 
 
 
@@ -49,6 +54,7 @@ public class MapMarker {
         this.junction_markers = new LinkedList<>();
         this.knownMarkers = new LinkedList<>();
         this.landMarkers = new LinkedList<>();
+        this.latLngs = new HashSet<>();
     }
 
     public static MapMarker getInstance(){
@@ -132,6 +138,7 @@ public class MapMarker {
         options = new MarkerOptions().position(ll).title(title).snippet(snip);
 
         switch (type.replaceAll("\\s","").toLowerCase()){
+
             case "building":
                 options.icon(BitmapDescriptorFactory.fromResource(R.mipmap.building));
                 marker = mGoogleMap.addMarker(options);
@@ -204,6 +211,13 @@ public class MapMarker {
     public void showJunctions(boolean b) {
         for ( Marker junction: junction_markers) {
             junction.setVisible(b);
+        }
+    }
+
+
+    public void showLandmarks(Boolean b){
+        for( Marker landmarks: landMarkers){
+            landmarks.setVisible(b);
         }
     }
 
