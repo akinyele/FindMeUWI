@@ -36,7 +36,7 @@ import java.util.Iterator;
 
 public class Tracker extends Thread {
     private static final String TAG = "com.android.comp3901";
-    private static final int TIMER = 25000;
+    //private static final int TIMER = 25000;
 
     Activity instance;
     Handler handler;
@@ -100,8 +100,7 @@ public class Tracker extends Thread {
                         startArrivalTimer();//Send arrival timer to main thread
                     }
                 });
-            }
-          else{
+            }else{
                 Location  location = FindMe.my_location;
                 if ( !(location.getAccuracy()>min_accurracy_error ||  location.hasAccuracy() )){
                     Log.d(" Tracker: ", "Not Accurate");
@@ -132,7 +131,7 @@ public class Tracker extends Thread {
                 }
             }
         };
-        handler.postDelayed(my_runnable, TIMER);
+        handler.postDelayed(my_runnable, 25000);
 
     }
 
