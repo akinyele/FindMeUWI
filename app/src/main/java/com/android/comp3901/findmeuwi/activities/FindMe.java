@@ -821,9 +821,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                                     ;
 
         line = mGoogleMap.addPolyline(options);
-
-
-    }
+   }
 
 
 

@@ -16,15 +16,15 @@ public class Room  extends Place{
      */
 
     private String Description;
-    private final double floor;
+    private final int floor;
     private final String building = "NA"; //TODO remove when building are included
 
     //private string imageName;
 
 
 
-    public Room(String id, String rmName, double mLatitude, double mLongitude,int known, double familiarity, double floor, String desc,int landmark) {
-        super(id, rmName, mLatitude, mLongitude, "ROOM", known, familiarity, landmark);
+    public Room(String id, String rmName, double mLatitude, double mLongitude,int known, double familiarity, int floor, String desc,int landmark) {
+        super(id, rmName, mLatitude, mLongitude, "ROOM", known, familiarity, landmark, floor);
 
         this.floor = floor;
         this.Description = desc;

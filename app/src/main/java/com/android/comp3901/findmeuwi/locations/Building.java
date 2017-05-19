@@ -17,7 +17,7 @@ public class Building extends Place {
 
 
     public Building(String id, String name, double lat, double lng,String[] rooms, int floors, int known, double fam , int landmark) {
-        super(id, name, lat, lng, "Building",known,fam, landmark);
+        super(id, name, lat, lng, "Building",known,fam, landmark,0);
 
         this.rooms=rooms;
         this.floors = floors;

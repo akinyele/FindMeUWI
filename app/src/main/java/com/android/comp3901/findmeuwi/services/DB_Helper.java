@@ -103,7 +103,7 @@ public class DB_Helper extends SQLiteOpenHelper{
                     RT_LONG + " REAL, " +
                     RT_DESC + " TEXT, " +
                     RT_BUILDING + " TEXT DEFAULT 'NONE', " +
-                    RT_FLOOR + " REAL, " +
+                    RT_FLOOR + " INT, " +
                     RT_KNOWN + " INT, " +
                     RT_FAM + " REAL, " +
                     RT_LANDMARK + " INT DEFAULT 0, " +

@@ -202,7 +202,7 @@ public class Path {
                         res.getDouble(res.getColumnIndex(DB_Helper.RT_LONG)),//longtude
                         res.getInt(res.getColumnIndex(DB_Helper.RT_KNOWN)),
                         res.getDouble(res.getColumnIndex(DB_Helper.RT_FAM)),
-                        res.getDouble(res.getColumnIndex(DB_Helper.RT_FLOOR)),
+                        res.getInt(res.getColumnIndex(DB_Helper.RT_FLOOR)),
                         res.getString(res.getColumnIndex(DB_Helper.RT_DESC)),
                         res.getInt(res.getColumnIndex(DB_Helper.RT_LANDMARK))
                         );
@@ -232,7 +232,8 @@ public class Path {
                         verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LONG)),//longtude
                         verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_TYPE)),//type
                         1,0.0,
-                        verticesDB.getInt(verticesDB.getColumnIndex(DB_Helper.V_LANDMARK)));//Landmark
+                        verticesDB.getInt(verticesDB.getColumnIndex(DB_Helper.V_LANDMARK)),
+                        verticesDB.getInt(verticesDB.getColumnIndex(DB_Helper.V_LEVEL)));//Landmark
                 break;
             default:
                 Location = new Vertex(verticesDB.getString(0),  //Vid
@@ -240,7 +241,8 @@ public class Path {
                         verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LAT)), //latitude
                         verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LONG)),//longtude
                         verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_TYPE)),//type
-                        verticesDB.getInt(verticesDB.getColumnIndex(DB_Helper.V_LANDMARK)));//Landmark
+                        verticesDB.getInt(verticesDB.getColumnIndex(DB_Helper.V_LANDMARK)),
+                        verticesDB.getInt(verticesDB.getColumnIndex(DB_Helper.V_LEVEL)));//Landmark
                 break;
         }
 

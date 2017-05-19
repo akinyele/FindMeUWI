@@ -1,5 +1,6 @@
 package com.android.comp3901.findmeuwi.services;
 
+import android.graphics.Color;
 import android.util.Log;
 
 import com.android.comp3901.findmeuwi.R;
@@ -79,22 +80,22 @@ public class MapPolylines {
             switch (edge.getLevel()){
 
                 case 0:
-                    lane.setColor(R.color.groundFloorColor);
-                    lane.setVisible(false);
+                    lane.setColor(Color.MAGENTA);
+                   lane.setVisible(false);
 
                     descendingEdges.add(lane);
                     break;
                 case 1:
-                    lane.setColor(0x33606060);
+                    lane.setColor(0x33606060);//
                     floorEdges.add(lane);
                     break;
                 case 2:
-                    lane.setColor(R.color.secondFloorColor);
-                    lane.setVisible(false);
+                    lane.setColor(Color.YELLOW);
+                  lane.setVisible(false);
                     secondFloorEdges.add(lane);
                     break;
                 case 3:
-                    lane.setColor(R.color.colorAccent);
+                    lane.setColor(Color.CYAN);
                     lane.setVisible(false);
                     thirdFloorEdges.add(lane);
                     break;

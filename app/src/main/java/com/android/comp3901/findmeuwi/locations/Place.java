@@ -16,8 +16,8 @@ public class Place extends Vertex {
 
 
 
-    public Place(String id, String name, double lat, double lng, String Type, Integer known, Double familiarity, int landMark) {
-        super(id, name, lat, lng, Type, landMark);
+    public Place(String id, String name, double lat, double lng, String Type, Integer known, Double familiarity, int landMark, int level) {
+        super(id, name, lat, lng, Type, landMark, level);
         this.known= known;
         this.familiarity = familiarity;
     }

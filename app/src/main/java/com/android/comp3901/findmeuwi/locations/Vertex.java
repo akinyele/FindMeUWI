@@ -15,23 +15,29 @@ public class Vertex {
 
     final private double lat;
     final private double lng;
+    final private int level;
 
-    /*
+/*
     final private int level;
     final private string type;
 
      */
 
 
-    public Vertex(String id, String name, double lat, double lng, String Type, int landmark) {
+    public Vertex(String id, String name, double lat, double lng, String Type, int landmark,int level) {
         this.id = id;
         this.name = name;
         this.lat = lat;
         this.lng = lng;
         this.type = Type;
         this.landmark = landmark;
+        this.level = level;
     }
 
+
+    public int getLevel() {
+        return level;
+    }
 
     public Boolean isLandmark() {
         return landmark==1;
