@@ -524,20 +524,11 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
      */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.mapTypeNone:
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NONE);
-                break;
-            case R.id.mapTypeNormal:
+           case R.id.mapTypeNormal:
                 mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 break;
             case R.id.mapTypeSatellite:
                 mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                break;
-            case R.id.mapTypeTerrain:
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-                break;
-            case R.id.mapTypeHybrid:
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                 break;
             default:
                 break;
@@ -1164,6 +1155,14 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         //TODO reloads landmarks
     }
 
+    public void setTheme(int style){
+
+        boolean success = mGoogleMap.setMapStyle(new MapStyleOptions(getResources().getString(style)));
+        if (!success) {
+            Toast.makeText(this.getActivity(), "Style parsing failed.", Toast.LENGTH_LONG).show();
+        }
+
+    }
 
 
 //    public boolean isSdReadable() {

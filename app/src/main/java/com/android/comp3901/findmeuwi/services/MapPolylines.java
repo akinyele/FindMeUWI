@@ -129,20 +129,22 @@ public class MapPolylines {
 
                 if(route.get(i).getLevel()==3){
                     options.color(Color.MAGENTA);
-                }else if(route.get(i).getLevel()==3){
+                }else if(route.get(i).getLevel()==2){
                     options.color(Color.YELLOW);
-                }else {
-                    options.color(Color.GREEN);
+                }else if(route.get(i).getLevel()==0){
+                    options.color(Color.BLUE);
+                    }else {
+                        options.color(Color.GREEN);
+                    }
+
+                    Polyline line = mGoogleMap.addPolyline(options);
+                    currPath.add(line);
                 }
+        }
 
-                Polyline line = mGoogleMap.addPolyline(options);
-                currPath.add(line);
-            }
-    }
+        public void showAllLevels(){
 
-    public void showAllLevels(){
-
-    }
+        }
 
 
     public void showLevelTwo(){

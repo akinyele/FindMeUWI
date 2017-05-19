@@ -16,14 +16,18 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
     FindMe mapFrag;
 
     SwitchCompat landmark_switch;
+    RadioButton popup_radio;
 
 
     @Override
@@ -46,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        popup_radio = (RadioButton) findViewById(R.id.popup_view);
 
         /**views**/
 
@@ -116,30 +122,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
      //Inflate the menu; this adds items to the action bar if it is present.
        getMenuInflater().inflate(R.menu.main, menu);
        getMenuInflater().inflate(R.menu.map_menu, menu);
+       getMenuInflater().inflate(R.menu.theme_pop_menu,menu);
 //        getMenuInflater().inflate(R.menu.search,menu);
 //
 //        createSearchView(menu);
 //
-
-
-
-        return true;
-    }
-
-    private void createSearchView(Menu menu) {
-
-        MenuItem searchItem = menu.findItem(R.id.search);
-        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        final SearchManager searchManager = (SearchManager)
-                getSystemService(Context.SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(
-                new ComponentName(this, MainActivity.class)));
-
-
-        searchView.setOnSuggestionListener(this);
-        searchView.setIconifiedByDefault(false);
-
+      return true;
     }
 
     @Override
@@ -154,20 +142,26 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
       if(findMeFrag != null){
 
             switch (item.getItemId()) {
-                case R.id.mapTypeNone:
-                    findMeFrag.onOptionsItemSelected(item);
-                    break;
-                case R.id.mapTypeNormal:
+               case R.id.mapTypeNormal:
                     findMeFrag.onOptionsItemSelected(item);
                     break;
                 case R.id.mapTypeSatellite:
                     findMeFrag.onOptionsItemSelected(item);
                     break;
-                case R.id.mapTypeTerrain:
-                    findMeFrag.onOptionsItemSelected(item);
+                case R.id.style1:
+                    findMeFrag.setTheme(R.string.style_icyBlue);
                     break;
-                case R.id.mapTypeHybrid:
-                    findMeFrag.onOptionsItemSelected(item);
+                case R.id.style2:
+                    findMeFrag.setTheme(R.string.style_cobalt);
+                    break;
+                case R.id.style3:
+                    findMeFrag.setTheme(R.string.style_chilled);
+                    break;
+                case R.id.style4:
+                    findMeFrag.setTheme(R.string.style_mapBox);
+                    break;
+                case R.id.style5:
+                    findMeFrag.setTheme(R.string.style_Rainforest_Fringe);
                     break;
                 default:
                     break;
@@ -195,8 +189,17 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
             startActivity(i);
 
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_theme) {
             /*fm.beginTransaction().replace(R.id.content_frame, new gmapsfrag()).commit();*/
+            Log.d("theme", "onNavigationItemSelected: ");
+            PopupMenu popupMenu= new PopupMenu(MainActivity.this, popup_radio);
+            popupMenu.getMenuInflater().inflate(R.menu.theme_pop_menu,popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    return false;
+                }
+            });
 
         } else if (id == R.id.nav_slideshow) {
 

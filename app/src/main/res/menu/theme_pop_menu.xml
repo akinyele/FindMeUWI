@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/style1" android:title="icyBlue"/>
+    <item android:id="@+id/style2" android:title="cobalt"/>
+    <item android:id="@+id/style3" android:title="chilled"/>
+    <item android:id="@+id/style4" android:title="mapBox"/>
+    <item android:id="@+id/style5" android:title="Rainforest_Fringe"/>
+
+</menu>
