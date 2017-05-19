@@ -37,6 +37,7 @@ public class DB_Helper extends SQLiteOpenHelper{
     public static final String V_LONG ="V_Longitude";
     public static final String V_TYPE ="V_Type";
     public static final String V_LANDMARK="V_Landmark";
+    public static final String V_LEVEL= "level";
 
     // Database for edges on the graph.
     public static final String EDGES_TABLE ="Edges";
@@ -128,7 +129,8 @@ public class DB_Helper extends SQLiteOpenHelper{
                     V_LONG  + " REAL, " +
                     V_TYPE + " TEXT," +
                     V_LANDMARK + " INT DEFAULT 0, " +
-                    "PRIMARY KEY ("+V_LAT+","+V_LONG+","+V_ID+" ) ); " );
+                    V_LEVEL + " INTEGER, "+
+                "PRIMARY KEY ("+V_LAT+","+V_LONG+","+V_ID+" ) ); " );
 
 
         db.execSQL(" CREATE TABLE IF NOT EXISTS " + EDGES_TABLE + " ( " +
@@ -358,17 +360,17 @@ public class DB_Helper extends SQLiteOpenHelper{
         db.insert(ROOM_TABLE,null, rooms);
         rooms.clear();
 
-//        //TODO changed room name to match vertex name
-//        rooms.put(RT_ID,"COMLAB");
-//        rooms.put(RT_NAME,"Computer Science Lab Room" );
-//        rooms.put(RT_LAT,18.005132);
-//        rooms.put(RT_LONG,-76.750145);
-//        rooms.put(RT_DESC,"Description");
-//        rooms.put(RT_FLOOR,1 );
-//        rooms.put(RT_KNOWN,0 );
-//        rooms.put(RT_FAM,0 );
-//        db.insert(ROOM_TABLE,null, rooms);
-//        rooms.clear();
+        //TODO changed room name to match vertex name
+        rooms.put(RT_ID,"COMLAB");
+        rooms.put(RT_NAME,"Computer Science Lab Room" );
+        rooms.put(RT_LAT,18.005164);//18.005164, -76.750173
+        rooms.put(RT_LONG,-76.750173);
+        rooms.put(RT_DESC,"Description");
+        rooms.put(RT_FLOOR,1 );
+        rooms.put(RT_KNOWN,0 );
+        rooms.put(RT_FAM,0 );
+        db.insert(ROOM_TABLE,null, rooms);
+        rooms.clear();
 
         rooms.put(RT_ID,"CPGR");
         rooms.put(RT_NAME,"Computing Post-Graduate Room");
@@ -1070,7 +1072,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,  18.005176);//18.005176, -76.749894
         vertices.put(V_LONG, -76.749894);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1079,7 +1082,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT, 18.005209 );
         vertices.put(V_LONG, -76.749750);
         vertices.put(V_TYPE,"ROOM");
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1088,7 +1092,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005384  );
         vertices.put(V_LONG,-76.750077   );
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1097,7 +1102,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004723 );
         vertices.put(V_LONG,-76.749975);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1106,7 +1112,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004690);
         vertices.put(V_LONG,-76.750036);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1116,7 +1123,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004496);//18.004496, -76.750018
         vertices.put(V_LONG,-76.750018);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1126,7 +1134,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004348);
         vertices.put(V_LONG,-76.749758);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1135,7 +1144,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004379);
         vertices.put(V_LONG,-76.749753);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1144,7 +1154,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004733);//18.004755, -76.749839
         vertices.put(V_LONG,-76.749870);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1153,7 +1164,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.003944);//18.003944, -76.749530
         vertices.put(V_LONG,-76.749530);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1162,7 +1174,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004002);//18.004002, -76.749451
         vertices.put(V_LONG,-76.749451);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1171,7 +1184,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004197);//18.004197, -76.749622
         vertices.put(V_LONG,-76.749622);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1181,7 +1195,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004593);
         vertices.put(V_LONG,-76.750123);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1190,7 +1205,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004577);
         vertices.put(V_LONG,-76.750150);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,3);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1199,7 +1215,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005242);//18.005242,-76.750182
         vertices.put(V_LONG,-76.750182);
         vertices.put(V_TYPE ,"Building" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1208,7 +1225,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005032);//18.005032,-76.750159
         vertices.put(V_LONG,-76.750159);
         vertices.put(V_TYPE ,"ROOM");
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1217,19 +1235,21 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005073);//18.005073, -76.750086
         vertices.put(V_LONG,-76.750086);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
 
-//        vertices.put(V_ID,"COMLAB");
-//        vertices.put(V_NAME,"Computer Science Lab Room" );
-//        vertices.put(V_LAT,18.005132);
-//        vertices.put(V_LONG,-76.750145);
-//        vertices.put(V_TYPE ,"ROOM" );
-//
-//        db.insert(VERTICES_TABLE,null,vertices);
-//        vertices.clear();
+        vertices.put(V_ID,"COMLAB");
+        vertices.put(V_NAME,"Computer Science Lab Room" );
+        vertices.put(V_LAT,18.005164);//18.005164, -76.750173
+        vertices.put(V_LONG,-76.750173);
+        vertices.put(V_TYPE ,"ROOM" );
+        vertices.put(V_LEVEL,1);
+        
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
 
 
         vertices.put(V_ID,"COMPLR"  );
@@ -1237,7 +1257,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005986);//18.005986, -76.749733
         vertices.put(V_LONG,-76.749733);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,3);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1246,7 +1267,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006040);//18.006040, -76.749681
         vertices.put(V_LONG,-76.749681);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1255,7 +1277,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005761);//18.005761, -76.750078
         vertices.put(V_LONG,-76.750078);
         vertices.put(V_TYPE ,"Building" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1266,7 +1289,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004834);
         vertices.put(V_LONG,-76.749991);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1275,7 +1299,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004794);
         vertices.put(V_LONG,-76.750063);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1284,7 +1309,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005130);
         vertices.put(V_LONG,-76.748741);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1293,7 +1319,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005722);
         vertices.put(V_LONG,-76.749694);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1304,7 +1331,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005346);
         vertices.put(V_LONG,-76.750207);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1313,7 +1341,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005288);
         vertices.put(V_LONG,-76.750332);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1323,7 +1352,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006011);//18.006011, -76.749629
         vertices.put(V_LONG,-76.749629);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1332,7 +1362,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005991);
         vertices.put(V_LONG,-76.750105);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1341,7 +1372,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005868);//18.005868, -76.749929
         vertices.put(V_LONG,-76.749929);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1350,7 +1382,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006293);
         vertices.put(V_LONG,-76.749763);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1359,7 +1392,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006255);
         vertices.put(V_LONG,-76.749714);
         vertices.put(V_TYPE ,"BUILDING" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1368,7 +1402,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005933);//18.005933, -76.749901
         vertices.put(V_LONG,-76.749901);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1377,7 +1412,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006473);//18.006473, -76.750288
         vertices.put(V_LONG,-76.750288);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1389,7 +1425,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_TYPE,"ROOM" );
 
 
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1400,7 +1437,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_TYPE,"ROOM" );
 
 
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1411,7 +1449,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_TYPE,"ROOM" );
 
 
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1420,7 +1459,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005933);
         vertices.put(V_LONG,-76.749901);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1429,7 +1469,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006192);
         vertices.put(V_LONG,-76.750141);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1438,7 +1479,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006611);//18.006611, -76.750176
         vertices.put(V_LONG,-76.750176);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1447,7 +1489,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006090);
         vertices.put(V_LONG,-76.750511);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1456,7 +1499,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006435);//18.006435, -76.750349
         vertices.put(V_LONG,-76.750349);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1465,7 +1509,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006611);//18.006611, -76.750176
         vertices.put(V_LONG,-76.750176);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1474,7 +1519,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005868);//18.005868, -76.749929
         vertices.put(V_LONG,-76.749929);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1483,7 +1529,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005868);//18.005868, -76.749929
         vertices.put(V_LONG,-76.749929);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1492,7 +1539,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005868);//18.005868, -76.749929
         vertices.put(V_LONG,-76.749929);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1501,7 +1549,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005933);//18.005933, -76.749901
         vertices.put(V_LONG,-76.749901);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1510,7 +1559,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005933);//18.005933, -76.749901
         vertices.put(V_LONG,-76.749901);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1519,7 +1569,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006292);
         vertices.put(V_LONG,-76.750432);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1529,7 +1580,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004574);
         vertices.put(V_LONG,-76.748972);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1538,7 +1590,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004561);//18.004561, -76.748850
         vertices.put(V_LONG,-76.748850);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1547,7 +1600,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004718);
         vertices.put(V_LONG,-76.750202);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,0);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1557,7 +1611,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.003868);//18.003868, -76.749724
         vertices.put(V_LONG,-76.749724);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1566,7 +1621,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006091);
         vertices.put(V_LONG,-76.748902);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1575,7 +1631,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006136);
         vertices.put(V_LONG,-76.748880);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1584,7 +1641,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006132);
         vertices.put(V_LONG,-76.749017);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1593,7 +1651,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006134 );
         vertices.put(V_LONG,-76.748966);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1602,7 +1661,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005969);
         vertices.put(V_LONG,-76.749099);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1611,7 +1671,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006117);
         vertices.put(V_LONG,-76.748861);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1620,7 +1681,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005648);
         vertices.put(V_LONG,-76.748699);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1629,7 +1691,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT, 18.004807);
         vertices.put(V_LONG,-76.749583);
         vertices.put(V_TYPE ,"Building");
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1638,7 +1701,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004886);//18.004907, -76.749519
         vertices.put(V_LONG,-76.749537);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1647,7 +1711,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004945); //18.004945,-76.749473
         vertices.put(V_LONG,-76.749473);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1656,7 +1721,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004884);
         vertices.put(V_LONG,-76.749417);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1665,7 +1731,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004994);
         vertices.put(V_LONG,-76.749409);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1674,7 +1741,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005302);//18.005302, -76.749143
         vertices.put(V_LONG,-76.749143);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1684,7 +1752,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005238);//18.005238, -76.749097
         vertices.put(V_LONG,-76.749097);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1693,7 +1762,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005149); //18.005149, -76.749037
         vertices.put(V_LONG,-76.749037);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1702,7 +1772,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004993);//18.004993, -76.748912
         vertices.put(V_LONG,-76.748912);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1711,7 +1782,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004523);///18.004523, -76.749032
         vertices.put(V_LONG,-76.749032);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1720,7 +1792,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005058);//18.005058, -76.749287
         vertices.put(V_LONG,-76.749287);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1729,7 +1802,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004797);
         vertices.put(V_LONG,-76.748785);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1738,7 +1812,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005569);
         vertices.put(V_LONG,-76.749115);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,3);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1747,7 +1822,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004736);// //18.004736,-76.748973
         vertices.put(V_LONG,-76.748973);
         vertices.put(V_TYPE,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1756,7 +1832,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004370);
         vertices.put(V_LONG,-76.749152);
         vertices.put(V_TYPE ,"ROOM" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1770,7 +1847,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.003972);//18.003972, -76.749573
         vertices.put(V_LONG,-76.749573);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1779,7 +1857,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004351);
         vertices.put(V_LONG,-76.749682);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1788,7 +1867,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004817);
         vertices.put(V_LONG,-76.748844);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1797,7 +1877,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005124);//18.005124, -76.749088
         vertices.put(V_LONG,-76.749088);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1806,7 +1887,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006064);
         vertices.put(V_LONG,-76.748764);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1815,7 +1897,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005490);
         vertices.put(V_LONG,-76.749112);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1824,7 +1907,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005490);
         vertices.put(V_LONG,-76.749112);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,3);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1833,7 +1917,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004784);
         vertices.put(V_LONG,-76.749857);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1842,7 +1927,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004757);
         vertices.put(V_LONG,-76.750148);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1851,7 +1937,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005772);//18.005772, -76.750013
         vertices.put(V_LONG,-76.750013);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1860,7 +1947,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005772);
         vertices.put(V_LONG,-76.750013);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,3);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1869,7 +1957,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006634);//18.006634, -76.750138
         vertices.put(V_LONG,-76.750138);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1878,7 +1967,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006054);//18.006054, -76.750567
         vertices.put(V_LONG,-76.750567);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1887,7 +1977,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004621);
         vertices.put(V_LONG,-76.748864);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1896,7 +1987,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004575);//18.004575, -76.750166
         vertices.put(V_LONG,-76.750166);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1905,7 +1997,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004575);//18.004575, -76.750166
         vertices.put(V_LONG,-76.750166);
         vertices.put(V_TYPE ,"STAIRS" );
-
+        vertices.put(V_LEVEL,3);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1918,7 +2011,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004442);
         vertices.put(V_LONG,-76.749224);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1927,7 +2021,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004466);
         vertices.put(V_LONG,-76.749309);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1936,7 +2031,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004423);
         vertices.put(V_LONG,-76.749354);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1945,7 +2041,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004590);
         vertices.put(V_LONG,-76.749407);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1954,7 +2051,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004986);//18.004986, -76.749709
         vertices.put(V_LONG,-76.749709);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1963,7 +2061,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005195);
         vertices.put(V_LONG,-76.749814);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1972,7 +2071,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005456);
         vertices.put(V_LONG,-76.749957);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1981,7 +2081,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005576);
         vertices.put(V_LONG,-76.750006);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1990,7 +2091,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005753);//
         vertices.put(V_LONG,-76.750102);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -1999,7 +2101,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005832);
         vertices.put(V_LONG,-76.750142);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2008,7 +2111,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005951);
         vertices.put(V_LONG,-76.750204);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2017,7 +2121,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006114);//18.006114, -76.750305
         vertices.put(V_LONG,-76.750305);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2026,7 +2131,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006135);
         vertices.put(V_LONG,-76.750360);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2035,7 +2141,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006243);
         vertices.put(V_LONG,-76.750440);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2044,7 +2151,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004648);
         vertices.put(V_LONG,-76.748900);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2053,7 +2161,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004584);
         vertices.put(V_LONG,-76.748831);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2062,7 +2171,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004782);//18.004782, -76.748771
         vertices.put(V_LONG,-76.748771);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2071,7 +2181,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004858);//18.004858, -76.748815
         vertices.put(V_LONG,-76.748815);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2080,7 +2191,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004839);//18.004839, -76.748874
         vertices.put(V_LONG,-76.748874);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2089,7 +2201,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004979);//18.004979, -76.748965
         vertices.put(V_LONG,-76.748965);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2098,7 +2211,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005095);//18.005095, -76.749139
         vertices.put(V_LONG,-76.749139);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2107,7 +2221,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005132);//18.005132, -76.749169
         vertices.put(V_LONG,-76.749169);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2116,7 +2231,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005314);//18.005314, -76.749212
         vertices.put(V_LONG,-76.749212);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2125,7 +2241,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005517);
         vertices.put(V_LONG,-76.749204 );
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2134,7 +2251,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005535);
         vertices.put(V_LONG,-76.749056);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,3);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2143,7 +2261,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005361);
         vertices.put(V_LONG,-76.749134);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2152,7 +2271,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004393);//18.004791, -76.749830
         vertices.put(V_LONG,-76.749705);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2161,7 +2281,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004376);
         vertices.put(V_LONG,-76.749724);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2170,7 +2291,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004332);
         vertices.put(V_LONG,-76.749740);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2179,7 +2301,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004174);//18.004174, -76.749987
         vertices.put(V_LONG,-76.749987);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2188,7 +2311,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004298);//18.004298, -76.749239
         vertices.put(V_LONG,-76.749239);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2197,7 +2321,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004101);
         vertices.put(V_LONG,-76.749350);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2206,7 +2331,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004127);
         vertices.put(V_LONG,-76.749384);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2215,7 +2341,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004161);
         vertices.put(V_LONG,-76.749398);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2224,7 +2351,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005452);//18.005452, -76.748941
         vertices.put(V_LONG,-76.748941);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2233,7 +2361,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005492);
         vertices.put(V_LONG,-76.748860);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2242,7 +2371,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005568);
         vertices.put(V_LONG,-76.748695);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2251,7 +2381,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005866);
         vertices.put(V_LONG,-76.749053);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2261,7 +2392,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006143);
         vertices.put(V_LONG,-76.748665);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2270,7 +2402,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006136);
         vertices.put(V_LONG,-76.749013);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2279,7 +2412,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006088);
         vertices.put(V_LONG,-76.749033);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2288,7 +2422,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006100);
         vertices.put(V_LONG,-76.748754);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2298,7 +2433,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005983);
         vertices.put(V_LONG,-76.748664);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2307,7 +2443,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004853);  //18.004859, -76.749498
         vertices.put(V_LONG,-76.749516);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2316,7 +2453,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004909);
         vertices.put(V_LONG,-76.749446);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2325,7 +2463,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004953);
         vertices.put(V_LONG,-76.749385);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2334,7 +2473,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004672);
         vertices.put(V_LONG,-76.749750);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2343,7 +2483,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004746);
         vertices.put(V_LONG,-76.749703);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2352,7 +2493,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004802);
         vertices.put(V_LONG,-76.749846);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2361,7 +2503,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004767);
         vertices.put(V_LONG,-76.749889);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2371,7 +2514,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005352);
         vertices.put(V_LONG,-76.750142  );
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2380,7 +2524,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005286 );
         vertices.put(V_LONG,-76.750116  );
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2389,7 +2534,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005218 );
         vertices.put(V_LONG,-76.750156  );
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2398,7 +2544,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005198 );
         vertices.put(V_LONG,-76.750188  );
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2407,7 +2554,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005186 );
         vertices.put(V_LONG,-76.750245  );
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2416,7 +2564,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006157 );//18.006157, -76.750208
         vertices.put(V_LONG,-76.750208);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2425,7 +2574,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006000);//18.006000, -76.750535
         vertices.put(V_LONG,-76.750535);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2434,7 +2584,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006037 );//18.006037, -76.750558
         vertices.put(V_LONG,-76.750558  );
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2443,7 +2594,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006037 );//18.006037, -76.750558
         vertices.put(V_LONG,-76.750558  );
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2452,7 +2604,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006366 );//18.006366, -76.750342
         vertices.put(V_LONG,-76.750342);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2461,7 +2614,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006522);//18.006522, -76.750439
         vertices.put(V_LONG,-76.750439);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2470,7 +2624,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006682 );//18.006682, -76.750144
         vertices.put(V_LONG,-76.750144);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2479,7 +2634,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006588 );//18.006588, -76.750082
         vertices.put(V_LONG,-76.750082);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2488,7 +2644,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006399);//18.006399, -76.750320
         vertices.put(V_LONG,-76.750320);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2497,7 +2654,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006430);//18.006430, -76.750264
         vertices.put(V_LONG,-76.750264);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2506,7 +2664,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006079 );
         vertices.put(V_LONG,-76.749948  );
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2515,7 +2674,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005962 );//18.005962, -76.749902
         vertices.put(V_LONG,-76.749902);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2524,7 +2684,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006020);//18.006020, -76.749800
         vertices.put(V_LONG,-76.749800);
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2533,7 +2694,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.006100 );
         vertices.put(V_LONG,-76.749667  );
         vertices.put(V_TYPE ,"Unimportant Node" );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2542,7 +2704,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.004596);//18.004601, -76.750187
         vertices.put(V_LONG,-76.750182);
         vertices.put(V_TYPE ,"Unimportant Node " );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2551,7 +2714,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005856);//18.005856, -76.750083
         vertices.put(V_LONG,-76.750083);
         vertices.put(V_TYPE ,"Unimportant Node " );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2560,7 +2724,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005792);//18.005792, -76.750048
         vertices.put(V_LONG,-76.750048);
         vertices.put(V_TYPE ,"Unimportant Node " );
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2569,7 +2734,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_LAT,18.005838);//18.005838, -76.750052
         vertices.put(V_LONG,-76.750052);
         vertices.put(V_TYPE ,"Unimportant Node " );
-
+        vertices.put(V_LEVEL,3);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2577,8 +2743,9 @@ public class DB_Helper extends SQLiteOpenHelper{
         vertices.put(V_NAME,"Comp sci node 2");
         vertices.put(V_LAT,18.005820);//18.005820, -76.750039
         vertices.put(V_LONG,-76.750039);
-        vertices.put(V_TYPE ,"Unimportant Node");
-
+        vertices.put(V_TYPE ,"Unimportant Node " );
+        vertices.put(V_LEVEL,2);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 
@@ -2589,13 +2756,14 @@ public class DB_Helper extends SQLiteOpenHelper{
          * CUSTOM LANDMARKS
          */
 
-        vertices.put(V_ID,"jackie");
-        vertices.put(V_NAME,"jackie's Stall");
+        vertices.put(V_ID,"Jackie");
+        vertices.put(V_NAME,"Jackie's Stall");
         vertices.put(V_LAT,18.005010 );
         vertices.put(V_LONG,-76.749584);
         vertices.put(V_TYPE ,"Place");
         vertices.put(V_LANDMARK, 1);
-
+        vertices.put(V_LEVEL,1);
+        
         db.insert(VERTICES_TABLE,null,vertices);
         vertices.clear();
 //
@@ -2605,7 +2773,7 @@ public class DB_Helper extends SQLiteOpenHelper{
 //        vertices.put(V_LONG,-76.  );
 //        vertices.put(V_TYPE ,"Unimportant Node" );
 //
-//        db.insert(VERTICES_TABLE,null,vertices);
+//                db.insert(VERTICES_TABLE,null,vertices);
 //        vertices.clear();
 //
 
@@ -2886,6 +3054,13 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         edges.put(E_SOURCE,"COMLABB");
         edges.put(E_DESTINATION,"CS3");
+        edges.put(E_WEIGHT, 1);
+        edges.put(E_LEVEL,1);
+        db.insert(EDGES_TABLE,null,edges);
+        edges.clear();
+
+        edges.put(E_SOURCE,"CS3");
+        edges.put(E_DESTINATION,"COMLAB");
         edges.put(E_WEIGHT, 1);
         edges.put(E_LEVEL,1);
         db.insert(EDGES_TABLE,null,edges);
@@ -3707,31 +3882,6 @@ public class DB_Helper extends SQLiteOpenHelper{
     }
 
 
-    /**
-     * This method is used to insert the user inserted landmarks
-     * @param latitude
-     * @param longitude
-     * @param name
-     * @param desc
-     * @param image_id unique image id thate is use to find the image of the landmark
-     */
-    public void insertLandmark(double latitude, double longitude, String name, String desc, String image_id){
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues vertices = new ContentValues();
-        vertices.put(V_ID,image_id);
-        vertices.put(V_NAME,name);
-        vertices.put(V_LAT,latitude);
-        vertices.put(V_LONG,longitude);
-        vertices.put(V_TYPE ,"Place" );
-        vertices.put(V_LANDMARK, 1);
-        db.insert(VERTICES_TABLE,null,vertices);
-        vertices.clear();
-        db.close();
-
-        Log.d(TAG, "insertLandmark: Landmark saved");
-     }
-
-
 
     /**
      * Returns a specific location from withing the database base
@@ -3866,6 +4016,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         return res;
 
     }
+
+
 
     public void updateRoom(String id, Integer known, double familiarity) {
 
