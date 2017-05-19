@@ -2754,9 +2754,10 @@ public class DB_Helper extends SQLiteOpenHelper{
 
         /**
          * CUSTOM LANDMARKS
+         * V_ID show not have any caps
          */
 
-        vertices.put(V_ID,"Jackie");
+        vertices.put(V_ID,"jackie");
         vertices.put(V_NAME,"Jackie's Stall");
         vertices.put(V_LAT,18.005010 );
         vertices.put(V_LONG,-76.749584);
@@ -4064,5 +4065,23 @@ public class DB_Helper extends SQLiteOpenHelper{
     }
 
 
+    public void insertLandmark(double lat, double lng, String name, String desc, String image_id) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues vertices = new ContentValues();
 
+        //TODO add levels to landmarks
+
+
+        vertices.put(V_ID,image_id);
+        vertices.put(V_NAME,name);
+        vertices.put(V_LAT,lat);
+        vertices.put(V_LONG,lng);
+        vertices.put(V_TYPE ,"Place" );
+        vertices.put(V_LEVEL,0);
+
+        db.insert(VERTICES_TABLE,null,vertices);
+        vertices.clear();
+
+
+    }
 }//END of DB_HELPER
