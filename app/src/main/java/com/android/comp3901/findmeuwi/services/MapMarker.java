@@ -99,9 +99,12 @@ public class MapMarker {
                 destMarker.setTag(vertex);
                 break;
             case 3:
-                Log.d(TAG, "addMarker: " + ll +" "+ startMarker.getPosition() );
-                    if(ll.equals(destMarker.getPosition())
-                            || ll.equals(startMarker.getPosition() )){ break;}
+                try {
+                    Log.d(TAG, "addMarker: " + ll + " " + startMarker.getPosition());
+                    if (ll.equals(destMarker.getPosition()) || ll.equals(startMarker.getPosition())) {
+                        break;
+                    }
+                }catch (NullPointerException e){}
 
                 option = new MarkerOptions()
                         .position(vertex.getLL())
@@ -234,6 +237,7 @@ public class MapMarker {
     }
 
 
-
-
+    public void removeStart() {
+        startMarker.remove();
+    }
 }//End of Marker Class

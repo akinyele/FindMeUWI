@@ -99,17 +99,16 @@ public class Tracker extends Thread {
                         startArrivalTimer();//Send arrival timer to main thread
                     }
                 });
-
             }
-//          else{
-//                Location  location = FindMe.my_location;
-//                if ( !(location.getAccuracy()>min_accurracy_error ||  location.hasAccuracy() )){
-//                    Log.d(" Tracker: ", "Not Accurate");
-//                    Toast.makeText(instance, "Cant get accurate location", Toast.LENGTH_SHORT);
-//                }else {
-//                    locationTracking();
-//                }
-//            }
+          else{
+                Location  location = FindMe.my_location;
+                if ( !(location.getAccuracy()>min_accurracy_error ||  location.hasAccuracy() )){
+                    Log.d(" Tracker: ", "Not Accurate");
+                    Toast.makeText(instance, "Cant get accurate location", Toast.LENGTH_SHORT);
+                }else {
+                    locationTracking();
+                }
+            }
   }
 
 
@@ -128,7 +127,6 @@ public class Tracker extends Thread {
             @Override
             public void run() {
                 if(!FindMe.location_service_enabled){
-                    arrival_timer_sent = false;
                     createDialog();
                 }
             }
@@ -184,7 +182,6 @@ public class Tracker extends Thread {
                             //mapMarker.addPointOfInterestMarker(node);
 
                 //TODO show a snack bar showing the tell what just popped up and where it is relative to you
-
 
                     Directions.getDirection(node);
 
@@ -292,6 +289,7 @@ public class Tracker extends Thread {
              @Override
              public void onClick(View v) {
                 Toast.makeText(instance.getApplicationContext(),"Not Arrived",Toast.LENGTH_SHORT).show();
+                arrival_timer_sent = false;
                 dialog.dismiss();
                 //TODO: restart the timer
              }

@@ -35,7 +35,7 @@ public class MapPolylines {
 
 
     GoogleMap googleMap;
-    Polyline currPath = null;
+    LinkedList<Polyline> currPath = null;
 
 
     public MapPolylines(GoogleMap map) {
@@ -45,6 +45,7 @@ public class MapPolylines {
         this.secondFloorEdges = new LinkedList<>();
         this.thirdFloorEdges = new LinkedList<>();
         this.descendingEdges = new LinkedList<>();
+        this.currPath = new LinkedList<>();
 
     }
 
@@ -112,8 +113,8 @@ public class MapPolylines {
 
     public void createPath(LinkedList<Vertex> route){
 
-           if(currPath != null)
-               currPath.remove();
+          if(!currPath.isEmpty())
+              deletePath();
 
             route.size();
             LinkedList<LatLng> pnts = new LinkedList<>();
@@ -134,10 +135,9 @@ public class MapPolylines {
                     options.color(Color.GREEN);
                 }
 
-                currPath = mGoogleMap.addPolyline(options);
+                Polyline line = mGoogleMap.addPolyline(options);
+                currPath.add(line);
             }
-
-
     }
 
     public void showAllLevels(){
@@ -150,9 +150,11 @@ public class MapPolylines {
     }
 
 
-
-
-
-
-
+    public void deletePath() {
+        for (Polyline line:
+             currPath) {
+            line.remove();
+        }
+        currPath.clear();
+    }
 }

@@ -160,10 +160,11 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             //arrival message recieve from tracker so clear current path
             Log.d(TAG, "handleMessage: MessageRecieved");
             path.remove();
-            line.remove();
+            mapPolylines.deletePath();
             mapMarkers.removePOI();
             //TODO delete starter and destination marker and make is sourceset = flase
 
+            mapMarkers.removeStart();
         }
 
     };
@@ -563,6 +564,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
      */
     public boolean setSource() {
 
+        if(location_service_enabled){return false;}
         String startText = getSourceView.getText().toString();
         Cursor res = dbHelper.findLocation(startText);
         return setVertex(res, 1);
@@ -757,13 +759,6 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         //handles the start location configuration
         if (location_service_enabled && !isSourceSet) {
             if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
             //TODO Check location accuracy before using the point;
@@ -794,9 +789,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
                 }
         }
 
-        mapPolylines.createPath(route);
-//      drawPath(route);
-        getPOI();
+       mapPolylines.createPath(route);
+       getPOI();
    }
 
             /*
