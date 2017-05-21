@@ -39,7 +39,7 @@ public class Learner {
 
             if(place.isKnown()){
                 return;
-            }else if(place.getFamiliarity() >= 5.0 ){
+            }else if(place.getFamiliarity() >= 3.0 ){
                 isKnownValidation(place);
             }else {
                 place.updateFamiliarity(1.0);

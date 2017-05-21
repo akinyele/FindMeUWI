@@ -106,6 +106,37 @@ public class Distance {
         return start;
     }
 
+    public static Vertex find_closest_marker(LatLng location) {
+
+        LatLng LL = location;
+
+        Vertex start;
+        ArrayList<Double> distances = new ArrayList();
+
+        List<Vertex> points = path.getCNodes(); // uses nodes that are connected to an edge
+
+        Integer closest = -1;
+
+        for (int i = 0; i < points.size(); i++) {
+
+            //Marker points Lat & Lng
+            LatLng markerLL = points.get(i).getLL();
+
+
+            double d = find_distance(LL,markerLL);
+            distances.add(d);
+
+            if (closest == -1 || d < distances.get(closest)) {
+                closest = i;
+            }
+        }
+
+        start = points.get(closest);
+        return start;
+    }
+
+
+
 
     private static double rad(double x) {
         return x * Math.PI / 180;

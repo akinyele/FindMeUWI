@@ -35,6 +35,7 @@ import com.android.comp3901.findmeuwi.R;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnSuggestionListener, NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener {
 
+    public static final String TAG = "com.android.comp3901";
     FragmentManager fragmentManager = getFragmentManager();
 
     private SearchView searchView;
@@ -189,6 +190,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
             startActivity(i);
 
 
+
+
         } else if (id == R.id.nav_theme) {
             /*fm.beginTransaction().replace(R.id.content_frame, new gmapsfrag()).commit();*/
             Log.d("theme", "onNavigationItemSelected: ");
@@ -209,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
 
         } else if (id == R.id.nav_landmark) {
             landmark_switch.setChecked(!(landmark_switch.isChecked()));
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -256,5 +260,19 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnSugg
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+    }
+
+
+//    @Override
+//    protected void onRestart() {
+//        super.onRestart();
+//        recreate();
+//    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: resumed");
     }
 }

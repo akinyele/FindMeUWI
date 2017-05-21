@@ -21,6 +21,7 @@ import com.android.comp3901.findmeuwi.R;
 import com.android.comp3901.findmeuwi.utils.Path;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.nearby.messages.Message;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,13 +64,13 @@ public class Tracker extends Thread {
 
     //Finals
     public final float min_accurracy_error = 15;
-    private final Double closeDistance= 0.0014;//in Km
+    private final Double closeDistance= 5.0;//in meters
 
     public Tracker(Activity instance){
 
         this.path = FindMe.path;
         this.instance = instance;
-        this.knownNodes =  this.getPointsOfInterest();
+//        this.knownNodes =  this.getPointsOfInterest();
         this.mapMarker = MapMarker.getInstance();
         this.learner = new Learner(instance);
         directionsSnackbar = Snackbar.make(instance.findViewById(R.id.app_bar_main), " ", Snackbar.LENGTH_LONG );
@@ -101,13 +102,18 @@ public class Tracker extends Thread {
                     }
                 });
             }else{
-                Location  location = FindMe.my_location;
-                if ( !(location.getAccuracy()>min_accurracy_error ||  location.hasAccuracy() )){
-                    Log.d(" Tracker: ", "Not Accurate");
-                    Toast.makeText(instance, "Cant get accurate location", Toast.LENGTH_SHORT);
-                }else {
-                    locationTracking();
+                try{
+                    Location  location = FindMe.my_location;
+                    if ( !(location.getAccuracy()>min_accurracy_error ||  location.hasAccuracy() )){
+                        Log.d(" Tracker: ", "Not Accurate");
+                        Toast.makeText(instance, "Cant get accurate location", Toast.LENGTH_SHORT);
+                    }else {
+                        locationTracking();
+                    }
+                }catch (NullPointerException e){
+
                 }
+
             }
   }
 
@@ -155,7 +161,8 @@ public class Tracker extends Thread {
         LatLng dest = new LatLng( FindMe.destination.getLat(), FindMe.destination.getLng());
 
 
-        Double distance_to_dest = Distance.find_distance(myLL,dest);
+        Double distance_to_dest =    SphericalUtil.computeDistanceBetween(myLL,dest) /*Distance.find_distance(myLL,dest)*/;
+
 
         Log.d(TAG, "Distance to destination" + distance_to_dest);
 
@@ -168,30 +175,30 @@ public class Tracker extends Thread {
         }else{// checks for known point and landMarks along the way
 
             //make variable local
-            for ( Vertex node : knownNodes) {
-
-                if(Distance.find_distance(myLL,node.getLL())<closeDistance){
-
-                    //TODO Pop up the known places
-                    knownNodes.remove(node);
-
-                    String nodeType = node.getType().replaceAll("\\s","").toLowerCase();
-
-                    //only pop up know rooms and land marks since building are always shown;
-                       if(!nodeType.equals("building"))
-                            //mapMarker.addPointOfInterestMarker(node);
-
-                //TODO show a snack bar showing the tell what just popped up and where it is relative to you
-
-                    Directions.getDirection(node);
-
-                    String message = node.getName()+" is on your ";
-                    directionsSnackbar.setText(message);
-                    directionsSnackbar.show();
-
-
-                }
-            }
+//            for ( Vertex node : knownNodes) {
+//
+//                if(Distance.find_distance(myLL,node.getLL())<closeDistance){
+//
+//                    //TODO Pop up the known places
+//                    knownNodes.remove(node);
+//
+//                    String nodeType = node.getType().replaceAll("\\s","").toLowerCase();
+//
+//                    //only pop up know rooms and land marks since building are always shown;
+//                       if(!nodeType.equals("building"))
+//                            //mapMarker.addPointOfInterestMarker(node);
+//
+//                //TODO show a snack bar showing the tell what just popped up and where it is relative to you
+//
+//                    Directions.getDirection(node);
+//
+//                    String message = node.getName()+" is on your ";
+//                    directionsSnackbar.setText(message);
+//                    directionsSnackbar.show();
+//
+//
+//                }
+//            }
         }
     }
 

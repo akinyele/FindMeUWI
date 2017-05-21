@@ -356,6 +356,8 @@ public class DB_Helper extends SQLiteOpenHelper{
         rooms.put(RT_DESC,"Description");
         rooms.put(RT_FLOOR,3 );
         rooms.put(RT_KNOWN,0 );
+        rooms.put(RT_KNOWN,0 );
+        rooms.put(RT_KNOWN,0 );
         rooms.put(RT_FAM,0 );
         db.insert(ROOM_TABLE,null, rooms);
         rooms.clear();

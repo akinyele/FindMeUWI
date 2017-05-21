@@ -108,7 +108,7 @@ public class MapMarker {
 
                 option = new MarkerOptions()
                         .position(vertex.getLL())
-                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.chat_bubble))
+                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.poi))
                         .snippet("POI")
                         .title(vertex.getName());
                 marker = mGoogleMap.addMarker(option);
@@ -238,6 +238,10 @@ public class MapMarker {
 
 
     public void removeStart() {
-        startMarker.remove();
+        try{
+            startMarker.remove();
+        }catch (NullPointerException e){
+
+        }
     }
 }//End of Marker Class

@@ -92,7 +92,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener, GoogleMap.OnMarkerClickListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener, GoogleMap.OnMarkerClickListener,
+        GoogleMap.OnMapLongClickListener, GoogleMap.OnInfoWindowLongClickListener{
 
 
     //Map Clients
@@ -176,18 +177,24 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
     private void initMap() {
         MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
         mapFragment.getMapAsync(this);
+
         buildAPI();
+
     }
 
     private void buildAPI() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity())
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage((FragmentActivity) this.getActivity(), this)
-                .build();
+
+        if(mGoogleApiClient==null){
+            mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity())
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(Places.GEO_DATA_API)
+                    .addApi(Places.PLACE_DETECTION_API)
+                    .enableAutoManage((FragmentActivity) this.getActivity(), this)
+                    .build();
+        }
+
     }
 
     /*
@@ -231,7 +238,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
                 String filepath = Environment.getExternalStorageDirectory()+File.separator+ location.getId();
                 File f = new File(getActivity().getApplicationContext().getFilesDir(), location.getId());
-                int img = getActivity().getResources().getIdentifier(location.getId(),"mipmap",getActivity().getPackageName() );
+                int img = getActivity().getResources().getIdentifier(location.getId().toLowerCase(),"mipmap",getActivity().getPackageName() );
 
                 if(f.exists()){
                     setPic(infoImage,filepath);
@@ -244,6 +251,8 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
                 return v;
             }
+
+
         });
         //mGoogleMap.setLatLngBoundsForCameraTarget();
 
@@ -310,7 +319,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         displayIcons(); // Diplay the node icons
         goToLocation(sci_tech);
 
-        boolean success = googleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_Rainforest_Fringe)));
+        boolean success = googleMap.setMapStyle(new MapStyleOptions(getResources().getString(R.string.style_mapBox)));
         if (!success) {
             Toast.makeText(this.getActivity(), "Style parsing failed.", Toast.LENGTH_LONG).show();
         }
@@ -445,7 +454,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         ArrayAdapter<String> roomsArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, locationSugg);
 
 
-        getSourceView = (AutoCompleteTextView) getView().findViewById(R.id.getSource);
+           getSourceView = (AutoCompleteTextView) getView().findViewById(R.id.getSource);
         getSourceView.setThreshold(1);
         getSourceView.setAdapter(roomsArrayAdapter);
         getSourceView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -755,7 +764,9 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             //TODO Check location accuracy before using the point;
             start = Distance.find_closest_marker(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient));
             isSourceSet = true;
-         }else{
+         }else if(isSourceSet){
+
+        }else{
             isSourceSet = setSource();
          }
 
@@ -879,11 +890,14 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(1000); //make a  request for the user's location every 1 second
-
+try{
         if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+    }catch(NullPointerException e){
+
+    }
 
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if(location == null) {
@@ -960,11 +974,27 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
 
     private void loadBottomSheet(Marker marker) {
 
-
+        final Marker mymarker = marker;
         ImageButton image_button = (ImageButton) getActivity().findViewById(R.id.bottom_sheet_add_image);
         TextView place_title = (TextView) getActivity().findViewById(R.id.bottom_sheet_title);
         TextView place_info1 = (TextView) getActivity().findViewById(R.id.place_info1);
         View moreinfo = getActivity().findViewById(R.id.more_info_layout);
+
+        image_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onInfoWindowLongClick: PRESSED");
+                LatLng ll = mymarker.getPosition();
+
+
+                start = Distance.find_closest_marker(ll);
+                isSourceSet = true;
+
+                getPath();
+                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+            }
+        });
 
 
         final Place place = (Place) marker.getTag();
@@ -1148,13 +1178,6 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         return nodes;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        //TODO reloads landmarks
-    }
-
     public void setTheme(int style){
 
         boolean success = mGoogleMap.setMapStyle(new MapStyleOptions(getResources().getString(style)));
@@ -1162,6 +1185,30 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
             Toast.makeText(this.getActivity(), "Style parsing failed.", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+
+    }
+
+    @Override
+    public void onInfoWindowLongClick(Marker marker) {
+
+        Log.d(TAG, "onInfoWindowLongClick: PRESSED");
+        LatLng ll = marker.getPosition();
+
+
+
+        start = Distance.find_closest_marker(ll);
+        isSourceSet = true;
+
+        getPath();
+    }
+
+
+    public void initVertices(){
+        path = new Path(dbHelper);
     }
 
 
