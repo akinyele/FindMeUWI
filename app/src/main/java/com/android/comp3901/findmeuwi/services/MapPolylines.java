@@ -3,8 +3,7 @@ package com.android.comp3901.findmeuwi.services;
 import android.graphics.Color;
 import android.util.Log;
 
-import com.android.comp3901.findmeuwi.R;
-import com.android.comp3901.findmeuwi.activities.FindMe;
+import com.android.comp3901.findmeuwi.ui.mapFragment.mapFragment;
 import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -15,7 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.android.comp3901.findmeuwi.activities.FindMe.mGoogleMap;
+import static com.android.comp3901.findmeuwi.ui.mapFragment.mapFragment.mGoogleMap;
 
 /**
  * Created by Kyzer on 5/12/2017.
@@ -52,10 +51,10 @@ public class MapPolylines {
 
     public void createGraph(){
 
-        List<Edge> edges = FindMe.path.getEdges();
-        List<Vertex> vertices = FindMe.path.getNodes();
+        List<Edge> edges = mapFragment.path.getEdges();
+        List<Vertex> vertices = mapFragment.path.getNodes();
 
-        HashMap<String, Vertex> vertexHashMap = FindMe.path.getVertices();
+        HashMap<String, Vertex> vertexHashMap = mapFragment.path.getVertices();
         Polyline lane;
         Vertex v1,v2;
 

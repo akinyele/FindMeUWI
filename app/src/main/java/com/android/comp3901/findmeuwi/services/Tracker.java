@@ -4,16 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.location.Location;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.android.comp3901.findmeuwi.utils.Directions;
-import com.android.comp3901.findmeuwi.utils.Distance;
-import com.android.comp3901.findmeuwi.activities.FindMe;
+import com.android.comp3901.findmeuwi.ui.mapFragment.mapFragment;
 import com.android.comp3901.findmeuwi.locations.Place;
 import com.android.comp3901.findmeuwi.locations.Room;
 import com.android.comp3901.findmeuwi.locations.Vertex;
@@ -68,7 +65,7 @@ public class Tracker extends Thread {
 
     public Tracker(Activity instance){
 
-        this.path = FindMe.path;
+        this.path = mapFragment.path;
         this.instance = instance;
 //        this.knownNodes =  this.getPointsOfInterest();
         this.mapMarker = MapMarker.getInstance();
@@ -92,9 +89,9 @@ public class Tracker extends Thread {
             }
 
 
-            if(!FindMe.location_service_enabled && !arrival_timer_sent){
+            if(!mapFragment.location_service_enabled && !arrival_timer_sent){
                 arrival_timer_sent = true;
-                FindMe.get().runOnUiThread(new Runnable() {
+                mapFragment.get().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Log.d(TAG, "run: ui thread");
@@ -103,7 +100,7 @@ public class Tracker extends Thread {
                 });
             }else{
                 try{
-                    Location  location = FindMe.my_location;
+                    Location  location = mapFragment.my_location;
                     if ( !(location.getAccuracy()>min_accurracy_error ||  location.hasAccuracy() )){
                         Log.d(" Tracker: ", "Not Accurate");
                         Toast.makeText(instance, "Cant get accurate location", Toast.LENGTH_SHORT);
@@ -132,7 +129,7 @@ public class Tracker extends Thread {
         my_runnable = new Runnable() {
             @Override
             public void run() {
-                if(!FindMe.location_service_enabled){
+                if(!mapFragment.location_service_enabled){
                     createDialog();
                 }
             }
@@ -152,13 +149,13 @@ public class Tracker extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Location  location = FindMe.my_location;
+        Location  location = mapFragment.my_location;
         Log.d(TAG , "tracking location :" + String.valueOf(location) );
         //if(Path.currPath == null){return;}
 
 
         LatLng  myLL = new LatLng(location.getLatitude(),location.getLongitude());
-        LatLng dest = new LatLng( FindMe.destination.getLat(), FindMe.destination.getLng());
+        LatLng dest = new LatLng( mapFragment.destination.getLat(), mapFragment.destination.getLng());
 
 
         Double distance_to_dest =    SphericalUtil.computeDistanceBetween(myLL,dest) /*Distance.find_distance(myLL,dest)*/;
@@ -170,7 +167,7 @@ public class Tracker extends Thread {
             //TODO create arrival dialog and increment familiarity clear path and land marks on arrival
             Toast.makeText(instance,"YOU HAVE ARRIVED AT YOUR DESTINATION", Toast.LENGTH_SHORT);
             hasArrived = true;
-            onArrival(FindMe.destination);
+            onArrival(mapFragment.destination);
 
         }else{// checks for known point and landMarks along the way
 
@@ -274,20 +271,20 @@ public class Tracker extends Thread {
          yesBtn.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 Toast.makeText(instance.getApplicationContext(),"Arrived at"+FindMe.destination.getName() ,Toast.LENGTH_SHORT).show();
+                 Toast.makeText(instance.getApplicationContext(),"Arrived at"+ mapFragment.destination.getName() ,Toast.LENGTH_SHORT).show();
                  dialog.dismiss();
 
 
                  // TODO: Check which class instance the destination is and increment the familiarity
 
-                 if( FindMe.destination instanceof Place){
+                 if( mapFragment.destination instanceof Place){
                          Log.d("ROOM TYPE  ", "TRUE");
-                         learner.learner1(FindMe.destination);
-                         ((Place) FindMe.destination).updateDB();
-                         Log.d("NEW Familiarity  ", ""+((Place) FindMe.destination).getFamiliarity());
+                         learner.learner1(mapFragment.destination);
+                         ((Place) mapFragment.destination).updateDB();
+                         Log.d("NEW Familiarity  ", ""+((Place) mapFragment.destination).getFamiliarity());
                     }
                 //TODO toast message
-                 onArrival(FindMe.destination);
+                 onArrival(mapFragment.destination);
              }
          });
 
@@ -310,7 +307,7 @@ public class Tracker extends Thread {
         //RESET FLAGS NEEDED IN THE LOOP
         hasArrived = true;
         arrival_timer_sent = false;
-        FindMe.trackerHandler.sendEmptyMessage(0);
+        mapFragment.trackerHandler.sendEmptyMessage(0);
 
         //TODO Clear Path show pop up image of destination;
 

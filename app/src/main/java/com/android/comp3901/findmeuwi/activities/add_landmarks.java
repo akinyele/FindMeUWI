@@ -7,11 +7,9 @@ import android.location.Location;
 import android.os.Bundle;
 import com.android.comp3901.findmeuwi.R;
 import com.android.comp3901.findmeuwi.services.DB_Helper;
+import com.android.comp3901.findmeuwi.ui.mapFragment.mapFragment;
 import com.android.comp3901.findmeuwi.utils.PhotoScalerAndSaver;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.vision.face.Landmark;
 
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -24,8 +22,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -82,8 +78,8 @@ public class add_landmarks extends Activity {
             @Override
             public void onClick(View v) {
 
-            landmark_location = FindMe.getLocation(getApplication() );
-            //Log.d(TAG, "onClick: GetMy Location "+ FindMe.my_location);
+            landmark_location = mapFragment.getLocation(getApplication() );
+            //Log.d(TAG, "onClick: GetMy Location "+ mapFragment.my_location);
             if(landmark_location == null){
                 Toast.makeText(add_landmarks.this,"Unable to Obtain Location, Ensure GPS is turned on", Toast.LENGTH_SHORT).show();
                     return;

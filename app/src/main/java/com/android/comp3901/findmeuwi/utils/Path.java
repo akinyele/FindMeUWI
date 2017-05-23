@@ -1,10 +1,8 @@
 package com.android.comp3901.findmeuwi.utils;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-import com.android.comp3901.findmeuwi.activities.FindMe;
 import com.android.comp3901.findmeuwi.locations.Building;
 import com.android.comp3901.findmeuwi.locations.Place;
 import com.android.comp3901.findmeuwi.locations.Room;
@@ -12,8 +10,6 @@ import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.android.comp3901.findmeuwi.services.DB_Helper;
 import com.android.comp3901.findmeuwi.services.Edge;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.maps.android.PolyUtil;
-import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;

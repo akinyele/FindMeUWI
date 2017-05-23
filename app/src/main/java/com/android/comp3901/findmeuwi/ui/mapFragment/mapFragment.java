@@ -1,4 +1,4 @@
-package com.android.comp3901.findmeuwi.activities;
+package com.android.comp3901.findmeuwi.ui.mapFragment;
 
 import android.Manifest;
 import android.app.Activity;
@@ -91,7 +91,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener, GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMapLongClickListener, GoogleMap.OnInfoWindowLongClickListener{
 

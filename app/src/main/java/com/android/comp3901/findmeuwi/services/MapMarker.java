@@ -2,7 +2,7 @@ package com.android.comp3901.findmeuwi.services;
 
 import android.util.Log;
 
-import com.android.comp3901.findmeuwi.activities.FindMe;
+import com.android.comp3901.findmeuwi.ui.mapFragment.mapFragment;
 import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.android.comp3901.findmeuwi.R;
 import com.google.android.gms.maps.GoogleMap;
@@ -10,9 +10,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PointOfInterest;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -58,7 +56,7 @@ public class MapMarker {
     }
 
     public static MapMarker getInstance(){
-            instance = new MapMarker(FindMe.mGoogleMap);
+            instance = new MapMarker(mapFragment.mGoogleMap);
         return  instance;
     }
 
