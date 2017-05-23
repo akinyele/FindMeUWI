@@ -453,8 +453,7 @@ public class FindMe extends Fragment implements OnMapReadyCallback, GoogleApiCli
         String[] locationSugg = rooms.toArray(new String[rooms.size()]);
         ArrayAdapter<String> roomsArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, locationSugg);
 
-
-           getSourceView = (AutoCompleteTextView) getView().findViewById(R.id.getSource);
+        getSourceView = (AutoCompleteTextView) getView().findViewById(R.id.getSource);
         getSourceView.setThreshold(1);
         getSourceView.setAdapter(roomsArrayAdapter);
         getSourceView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
