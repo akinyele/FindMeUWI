@@ -438,7 +438,7 @@ public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleA
 
     }
     /*
-    This methods sets the text views.
+    This methods sets the text views...
  */
     @NonNull
     private void setTextViews() {
