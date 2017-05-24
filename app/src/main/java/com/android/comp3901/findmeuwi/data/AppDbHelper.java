@@ -1,4 +1,4 @@
-package com.android.comp3901.findmeuwi.services;
+package com.android.comp3901.findmeuwi.data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.os.Environment;
-import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
  * Created by Akinyele on 2/4/2017.
  */
 
-public class DB_Helper extends SQLiteOpenHelper{
+public class AppDbHelper extends SQLiteOpenHelper implements DbHelper{
     private static final String TAG = "com.android.comp3901";
 
     public static final Integer DATABASE_VERSION = 38;
@@ -76,18 +75,18 @@ public class DB_Helper extends SQLiteOpenHelper{
     public static final String B_LANDMARK="B_Landmark";
 
 
-    private static DB_Helper mInstance = null;
+    private static AppDbHelper mInstance = null;
 
-    public static DB_Helper getInstance(Context ctx){
+    public static AppDbHelper getInstance(Context ctx){
 
         if (mInstance == null) {
-            mInstance = new DB_Helper(ctx.getApplicationContext());
+            mInstance = new AppDbHelper(ctx.getApplicationContext());
         }
         return mInstance;
     }
 
 
-    private DB_Helper(Context context) {
+    private AppDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

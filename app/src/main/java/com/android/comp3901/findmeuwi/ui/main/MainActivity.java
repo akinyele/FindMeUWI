@@ -24,20 +24,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.comp3901.findmeuwi.R;
-import com.android.comp3901.findmeuwi.ui.mapFragment.MapFragment;
+import com.android.comp3901.findmeuwi.ui.mapFragment.MapFrag;
 import com.android.comp3901.findmeuwi.ui.addLandmarks.AddLandmarks;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener ,CompoundButton.OnCheckedChangeListener{
+public class MainActivity extends AppCompatActivity implements MainMvpView, NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener ,CompoundButton.OnCheckedChangeListener{
 
     private static final String TAG = "com.android.comp3901";
     private FragmentManager fragmentManager = getFragmentManager();
-    private MapFragment mapFrag;
+    private MapFrag mapFrag;
 
     //menu
     Menu menu;
+
+    MainPresenter presenter;
 
     //views
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
@@ -53,14 +55,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         setSupportActionBar(toolbar);
-        /**views**/
 
-        fragmentManager.beginTransaction().replace(R.id.content_frame, new MapFragment(), "mapFrag" ).commit();
+        presenter = new MainPresenter(this);
+
+        fragmentManager.beginTransaction().replace(R.id.content_frame, new MapFrag(), "mapFrag" ).commit();
 
         //getting reference to the fragment added
-        mapFrag = (MapFragment) getFragmentManager().findFragmentByTag("mapFrag");
+        mapFrag = (MapFrag) getFragmentManager().findFragmentByTag("mapFrag");
 
 
         //initializing navigation bar and listener
@@ -78,11 +80,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer= (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if(mapFrag.sheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN ){
             mapFrag.sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            presenter.bottomSheet();
         }
         else{
             super.onBackPressed();
@@ -105,30 +108,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        MapFragment mapFragmentFrag = (MapFragment) getFragmentManager().findFragmentByTag("mapFrag");
+        MapFrag mapFragFrag = (MapFrag) getFragmentManager().findFragmentByTag("mapFrag");
         //TODO Needs fixing
-      if(mapFragmentFrag != null){
+      if(mapFragFrag != null){
              switch (item.getItemId()) {
                case R.id.mapTypeNormal:
-                    mapFragmentFrag.setStyle("normal");
+                    mapFragFrag.setStyle("normal");
                     break;
                 case R.id.mapTypeSatellite:
-                    mapFragmentFrag.setStyle("satellite");
+                    mapFragFrag.setStyle("satellite");
                     break;
                 case R.id.style1:
-                    mapFragmentFrag.setTheme(R.string.style_icyBlue);
+                    mapFragFrag.setTheme(R.string.style_icyBlue);
                     break;
                 case R.id.style2:
-                    mapFragmentFrag.setTheme(R.string.style_cobalt);
+                    mapFragFrag.setTheme(R.string.style_cobalt);
                     break;
                 case R.id.style3:
-                    mapFragmentFrag.setTheme(R.string.style_chilled);
+                    mapFragFrag.setTheme(R.string.style_chilled);
                     break;
                 case R.id.style4:
-                    mapFragmentFrag.setTheme(R.string.style_mapBox);
+                    mapFragFrag.setTheme(R.string.style_mapBox);
                     break;
                 case R.id.style5:
-                    mapFragmentFrag.setTheme(R.string.style_Rainforest_Fringe);
+                    mapFragFrag.setTheme(R.string.style_Rainforest_Fringe);
                     break;
                 default:
                     break;
@@ -140,22 +143,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        FragmentManager fm = getFragmentManager();
-
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            /*Intent intent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath());
-            startActivityForResult(intent, 1);*/
-
-            Intent i = new Intent(MainActivity.this, AddLandmarks.class);
+             Intent i = new Intent(MainActivity.this, AddLandmarks.class);
             startActivity(i);
-
-
-
-
         } else if (id == R.id.nav_theme) {
             /*fm.beginTransaction().replace(R.id.content_frame, new gmapsfrag()).commit();*/
             Log.d("theme", "onNavigationItemSelected: ");

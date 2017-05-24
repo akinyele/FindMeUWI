@@ -24,28 +24,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <!--<LinearLayout-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_width="133dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom|end">-->
-
-
-
-        <!--TODO PUT CAMERA FEATURE SOMEWHERE ELSE-->
-        <!--<android.support.design.widget.FloatingActionButton-->
-            <!--android:id="@+id/fab"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="bottom|end"-->
-            <!--android:layout_margin="@dimen/fab_margin"-->
-            <!--app:srcCompat="@android:drawable/ic_menu_camera"-->
-            <!--app:backgroundTint="?android:attr/colorPrimary" />-->
-
-
-    <!--</LinearLayout>-->
-
-
     <include
         layout="@layout/content_main"
         android:layout_width="match_parent" />

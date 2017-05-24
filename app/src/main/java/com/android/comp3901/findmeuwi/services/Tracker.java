@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.android.comp3901.findmeuwi.ui.mapFragment.MapFragment;
+import com.android.comp3901.findmeuwi.ui.mapFragment.MapFrag;
 import com.android.comp3901.findmeuwi.locations.Place;
 import com.android.comp3901.findmeuwi.locations.Room;
 import com.android.comp3901.findmeuwi.locations.Vertex;
@@ -65,7 +65,7 @@ public class Tracker extends Thread {
 
     public Tracker(Activity instance){
 
-        this.path = MapFragment.path;
+        this.path = MapFrag.path;
         this.instance = instance;
 //        this.knownNodes =  this.getPointsOfInterest();
         this.mapMarker = MapMarker.getInstance();
@@ -89,9 +89,9 @@ public class Tracker extends Thread {
             }
 
 
-            if(!MapFragment.location_service_enabled && !arrival_timer_sent){
+            if(!MapFrag.location_service_enabled && !arrival_timer_sent){
                 arrival_timer_sent = true;
-                MapFragment.get().runOnUiThread(new Runnable() {
+                MapFrag.get().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Log.d(TAG, "run: ui thread");
@@ -100,7 +100,7 @@ public class Tracker extends Thread {
                 });
             }else{
                 try{
-                    Location  location = MapFragment.my_location;
+                    Location  location = MapFrag.my_location;
                     if ( !(location.getAccuracy()>min_accurracy_error ||  location.hasAccuracy() )){
                         Log.d(" Tracker: ", "Not Accurate");
                         Toast.makeText(instance, "Cant get accurate location", Toast.LENGTH_SHORT);
@@ -129,7 +129,7 @@ public class Tracker extends Thread {
         my_runnable = new Runnable() {
             @Override
             public void run() {
-                if(!MapFragment.location_service_enabled){
+                if(!MapFrag.location_service_enabled){
                     createDialog();
                 }
             }
@@ -149,13 +149,13 @@ public class Tracker extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Location  location = MapFragment.my_location;
+        Location  location = MapFrag.my_location;
         Log.d(TAG , "tracking location :" + String.valueOf(location) );
         //if(Path.currPath == null){return;}
 
 
         LatLng  myLL = new LatLng(location.getLatitude(),location.getLongitude());
-        LatLng dest = new LatLng( MapFragment.destination.getLat(), MapFragment.destination.getLng());
+        LatLng dest = new LatLng( MapFrag.destination.getLat(), MapFrag.destination.getLng());
 
 
         Double distance_to_dest =    SphericalUtil.computeDistanceBetween(myLL,dest) /*Distance.find_distance(myLL,dest)*/;
@@ -167,7 +167,7 @@ public class Tracker extends Thread {
             //TODO create arrival dialog and increment familiarity clear path and land marks on arrival
             Toast.makeText(instance,"YOU HAVE ARRIVED AT YOUR DESTINATION", Toast.LENGTH_SHORT);
             hasArrived = true;
-            onArrival(MapFragment.destination);
+            onArrival(MapFrag.destination);
 
         }else{// checks for known point and landMarks along the way
 
@@ -271,20 +271,20 @@ public class Tracker extends Thread {
          yesBtn.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 Toast.makeText(instance.getApplicationContext(),"Arrived at"+ MapFragment.destination.getName() ,Toast.LENGTH_SHORT).show();
+                 Toast.makeText(instance.getApplicationContext(),"Arrived at"+ MapFrag.destination.getName() ,Toast.LENGTH_SHORT).show();
                  dialog.dismiss();
 
 
                  // TODO: Check which class instance the destination is and increment the familiarity
 
-                 if( MapFragment.destination instanceof Place){
+                 if( MapFrag.destination instanceof Place){
                          Log.d("ROOM TYPE  ", "TRUE");
-                         learner.learner1(MapFragment.destination);
-                         ((Place) MapFragment.destination).updateDB();
-                         Log.d("NEW Familiarity  ", ""+((Place) MapFragment.destination).getFamiliarity());
+                         learner.learner1(MapFrag.destination);
+                         ((Place) MapFrag.destination).updateDB();
+                         Log.d("NEW Familiarity  ", ""+((Place) MapFrag.destination).getFamiliarity());
                     }
                 //TODO toast message
-                 onArrival(MapFragment.destination);
+                 onArrival(MapFrag.destination);
              }
          });
 
@@ -307,7 +307,7 @@ public class Tracker extends Thread {
         //RESET FLAGS NEEDED IN THE LOOP
         hasArrived = true;
         arrival_timer_sent = false;
-        MapFragment.trackerHandler.sendEmptyMessage(0);
+        MapFrag.trackerHandler.sendEmptyMessage(0);
 
         //TODO Clear Path show pop up image of destination;
 

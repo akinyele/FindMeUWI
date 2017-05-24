@@ -51,7 +51,7 @@ import com.android.comp3901.findmeuwi.services.Edge;
 import com.android.comp3901.findmeuwi.services.MapPolylines;
 import com.android.comp3901.findmeuwi.utils.Path;
 import com.android.comp3901.findmeuwi.services.Tracker;
-import com.android.comp3901.findmeuwi.services.DB_Helper;
+import com.android.comp3901.findmeuwi.data.AppDbHelper;
 import com.android.comp3901.findmeuwi.utils.Distance;
 import com.android.comp3901.findmeuwi.services.MapMarker;
 import com.google.android.gms.common.ConnectionResult;
@@ -64,6 +64,7 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
@@ -85,15 +86,18 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMarkerClickListener{
+public class MapFrag extends Fragment implements MapFragMvPView, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMarkerClickListener, GoogleMap.InfoWindowAdapter{
     private static final String TAG = "com.android.comp3901";
+    final LatLng sci_tech = new LatLng(18.005072, -76.749544);
 
 
+
+    MapPresenter presenter;
     //Map Clients
     private static GoogleApiClient mGoogleApiClient;
     private UiSettings mUiSettings;
-    private DB_Helper dbHelper;
+    private AppDbHelper dbHelper;
     private Tracker mapTracker;
     public static MapMarker mapMarkers;
     private static MapPolylines mapPolylines;
@@ -102,23 +106,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
 
     //Map Objects
     LinkedList<Vertex> route;
-
-
     boolean isSourceSet;
 
-    private ToggleButton locatoin_toggle;
-
-    private final float min_accurracy_error = 15;
-
-
-    /**Map State Variable**/
-    private boolean is_tracking = false;   //uses to tell when there is a path that is being tracked;
-
-    //Finals
-    final LatLng sci_tech = new LatLng(18.005072, -76.749544);
-
-
-    //Static Variables
     public static GoogleMap mGoogleMap;
     static Vertex start;
     public static Vertex destination;
@@ -127,9 +116,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     public volatile static boolean location_service_enabled;
 
     static Activity instance;
-    private CameraUpdate update;
 
-    public MapFragment() {
+    public MapFrag() {
     }
 
     /**
@@ -172,48 +160,45 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     @BindView(R.id.bottom_sheet) NestedScrollView nestedView;
     @BindView(R.id.search_view_layout) View searchView;
 
-    private Unbinder unbinder;
-
-
-
-
-
-
-
+    private Unbinder unbinder = Unbinder.EMPTY;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Creates the fragment view.
+        presenter = new MapPresenter(this);
         View view = inflater.inflate(R.layout.activity_find_me, container, false);
-
         instance = this.getActivity();
-        dbHelper = DB_Helper.getInstance(getActivity()); //Creating databases
-
-        ButterKnife.bind(MapFragment.this,view);
+        ButterKnife.bind(MapFrag.this,view);
         return view;
     }
-
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setTextViews();
         if (googleServicesCheck()) {
             Toast.makeText(this.getActivity(), "Perfect!!", Toast.LENGTH_LONG).show();
             initMap();
-            setTextViews();
         }
-
-    }
+   }
 
     /**
      * Initializes Map Fragment;
      */
     private void initMap() {
-        com.google.android.gms.maps.MapFragment MapFragment = (com.google.android.gms.maps.MapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
-        MapFragment.getMapAsync(this);
-        buildAPI();
+        MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
+        mapFragment.getMapAsync(this);
+        if(mGoogleApiClient==null){
+            mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity())
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(Places.GEO_DATA_API)
+                    .addApi(Places.PLACE_DETECTION_API)
+                    .enableAutoManage((FragmentActivity) this.getActivity(), this)
+                    .build();
+        }
     }
+
 
     /**
      * Function that tells the map what to do when its ready
@@ -222,58 +207,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+
         //Initialisations
+        dbHelper = AppDbHelper.getInstance(getActivity()); //Creating databases
         path = new Path(dbHelper); //Initialises path object which creates graph
-
-        //mapTracker = new Tracker(getActivity());
-
-        //LatLngBounds latLngBounds = new LatLngBounds()
-
-        mGoogleMap = googleMap;
-        mUiSettings = mGoogleMap.getUiSettings();
-
         mapPolylines = new MapPolylines(mGoogleMap);
         mapMarkers = MapMarker.getInstance();
         mapTracker = new Tracker(getActivity());
         mapTracker.start();
+
+
+        mGoogleMap = googleMap;
+        mUiSettings = mGoogleMap.getUiSettings();
         mGoogleMap.setOnMarkerClickListener(this);
-        mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-            @Override
-            public View getInfoWindow(Marker marker) {
-                return null;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                if(marker.getSnippet().equals("stairs")  ){
-                    return null;
-                }
-                Place location = (Place) marker.getTag();
-                View v = getActivity().getLayoutInflater().inflate(R.layout.info_window_layout,null);
-                TextView infoTitle = (TextView) v.findViewById(R.id.info_window_title);
-                ImageView infoImage = (ImageView) v.findViewById(R.id.info_window_image_view);
-                infoTitle.setText(((Place)marker.getTag()).getName());
-
-                String filepath = Environment.getExternalStorageDirectory()+File.separator+ location.getId();
-                File f = new File(getActivity().getApplicationContext().getFilesDir(), location.getId());
-                int img = getActivity().getResources().getIdentifier(location.getId().toLowerCase(),"mipmap",getActivity().getPackageName() );
-
-                if(f.exists()){
-                    setPic(infoImage,filepath);
-                }else if(img >0){
-                    infoImage.setImageResource(img);
-                }
-                else{
-                    infoImage.setImageResource(R.mipmap.photos_coming_soon);
-                }
-
-                return v;
-            }
-
-
-        });
-        //mGoogleMap.setLatLngBoundsForCameraTarget();
-
+        mGoogleMap.setInfoWindowAdapter(this);
 
         mUiSettings.setMapToolbarEnabled(false);
         mUiSettings.setZoomControlsEnabled(false);
@@ -422,20 +369,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
 
 
         if (checked) {
-
             if (isGPSEnabled(this.getActivity())) {
                 //provide some method that Uses user Location as starting point.
                 useMyLocation();
                 Toast.makeText(this.getActivity(), "Getting Your Location", Toast.LENGTH_LONG).show();
-
                 // Disable the text field when he user has locations connected
                 EditText getSource = (EditText) getView().findViewById(R.id.getSource);
                 getSource.setHint("YOUR LOCATION");
                 getSource.getText().clear();
                 getSource.setFocusable(false);
                 location_service_enabled = true;
-
-
             } else {
                 Toast.makeText(this.getActivity(), "Please turn Locations on", Toast.LENGTH_LONG).show();
                 ((ToggleButton) view).setChecked(false);
@@ -466,7 +409,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         }
 
     }
-
 
     /***
      * Handles  the maps type switching
@@ -582,20 +524,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     /*************************************************************
      *                              LOGIC
      *************************************************************/
-    private void buildAPI() {
 
-        if(mGoogleApiClient==null){
-            mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity())
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(Places.GEO_DATA_API)
-                    .addApi(Places.PLACE_DETECTION_API)
-                    .enableAutoManage((FragmentActivity) this.getActivity(), this)
-                    .build();
-        }
-
-    }
 
 
     private void setPic(ImageView mImageView, String mCurrentPhotoPath) {
@@ -678,7 +607,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
 
         EditText et = (EditText) getView().findViewById(R.id.classSearch);
         String clss = et.getText().toString();
-
         Cursor res = dbHelper.findLocation(clss);
         setVertex(res, 2);
     }
@@ -780,7 +708,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         }else if(!mGoogleApiClient.isConnected()){
             mGoogleApiClient.connect();
         }
-
         return my_location;
     }
 
@@ -1019,7 +946,6 @@ try{
 
     }
 
-
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(this.getActivity(), "Couldn't receive your location", Toast.LENGTH_LONG).show();
@@ -1046,6 +972,43 @@ try{
             Log.d( TAG, "onLocationChanged: "+String.valueOf(location));
 
         }
+    }
+
+    @Override
+    public void makeToast(String msg) {
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT);
+    }
+
+    @Override
+    public View getInfoWindow(Marker marker) {
+        return null;
+    }
+
+    @Override
+    public View getInfoContents(Marker marker) {
+        if(marker.getSnippet().equals("stairs")  ){
+            return null;
+        }
+        Place location = (Place) marker.getTag();
+        View v = getActivity().getLayoutInflater().inflate(R.layout.info_window_layout,null);
+        TextView infoTitle = (TextView) v.findViewById(R.id.info_window_title);
+        ImageView infoImage = (ImageView) v.findViewById(R.id.info_window_image_view);
+        infoTitle.setText(((Place)marker.getTag()).getName());
+
+        String filepath = Environment.getExternalStorageDirectory()+File.separator+ location.getId();
+        File f = new File(getActivity().getApplicationContext().getFilesDir(), location.getId());
+        int img = getActivity().getResources().getIdentifier(location.getId().toLowerCase(),"mipmap",getActivity().getPackageName() );
+
+        if(f.exists()){
+            setPic(infoImage,filepath);
+        }else if(img >0){
+            infoImage.setImageResource(img);
+        }
+        else{
+            infoImage.setImageResource(R.mipmap.photos_coming_soon);
+        }
+
+        return v;
     }
 
 

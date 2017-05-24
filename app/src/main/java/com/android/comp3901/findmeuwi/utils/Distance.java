@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.android.comp3901.findmeuwi.ui.mapFragment.MapFragment.path;
+import static com.android.comp3901.findmeuwi.ui.mapFragment.MapFrag.path;
 
 /**
  * Created by Kyzer on 3/14/2017.

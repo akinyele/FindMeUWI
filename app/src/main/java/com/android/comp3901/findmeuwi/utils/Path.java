@@ -7,7 +7,7 @@ import com.android.comp3901.findmeuwi.locations.Building;
 import com.android.comp3901.findmeuwi.locations.Place;
 import com.android.comp3901.findmeuwi.locations.Room;
 import com.android.comp3901.findmeuwi.locations.Vertex;
-import com.android.comp3901.findmeuwi.services.DB_Helper;
+import com.android.comp3901.findmeuwi.data.AppDbHelper;
 import com.android.comp3901.findmeuwi.services.Edge;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -32,7 +32,7 @@ public class Path {
     private List<Vertex> nodes;
     private static List<Vertex> connectedNodes;
     private List<Edge> edges;
-    DB_Helper dbHelper;
+    AppDbHelper dbHelper;
 
     public static List<Vertex> getConnectedNodes() {
         return connectedNodes;
@@ -52,7 +52,7 @@ public class Path {
     /*
      *  Constructor methods which initializes and creates all the vertices and edges.
      */
-    public Path(DB_Helper db){
+    public Path(AppDbHelper db){
 
         this.nodes = new ArrayList<Vertex>();
         this.connectedNodes = new ArrayList<Vertex>();
@@ -70,7 +70,7 @@ public class Path {
 
             //Places the create vertex into a list and a HashMap
             nodes.add(location);
-            vertices.put(verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_ID)), location);
+            vertices.put(verticesDB.getString(verticesDB.getColumnIndex(AppDbHelper.V_ID)), location);
 
             verticesDB.moveToNext();
         }
@@ -86,12 +86,12 @@ public class Path {
             Edge lane1 = new Edge(edgesDB.getString(0) + " -> " + edgesDB.getString(1),
                     vertices.get(edgesDB.getString(0)),
                     vertices.get(edgesDB.getString(1)),
-                    (int) edgesDB.getDouble(2), edgesDB.getInt(edgesDB.getColumnIndex(DB_Helper.E_LEVEL)));
+                    (int) edgesDB.getDouble(2), edgesDB.getInt(edgesDB.getColumnIndex(AppDbHelper.E_LEVEL)));
 
             Edge lane2 = new Edge(edgesDB.getString(1) + " -> " + edgesDB.getString(0),
                     vertices.get(edgesDB.getString(1)),
                     vertices.get(edgesDB.getString(0)),
-                    (int) edgesDB.getDouble(2), edgesDB.getInt(edgesDB.getColumnIndex(DB_Helper.E_LEVEL)));
+                    (int) edgesDB.getDouble(2), edgesDB.getInt(edgesDB.getColumnIndex(AppDbHelper.E_LEVEL)));
 
 
             connectedNodes.add(vertices.get(edgesDB.getString(0)));
@@ -177,12 +177,12 @@ public class Path {
     private Vertex creator(Cursor verticesDB){
 
         Vertex Location = null;
-        String type =verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_TYPE)).toLowerCase().replaceAll("\\s+","");
-        String test =verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_ID));
+        String type =verticesDB.getString(verticesDB.getColumnIndex(AppDbHelper.V_TYPE)).toLowerCase().replaceAll("\\s+","");
+        String test =verticesDB.getString(verticesDB.getColumnIndex(AppDbHelper.V_ID));
 
-        Cursor res = dbHelper.findLocation( verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LAT)),
-                verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LONG)),
-                verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_ID))
+        Cursor res = dbHelper.findLocation( verticesDB.getDouble(verticesDB.getColumnIndex(AppDbHelper.V_LAT)),
+                verticesDB.getDouble(verticesDB.getColumnIndex(AppDbHelper.V_LONG)),
+                verticesDB.getString(verticesDB.getColumnIndex(AppDbHelper.V_ID))
         );
 
         switch (type){
@@ -192,15 +192,15 @@ public class Path {
                     assertEquals(1,res.getCount());
                 }
 
-                Location = new Room(res.getString(res.getColumnIndex(DB_Helper.RT_ID)),
-                        res.getString(res.getColumnIndex(DB_Helper.RT_NAME)),//name
-                        res.getDouble(res.getColumnIndex(DB_Helper.RT_LAT)), //latitude
-                        res.getDouble(res.getColumnIndex(DB_Helper.RT_LONG)),//longtude
-                        res.getInt(res.getColumnIndex(DB_Helper.RT_KNOWN)),
-                        res.getDouble(res.getColumnIndex(DB_Helper.RT_FAM)),
-                        res.getInt(res.getColumnIndex(DB_Helper.RT_FLOOR)),
-                        res.getString(res.getColumnIndex(DB_Helper.RT_DESC)),
-                        res.getInt(res.getColumnIndex(DB_Helper.RT_LANDMARK))
+                Location = new Room(res.getString(res.getColumnIndex(AppDbHelper.RT_ID)),
+                        res.getString(res.getColumnIndex(AppDbHelper.RT_NAME)),//name
+                        res.getDouble(res.getColumnIndex(AppDbHelper.RT_LAT)), //latitude
+                        res.getDouble(res.getColumnIndex(AppDbHelper.RT_LONG)),//longtude
+                        res.getInt(res.getColumnIndex(AppDbHelper.RT_KNOWN)),
+                        res.getDouble(res.getColumnIndex(AppDbHelper.RT_FAM)),
+                        res.getInt(res.getColumnIndex(AppDbHelper.RT_FLOOR)),
+                        res.getString(res.getColumnIndex(AppDbHelper.RT_DESC)),
+                        res.getInt(res.getColumnIndex(AppDbHelper.RT_LANDMARK))
                         );
                 break;
 
@@ -211,34 +211,34 @@ public class Path {
                    Log.d("GET BUILDING", test);
                    assertEquals(1,res.getCount());
                }
-                Location = new Building( res.getString(res.getColumnIndex(DB_Helper.B_ID)),
-                        res.getString(res.getColumnIndex(DB_Helper.B_NAME)),
-                        res.getDouble(res.getColumnIndex(DB_Helper.B_LAT)),
-                        res.getDouble(res.getColumnIndex(DB_Helper.B_LONG)),
-                        res.getString(res.getColumnIndex(DB_Helper.B_ROOMS)).split(","),
-                        res.getInt(res.getColumnIndex(DB_Helper.B_FLOORS)),
-                        res.getInt(res.getColumnIndex(DB_Helper.B_KNOWN)),
-                        res.getDouble(res.getColumnIndex(DB_Helper.B_FAM)),
-                        res.getInt(res.getColumnIndex(DB_Helper.B_LANDMARK)));
+                Location = new Building( res.getString(res.getColumnIndex(AppDbHelper.B_ID)),
+                        res.getString(res.getColumnIndex(AppDbHelper.B_NAME)),
+                        res.getDouble(res.getColumnIndex(AppDbHelper.B_LAT)),
+                        res.getDouble(res.getColumnIndex(AppDbHelper.B_LONG)),
+                        res.getString(res.getColumnIndex(AppDbHelper.B_ROOMS)).split(","),
+                        res.getInt(res.getColumnIndex(AppDbHelper.B_FLOORS)),
+                        res.getInt(res.getColumnIndex(AppDbHelper.B_KNOWN)),
+                        res.getDouble(res.getColumnIndex(AppDbHelper.B_FAM)),
+                        res.getInt(res.getColumnIndex(AppDbHelper.B_LANDMARK)));
                         break;
             case "place":
                 Location = new Place(verticesDB.getString(0),  //Vid
-                        verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_NAME)),//Vname
-                        verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LAT)), //latitude
-                        verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LONG)),//longtude
-                        verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_TYPE)),//type
+                        verticesDB.getString(verticesDB.getColumnIndex(AppDbHelper.V_NAME)),//Vname
+                        verticesDB.getDouble(verticesDB.getColumnIndex(AppDbHelper.V_LAT)), //latitude
+                        verticesDB.getDouble(verticesDB.getColumnIndex(AppDbHelper.V_LONG)),//longtude
+                        verticesDB.getString(verticesDB.getColumnIndex(AppDbHelper.V_TYPE)),//type
                         1,0.0,
-                        verticesDB.getInt(verticesDB.getColumnIndex(DB_Helper.V_LANDMARK)),
-                        verticesDB.getInt(verticesDB.getColumnIndex(DB_Helper.V_LEVEL)));//Landmark
+                        verticesDB.getInt(verticesDB.getColumnIndex(AppDbHelper.V_LANDMARK)),
+                        verticesDB.getInt(verticesDB.getColumnIndex(AppDbHelper.V_LEVEL)));//Landmark
                 break;
             default:
                 Location = new Vertex(verticesDB.getString(0),  //Vid
-                        verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_NAME)),//Vname
-                        verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LAT)), //latitude
-                        verticesDB.getDouble(verticesDB.getColumnIndex(DB_Helper.V_LONG)),//longtude
-                        verticesDB.getString(verticesDB.getColumnIndex(DB_Helper.V_TYPE)),//type
-                        verticesDB.getInt(verticesDB.getColumnIndex(DB_Helper.V_LANDMARK)),
-                        verticesDB.getInt(verticesDB.getColumnIndex(DB_Helper.V_LEVEL)));//Landmark
+                        verticesDB.getString(verticesDB.getColumnIndex(AppDbHelper.V_NAME)),//Vname
+                        verticesDB.getDouble(verticesDB.getColumnIndex(AppDbHelper.V_LAT)), //latitude
+                        verticesDB.getDouble(verticesDB.getColumnIndex(AppDbHelper.V_LONG)),//longtude
+                        verticesDB.getString(verticesDB.getColumnIndex(AppDbHelper.V_TYPE)),//type
+                        verticesDB.getInt(verticesDB.getColumnIndex(AppDbHelper.V_LANDMARK)),
+                        verticesDB.getInt(verticesDB.getColumnIndex(AppDbHelper.V_LEVEL)));//Landmark
                 break;
         }
 

@@ -5,7 +5,7 @@
     android:id="@+id/activity_find_me"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.comp3901.findmeuwi.ui.mapFragment.MapFragment">
+    tools:context="com.android.comp3901.findmeuwi.ui.mapFragment.MapFrag">
 
 
     <fragment
