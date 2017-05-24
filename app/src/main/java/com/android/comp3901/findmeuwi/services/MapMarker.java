@@ -2,7 +2,7 @@ package com.android.comp3901.findmeuwi.services;
 
 import android.util.Log;
 
-import com.android.comp3901.findmeuwi.ui.mapFragment.mapFragment;
+import com.android.comp3901.findmeuwi.ui.mapFragment.MapFragment;
 import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.android.comp3901.findmeuwi.R;
 import com.google.android.gms.maps.GoogleMap;
@@ -56,7 +56,7 @@ public class MapMarker {
     }
 
     public static MapMarker getInstance(){
-            instance = new MapMarker(mapFragment.mGoogleMap);
+            instance = new MapMarker(MapFragment.mGoogleMap);
         return  instance;
     }
 

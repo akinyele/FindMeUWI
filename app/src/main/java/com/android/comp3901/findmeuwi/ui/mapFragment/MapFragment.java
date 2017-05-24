@@ -1,6 +1,5 @@
 package com.android.comp3901.findmeuwi.ui.mapFragment;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -10,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,7 +43,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.android.comp3901.findmeuwi.locations.Building;
 import com.android.comp3901.findmeuwi.locations.Place;
 import com.android.comp3901.findmeuwi.locations.Room;
 import com.android.comp3901.findmeuwi.locations.Vertex;
@@ -63,27 +60,19 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.maps.android.PolyUtil;
 import com.google.maps.android.SphericalUtil;
 
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,9 +80,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener, GoogleMap.OnMarkerClickListener,
-        GoogleMap.OnMapLongClickListener, GoogleMap.OnInfoWindowLongClickListener{
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
+
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMarkerClickListener{
+    private static final String TAG = "com.android.comp3901";
 
 
     //Map Clients
@@ -104,24 +98,10 @@ public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     public static MapMarker mapMarkers;
     private static MapPolylines mapPolylines;
     public static BottomSheetBehavior sheetBehavior;
-
-    //Utils
+    private LocationRequest mLocationRequest;
 
     //Map Objects
-    Marker startMarker, destMarker, marker; //TODO let MapMarker class handle the creation of these markers
-    LinkedList<Polyline> graphLines;
-    Vertex source, known;
     LinkedList<Vertex> route;
-    private static Polyline line;
-
-
-    private static final String TAG = "com.android.comp3901";
-
-    //Views
-    private AutoCompleteTextView getSourceView;
-    private AutoCompleteTextView classSearchView;
-    private NestedScrollView nestedView;
-    private View searchView;
 
 
     boolean isSourceSet;
@@ -149,11 +129,23 @@ public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleA
     static Activity instance;
     private CameraUpdate update;
 
+    public MapFragment() {
+    }
+
+    /**
+     * Method used to get the application context
+     * @return
+     */
     public static Activity get() {
         return instance;
     }
 
 
+    /**
+     * Handler uses for the tracker thread the handle message callback
+     * is overriden and used to set the required ojects and view components to
+     * null
+     */
     public static final Handler trackerHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -164,42 +156,68 @@ public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleA
             mapPolylines.deletePath();
             mapMarkers.removePOI();
             //TODO delete starter and destination marker and make is sourceset = flase
-
             mapMarkers.removeStart();
         }
 
     };
 
 
-    /*
-    ** Initializes Map Fragment;
-    **/
-    private void initMap() {
-        MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
-        mapFragment.getMapAsync(this);
+    /************************************************************
+     *                            VIEWS
+     ************************************************************/
 
-        buildAPI();
+    //Views
+    @BindView(R.id.getSource)AutoCompleteTextView getSourceView;
+    @BindView(R.id.classSearch)  AutoCompleteTextView classSearchView;
+    @BindView(R.id.bottom_sheet) NestedScrollView nestedView;
+    @BindView(R.id.search_view_layout) View searchView;
 
+    private Unbinder unbinder;
+
+
+
+
+
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //Creates the fragment view.
+        View view = inflater.inflate(R.layout.activity_find_me, container, false);
+
+        instance = this.getActivity();
+        dbHelper = DB_Helper.getInstance(getActivity()); //Creating databases
+
+        ButterKnife.bind(MapFragment.this,view);
+        return view;
     }
 
-    private void buildAPI() {
 
-        if(mGoogleApiClient==null){
-            mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity())
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(Places.GEO_DATA_API)
-                    .addApi(Places.PLACE_DETECTION_API)
-                    .enableAutoManage((FragmentActivity) this.getActivity(), this)
-                    .build();
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (googleServicesCheck()) {
+            Toast.makeText(this.getActivity(), "Perfect!!", Toast.LENGTH_LONG).show();
+            initMap();
+            setTextViews();
         }
 
     }
 
-    /*
+    /**
+     * Initializes Map Fragment;
+     */
+    private void initMap() {
+        com.google.android.gms.maps.MapFragment MapFragment = (com.google.android.gms.maps.MapFragment) getChildFragmentManager().findFragmentById(R.id.mapFragment);
+        MapFragment.getMapAsync(this);
+        buildAPI();
+    }
+
+    /**
      * Function that tells the map what to do when its ready
-     *
+     * @param googleMap
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -326,120 +344,9 @@ public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleA
 
     }
 
-    private void setPic(ImageView mImageView, String mCurrentPhotoPath) {
-        // Get the dimensions of the View
-        int targetW = mImageView.getWidth();
-        int targetH = mImageView.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        mImageView.setImageBitmap(bitmap);
-    }
-
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        instance = this.getActivity();
-        dbHelper = DB_Helper.getInstance(getActivity()); //Creating databases
-
-
-        try {// writes database to sd card for debugging purposes.
-            dbHelper.writeToSD(this.getActivity());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        //Creates the fragment view.
-        View view = inflater.inflate(R.layout.activity_find_me, container, false);
-
-        // Sets the on click listener for the fragment elements.
-        Button find = (Button) view.findViewById(R.id.findBtn);
-        find.setOnClickListener(this);
-
-        ToggleButton location = (ToggleButton) view.findViewById(R.id.locationToggle);
-        location.setOnClickListener(this);
-
-
-        return view;
-    }
-
-
-    @Override
-    public void onClick(View v) {
-
-        //Handles each on click method for a button.
-        switch (v.getId()) {
-            case R.id.findBtn:
-                try {
-                    Log.d(TAG, "onClick: find button ");
-                    geoLocate(v);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.getPath:
-                getPath();
-                break;
-            case R.id.locationToggle:
-                toggleLocations(v);
-                break;
-            default:
-                break;
-
-        }
-
-
-    }
-
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        if (googleServicesCheck()) {
-            Toast.makeText(this.getActivity(), "Perfect!!", Toast.LENGTH_LONG).show();
-            initMap();
-
-
-            setTextViews();
-
-            searchView = getView().findViewById(R.id.search_view_layout);
-
-        }
-    }
-
-
-    public void toggleSearchView(){
-
-        if(searchView.getVisibility() == View.VISIBLE){
-            searchView.animate().translationY(10);
-            searchView.setVisibility(View.INVISIBLE);
-        }else{
-            searchView.animate().translationY(0);
-            searchView.setVisibility(View.VISIBLE);
-        }
-
-    }
-    /*
-    This methods sets the text views...
- */
+    /**
+     *  This methods sets the text views...
+     **/
     @NonNull
     private void setTextViews() {
 
@@ -453,7 +360,6 @@ public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         String[] locationSugg = rooms.toArray(new String[rooms.size()]);
         ArrayAdapter<String> roomsArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, locationSugg);
 
-        getSourceView = (AutoCompleteTextView) getView().findViewById(R.id.getSource);
         getSourceView.setThreshold(1);
         getSourceView.setAdapter(roomsArrayAdapter);
         getSourceView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -469,7 +375,6 @@ public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleA
             }
         });
 
-        classSearchView = (AutoCompleteTextView) getView().findViewById(R.id.classSearch);
         classSearchView.setThreshold(1);
         classSearchView.setAdapter(roomsArrayAdapter);
         classSearchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -495,7 +400,6 @@ public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         /*
          * Bottom Sheet View
          */
-        nestedView = (NestedScrollView) getActivity().findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(nestedView);
         sheetBehavior.setHideable(true);
         sheetBehavior.setPeekHeight(200);
@@ -504,12 +408,226 @@ public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleA
         return;
     }
 
+
+    /***
+     * This methods is called when the toggle button is click.
+     * If enabled the location services is used  and the user's location is used as starting point
+     * It also Provides the google API tracking services
+     * @param view
+     */
+    public void toggleLocations(View view) {
+
+        // Uses check box to tell when user want to user there location.
+        boolean checked = ((ToggleButton) view).isChecked();
+
+
+        if (checked) {
+
+            if (isGPSEnabled(this.getActivity())) {
+                //provide some method that Uses user Location as starting point.
+                useMyLocation();
+                Toast.makeText(this.getActivity(), "Getting Your Location", Toast.LENGTH_LONG).show();
+
+                // Disable the text field when he user has locations connected
+                EditText getSource = (EditText) getView().findViewById(R.id.getSource);
+                getSource.setHint("YOUR LOCATION");
+                getSource.getText().clear();
+                getSource.setFocusable(false);
+                location_service_enabled = true;
+
+
+            } else {
+                Toast.makeText(this.getActivity(), "Please turn Locations on", Toast.LENGTH_LONG).show();
+                ((ToggleButton) view).setChecked(false);
+
+            }
+
+
+        } else {
+            if (mGoogleApiClient != null){ mGoogleApiClient.disconnect();}
+            if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                //   TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+
+            mGoogleMap.setMyLocationEnabled(false);
+            goToLocation(sci_tech);
+
+            EditText getSource = (EditText) getView().findViewById(R.id.getSource);
+            getSource.setHint("Choose a Starting point");
+            getSource.setFocusableInTouchMode(true);
+            location_service_enabled = false;
+        }
+
+    }
+
+
+    /***
+     * Handles  the maps type switching
+     * @param item
+     * @return
+     */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.mapTypeNormal:
+                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
+            case R.id.mapTypeSatellite:
+                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void toggleSearchView(){
+
+        if(searchView.getVisibility() == View.VISIBLE){
+            searchView.animate().translationY(10);
+            searchView.setVisibility(View.INVISIBLE);
+        }else{
+            searchView.animate().translationY(0);
+            searchView.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+
+    @OnClick(R.id.findBtn)
+    public void findRoom(View v){
+        try {
+            geoLocate(v);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @OnClick(R.id.locationToggle)
+    public void toggleClick(View v){
+        toggleLocations(v);
+    }
+
+
+    @OnClick(R.id.fbPath)
+    public void fabOnClick(){
+        getPath();
+        }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        Log.d("Marker Snippet", marker.getSnippet() );
+
+        switch (marker.getSnippet()){
+            case "stairs":
+                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case "junction":
+                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            default:
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                loadBottomSheet(marker);
+                break;
+        }
+        return false;
+    }
+
+    private void create_info_dialog(Vertex v) {
+        AlertDialog.Builder info_dialog = new AlertDialog.Builder(getActivity(),AlertDialog.BUTTON_POSITIVE);
+        View room_info_view = getActivity().getLayoutInflater().inflate(R.layout.place_info_dialog, null);
+        TextView info_text = ButterKnife.findById(room_info_view,R.id.place_dialog_info);
+        Switch known_switch =  ButterKnife.findById(room_info_view,R.id.place_info_known_swittch);
+        Button dissmiss =  ButterKnife.findById(room_info_view,R.id.plac_info_dismiss);
+
+        //TODO change the test to instance of when buildings  database fully are implemented
+        final Place place = ((Place) v );
+
+        info_text.setText(place.getInfo());
+        known_switch.setChecked(place.isKnown());
+        known_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    place.setKnown(1);
+                }else{
+                    place.setKnown(0);
+                }
+                place.updateDB();
+            }
+        });
+        info_dialog.setView(room_info_view);
+        final AlertDialog dialog = info_dialog.create();
+        dialog.show();
+        dissmiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    /*************************************************************
+     *                              LOGIC
+     *************************************************************/
+    private void buildAPI() {
+
+        if(mGoogleApiClient==null){
+            mGoogleApiClient = new GoogleApiClient.Builder(this.getActivity())
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(Places.GEO_DATA_API)
+                    .addApi(Places.PLACE_DETECTION_API)
+                    .enableAutoManage((FragmentActivity) this.getActivity(), this)
+                    .build();
+        }
+
+    }
+
+
+    private void setPic(ImageView mImageView, String mCurrentPhotoPath) {
+        // Get the dimensions of the View
+        int targetW = mImageView.getWidth();
+        int targetH = mImageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        mImageView.setImageBitmap(bitmap);
+    }
+
+
     /**
      * Checks to see if the User has play services available.
      * @return
      */
-
-    public boolean googleServicesCheck() {
+     public boolean googleServicesCheck() {
 
         GoogleApiAvailability api = GoogleApiAvailability.getInstance();
         int isAvailable = api.isGooglePlayServicesAvailable(this.getActivity());
@@ -522,26 +640,6 @@ public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleA
             Toast.makeText(this.getActivity(), "Cant connect to play services", Toast.LENGTH_LONG).show();
         }
         return false;
-    }
-
-
-    /***
-     * Handles  the maps type switching
-     * @param item
-     * @return
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-           case R.id.mapTypeNormal:
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                break;
-            case R.id.mapTypeSatellite:
-                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                break;
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 
@@ -619,67 +717,6 @@ public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleA
             return true;
         }
     }
-
-
-    /***
-     * This methods is called when the toggle button is click.
-     * If enabled the location services is used  and the user's location is used as starting point
-     * It also Provides the google API tracking services
-     * @param view
-     */
-
-    public void toggleLocations(View view) {
-
-        // Uses check box to tell when user want to user there location.
-        boolean checked = ((ToggleButton) view).isChecked();
-
-
-        if (checked) {
-
-            if (isGPSEnabled(this.getActivity())) {
-                //provide some method that Uses user Location as starting point.
-                useMyLocation();
-                Toast.makeText(this.getActivity(), "Getting Your Location", Toast.LENGTH_LONG).show();
-
-                // Disable the text field when he user has locations connected
-                EditText getSource = (EditText) getView().findViewById(R.id.getSource);
-                getSource.setHint("YOUR LOCATION");
-                getSource.getText().clear();
-                getSource.setFocusable(false);
-                location_service_enabled = true;
-
-
-            } else {
-                Toast.makeText(this.getActivity(), "Please turn Locations on", Toast.LENGTH_LONG).show();
-                ((ToggleButton) view).setChecked(false);
-
-            }
-
-
-        } else {
-            if (mGoogleApiClient != null){ mGoogleApiClient.disconnect();}
-            if (ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                //   TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-
-            mGoogleMap.setMyLocationEnabled(false);
-            goToLocation(sci_tech);
-
-            EditText getSource = (EditText) getView().findViewById(R.id.getSource);
-            getSource.setHint("Choose a Starting point");
-            getSource.setFocusableInTouchMode(true);
-            location_service_enabled = false;
-        }
-
-    }
-
 
     /***
      * Checks to see if the user has location services enabled returns false if it is off.
@@ -793,76 +830,6 @@ public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleA
        mapPolylines.createPath(route);
        getPOI();
    }
-
-            /*
-             * Draws a path with the provided the set of vertices
-             */
-    public void drawPath(LinkedList<Vertex> route){
-        if(line != null)
-            line.remove();
-
-        route.size();
-        LinkedList<LatLng> pnts = new LinkedList<>();
-
-        for( int i = 0; i<route.size(); i++ ){
-            LatLng  ll =  route.get(i).getLL();
-            pnts.add(ll);
-        }
-
-        PolylineOptions  options = new PolylineOptions()
-                                    .width(5)
-                                    .addAll(pnts)
-                                    .zIndex(02)
-                                    .color(Color.GREEN)
-                                    ;
-
-        line = mGoogleMap.addPolyline(options);
-   }
-
-
-
-    /*
-     * Displays all the edges in the graph.
-     */
-    public void displayGraph(){
-
-        List<Edge> edges =  path.getEdges();
-        List<Vertex> vertices = path.getNodes();
-
-        HashMap<String, Vertex> vertexHashMap = path.getVertices();
-        Polyline lane;
-        Vertex v1,v2;
-        graphLines = new LinkedList<>();
-
-
-
-        for(Edge edge: edges){
-
-
-            v1 = vertexHashMap.get(edge.getSource().getId());
-            v2 = vertexHashMap.get(edge.getDestination().getId());
-
-
-
-            //TODO make polyline clickable
-            PolylineOptions options = new PolylineOptions()
-                    .color(0x33606060)
-                    .width(15)
-                    .zIndex(01)
-                    .clickable(true)
-                    .add(v1.getLL(),v2.getLL());
-
-            lane =  mGoogleMap.addPolyline(options);
-            lane.setClickable(true);
-
-            graphLines.add(lane);
-
-
-        }
-
-    }
-
-
     public void displayIcons(){
         List<Edge> edges =  path.getEdges();
         HashMap<String, Vertex> vertexHashMap = path.getVertices();
@@ -872,13 +839,141 @@ public class mapFragment extends Fragment implements OnMapReadyCallback, GoogleA
             mapMarkers.addIcon(node);
          }
     }
+    private void loadBottomSheet(Marker marker) {
+
+        final Marker mymarker = marker;
+        ImageButton image_button = ButterKnife.findById(getActivity(),R.id.bottom_sheet_add_image);
+        TextView place_title = (TextView) getActivity().findViewById(R.id.bottom_sheet_title);
+        TextView place_info1 = (TextView) getActivity().findViewById(R.id.place_info1);
+        View moreinfo = getActivity().findViewById(R.id.more_info_layout);
+
+        image_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onInfoWindowLongClick: PRESSED");
+                LatLng ll = mymarker.getPosition();
 
 
-    /*
+                start = Distance.find_closest_marker(ll);
+                isSourceSet = true;
+
+                getPath();
+                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+            }
+        });
+
+
+        final Place place = (Place) marker.getTag();
+
+
+
+        Log.d("Marker Object", " Room Instance: ");
+
+        //TODO ADD BUILDING TO SECOND INFO VIEW
+        place_title.setText(place.getName());
+        place_info1.setText(place.getInfo());
+//            place_info2.setText("{building name}");
+//            explore_icon.setVisibility(View.INVISIBLE);
+
+
+        //TODO Start activity that shows the room info;
+        moreinfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("more info", "onClick: ");
+                create_info_dialog(place);
+            }
+
+
+        });
+
+//
+//        }else if(markerObject instanceof com.android.comp3901.findmeuwi.locations.Building){
+//            Log.d("Marker Object", "Building Instance ");
+//
+//
+//        }else {
+//            Log.d("Marker Object", "Vertex Instance ");
+//
+//            place_title.setText(marker.getTitle());
+//            place_info1.setText(marker.getId());
+//            place_info2.setVisibility(View.INVISIBLE);
+//            explore_icon.setVisibility(View.INVISIBLE);
+//
+//        }
+
+
+
+
+
+    }
+    private void getPOI(){
+        LinkedList<Vertex> currPath = path.getCurrPath();
+        ArrayList<Vertex> POI = getPointsOfInterest();
+        for(int i = 0; i<currPath.size()-1; i++){
+            LatLng midPoint  = SphericalUtil.interpolate(currPath.get(i).getLL(),currPath.get(i).getLL(), 0.5 );
+            for( int n = 0 ; n< POI.size() ; n++){
+                if( SphericalUtil.computeDistanceBetween(midPoint,POI.get(n).getLL()) < 15.0){
+                    //closePoints.add(POI.remove(n));
+                    Log.d(TAG, "getPOI: distance midPoint-POI.get(n).getLL() " +  SphericalUtil.computeDistanceBetween(midPoint,POI.get(n).getLL()));
+                    mapMarkers.addMarker( POI.remove(n), 3);
+                }
+            }
+        }
+    }
+    private ArrayList<Vertex> getPointsOfInterest() {
+        ArrayList<Vertex> nodes = new ArrayList<>();
+        HashMap<String,Vertex> all_nodes = path.getVertices();
+        Boolean known;
+
+        Iterator iter = all_nodes.keySet().iterator();
+
+        while (iter.hasNext()){
+
+            String key = (String) iter.next();
+
+            Vertex v = all_nodes.get(key);
+
+
+            if( v instanceof Place){
+                known = ((Place) v).isKnown();
+            }else if( v.isLandmark() ){
+                known =true;
+            }else if(v instanceof Room){
+                known = ((Room) v).isKnown();
+            } else {
+                known = false;
+            }
+            if(known){
+                nodes.add(v);
+            }
+        }
+        return nodes;
+    }
+    public void setTheme(int style){
+        boolean success = mGoogleMap.setMapStyle(new MapStyleOptions(getResources().getString(style)));
+        if (!success) {
+            Toast.makeText(this.getActivity(), "Style parsing failed.", Toast.LENGTH_LONG).show();
+        }
+    }
+    public void setStyle(String style){
+         switch (style){
+            case "normal":
+                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
+            case "satellite":
+                mGoogleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                break;
+            default:
+                break;
+        }
+    }
+
+
+     /****
      *   Handling of the locations services and tracking
-     */
-    LocationRequest mLocationRequest;
-
+     ****/
 
 
     // This gets called when the user location is picked upped
@@ -917,7 +1012,6 @@ try{
     }
 
 
-    // Methods that gets called when the user's location isn't available
     @Override
     public void onConnectionSuspended(int i) {
         Toast.makeText(this.getActivity(), "Location Lost", Toast.LENGTH_LONG).show();
@@ -932,7 +1026,10 @@ try{
 
     }
 
-    //When the user
+    /**
+     * callback method for location request.
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
 
@@ -949,265 +1046,6 @@ try{
             Log.d( TAG, "onLocationChanged: "+String.valueOf(location));
 
         }
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-
-        Log.d("Marker Snippet", marker.getSnippet() );
-
-        switch (marker.getSnippet()){
-            case "stairs":
-                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                break;
-            case "junction":
-                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                break;
-            default:
-                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                loadBottomSheet(marker);
-                break;
-        }
-         return false;
-    }
-
-    private void loadBottomSheet(Marker marker) {
-
-        final Marker mymarker = marker;
-        ImageButton image_button = (ImageButton) getActivity().findViewById(R.id.bottom_sheet_add_image);
-        TextView place_title = (TextView) getActivity().findViewById(R.id.bottom_sheet_title);
-        TextView place_info1 = (TextView) getActivity().findViewById(R.id.place_info1);
-        View moreinfo = getActivity().findViewById(R.id.more_info_layout);
-
-        image_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onInfoWindowLongClick: PRESSED");
-                LatLng ll = mymarker.getPosition();
-
-
-                start = Distance.find_closest_marker(ll);
-                isSourceSet = true;
-
-                getPath();
-                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-
-            }
-        });
-
-
-        final Place place = (Place) marker.getTag();
-
-
-
-            Log.d("Marker Object", " Room Instance: ");
-
-            //TODO ADD BUILDING TO SECOND INFO VIEW
-            place_title.setText(place.getName());
-            place_info1.setText(place.getInfo());
-//            place_info2.setText("{building name}");
-//            explore_icon.setVisibility(View.INVISIBLE);
-
-
-            //TODO Start activity that shows the room info;
-            moreinfo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("more info", "onClick: ");
-                        create_info_dialog(place);
-                    }
-
-
-            });
-
-//
-//        }else if(markerObject instanceof com.android.comp3901.findmeuwi.locations.Building){
-//            Log.d("Marker Object", "Building Instance ");
-//
-//
-//        }else {
-//            Log.d("Marker Object", "Vertex Instance ");
-//
-//            place_title.setText(marker.getTitle());
-//            place_info1.setText(marker.getId());
-//            place_info2.setVisibility(View.INVISIBLE);
-//            explore_icon.setVisibility(View.INVISIBLE);
-//
-//        }
-
-
-
-
-
-    }
-
-    private void create_info_dialog(Vertex v) {
-
-                AlertDialog.Builder info_dialog = new AlertDialog.Builder(getActivity(),AlertDialog.BUTTON_POSITIVE);
-                View room_info_view = getActivity().getLayoutInflater().inflate(R.layout.place_info_dialog, null);
-
-
-                //Instantiate Layout Views
-//                TextView name_text = (TextView) room_info_view.findViewById(R.id.plac_name_info);
-//                TextView id_text = (TextView) room_info_view.findViewById(R.id.place_id_info);
-//                TextView building_text = (TextView) room_info_view.findViewById(R.id.place_building_info);
-//                TextView floor_text = (TextView) room_info_view.findViewById(R.id.place_floor_info);
-                TextView info_text = (TextView) room_info_view.findViewById(R.id.place_dialog_info);
-                Switch known_switch = (Switch) room_info_view.findViewById(R.id.place_info_known_swittch);
-
-//                View rooms_view = room_info_view.findViewById(R.id.info_building_rooms_layout);
-//                rooms_view.setVisibility(View.GONE);
-
-                Button dissmiss = (Button) room_info_view.findViewById(R.id.plac_info_dismiss);
-
-
-
-
-                //TODO change the test to instance of when buildings  database fully are implemented
-//                if(v.getType().replaceAll("\\s","").toLowerCase().equals("room")){
-                    final Place place = ((Place) v );
-
-                    info_text.setText(place.getInfo());
-//                    id_text.setText(place.getId());
-//                    building_text.setText(place.getBuilding());
-//                    floor_text.setText(""+place.getFloor());
-                    known_switch.setChecked(place.isKnown());
-
-                    known_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                            if(isChecked){
-                                place.setKnown(1);
-                            }else{
-                                place.setKnown(0);
-                            }
-                            place.updateDB();
-
-                        }
-                    });
-
-
-
-//                }
-
-//                else if(v.getType().replaceAll("\\s","").toLowerCase().equals("<na>building")){
-//                    Building build = ((Building) v );
-//
-//                    name_text.setText(build.getName());
-//                    id_text.setText(build.getId());
-//                    floor_text.setText(""+build.getFloors());
-//                }
-
-
-                info_dialog.setView(room_info_view);
-                final AlertDialog dialog = info_dialog.create();
-                dialog.show();
-
-
-                dissmiss.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-            }
-
-    private void getPOI(){
-
-        LinkedList<Vertex> currPath = path.getCurrPath();
-        LinkedList<Vertex> closePoints = new LinkedList<>();
-
-//        Log.d(TAG, "getPOI: Start " + currPath.get(0).getLL());
-//        Log.d(TAG, "getPOI: Stop " + currPath.get(1).getLL());
-//        Log.d(TAG, "getPOI: " + midPoint);
-
-
-//        Log.d(TAG, "DISTANCE TEST : " + SphericalUtil.computeDistanceBetween(on,two) );
-
-        ArrayList<Vertex> POI = getPointsOfInterest();
-
-
-
-        for(int i = 0; i<currPath.size()-1; i++){
-
-            LatLng midPoint  = SphericalUtil.interpolate(currPath.get(i).getLL(),currPath.get(i).getLL(), 0.5 );
-            for( int n = 0 ; n< POI.size() ; n++){
-                if( SphericalUtil.computeDistanceBetween(midPoint,POI.get(n).getLL()) < 15.0){
-                    //closePoints.add(POI.remove(n));
-                    Log.d(TAG, "getPOI: distance midPoint-POI.get(n).getLL() " +  SphericalUtil.computeDistanceBetween(midPoint,POI.get(n).getLL()));
-                    mapMarkers.addMarker( POI.remove(n), 3);
-                }
-            }
-        }
-
-
-
-     }
-
-
-    private ArrayList<Vertex> getPointsOfInterest() {
-        ArrayList<Vertex> nodes = new ArrayList<>();
-        HashMap<String,Vertex> all_nodes = path.getVertices();
-        Boolean known;
-
-        Iterator iter = all_nodes.keySet().iterator();
-
-        while (iter.hasNext()){
-
-            String key = (String) iter.next();
-
-            Vertex v = all_nodes.get(key);
-
-
-            if( v instanceof Place){
-                known = ((Place) v).isKnown();
-            }else if( v.isLandmark() ){
-                known =true;
-            }else if(v instanceof Room){
-                known = ((Room) v).isKnown();
-            } else {
-                known = false;
-            }
-            if(known){
-                nodes.add(v);
-            }
-        }
-        return nodes;
-    }
-
-    public void setTheme(int style){
-
-        boolean success = mGoogleMap.setMapStyle(new MapStyleOptions(getResources().getString(style)));
-        if (!success) {
-            Toast.makeText(this.getActivity(), "Style parsing failed.", Toast.LENGTH_LONG).show();
-        }
-
-    }
-
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-
-    }
-
-    @Override
-    public void onInfoWindowLongClick(Marker marker) {
-
-        Log.d(TAG, "onInfoWindowLongClick: PRESSED");
-        LatLng ll = marker.getPosition();
-
-
-
-        start = Distance.find_closest_marker(ll);
-        isSourceSet = true;
-
-        getPath();
-    }
-
-
-    public void initVertices(){
-        path = new Path(dbHelper);
     }
 
 

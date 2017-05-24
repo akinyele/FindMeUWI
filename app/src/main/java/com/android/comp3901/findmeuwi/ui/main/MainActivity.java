@@ -24,18 +24,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.comp3901.findmeuwi.R;
-import com.android.comp3901.findmeuwi.ui.mapFragment.mapFragment;
-import com.android.comp3901.findmeuwi.activities.add_landmarks;
+import com.android.comp3901.findmeuwi.ui.mapFragment.MapFragment;
+import com.android.comp3901.findmeuwi.ui.addLandmarks.AddLandmarks;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemClickListener ,CompoundButton.OnCheckedChangeListener{
 
     private static final String TAG = "com.android.comp3901";
     private FragmentManager fragmentManager = getFragmentManager();
-    private mapFragment mapFrag;
+    private MapFragment mapFrag;
 
     //menu
     Menu menu;
@@ -58,10 +57,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
         /**views**/
 
-        fragmentManager.beginTransaction().replace(R.id.content_frame, new mapFragment(), "mapFrag" ).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, new MapFragment(), "mapFrag" ).commit();
 
         //getting reference to the fragment added
-        mapFrag = (mapFragment) getFragmentManager().findFragmentByTag("mapFrag");
+        mapFrag = (MapFragment) getFragmentManager().findFragmentByTag("mapFrag");
 
 
         //initializing navigation bar and listener
@@ -106,16 +105,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        mapFragment mapFragmentFrag = (mapFragment) getFragmentManager().findFragmentByTag("mapFrag");
+        MapFragment mapFragmentFrag = (MapFragment) getFragmentManager().findFragmentByTag("mapFrag");
         //TODO Needs fixing
       if(mapFragmentFrag != null){
-
-            switch (item.getItemId()) {
+             switch (item.getItemId()) {
                case R.id.mapTypeNormal:
-                    mapFragmentFrag.onOptionsItemSelected(item);
+                    mapFragmentFrag.setStyle("normal");
                     break;
                 case R.id.mapTypeSatellite:
-                    mapFragmentFrag.onOptionsItemSelected(item);
+                    mapFragmentFrag.setStyle("satellite");
                     break;
                 case R.id.style1:
                     mapFragmentFrag.setTheme(R.string.style_icyBlue);
@@ -135,9 +133,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 default:
                     break;
             }
-
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -154,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath());
             startActivityForResult(intent, 1);*/
 
-            Intent i = new Intent(MainActivity.this, add_landmarks.class);
+            Intent i = new Intent(MainActivity.this, AddLandmarks.class);
             startActivity(i);
 
 
@@ -208,11 +204,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    @OnClick(R.id.fbPath)
-    public void fabOnClick(View view){
-        mapFrag = (mapFragment) getFragmentManager().findFragmentByTag("mapFrag");
-        if(mapFrag.isAdded()){
-                    mapFrag.getPath();
-        }
-    }
+
 }

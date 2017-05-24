@@ -1,4 +1,4 @@
-package com.android.comp3901.findmeuwi.activities;
+package com.android.comp3901.findmeuwi.ui.splash;
 
 /**
  * Created by Kyzer on 5/11/2017.

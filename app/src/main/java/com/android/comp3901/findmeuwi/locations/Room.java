@@ -1,7 +1,7 @@
 package com.android.comp3901.findmeuwi.locations;
 
 import com.android.comp3901.findmeuwi.services.DB_Helper;
-import com.android.comp3901.findmeuwi.ui.mapFragment.mapFragment;
+import com.android.comp3901.findmeuwi.ui.mapFragment.MapFragment;
 
 /**
  * Created by Akinyele on 1/29/2017.
@@ -32,7 +32,7 @@ public class Room  extends Place{
 
     @Override
     public void updateDB(){
-         DB_Helper.getInstance(mapFragment.get()).updateRoom(super.getId(),known,familiarity);
+         DB_Helper.getInstance(MapFragment.get()).updateRoom(super.getId(),known,familiarity);
     }
 
 

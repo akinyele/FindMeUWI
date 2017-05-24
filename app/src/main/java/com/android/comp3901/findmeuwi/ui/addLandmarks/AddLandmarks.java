@@ -1,4 +1,4 @@
-package com.android.comp3901.findmeuwi.activities;
+package com.android.comp3901.findmeuwi.ui.addLandmarks;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,7 +7,7 @@ import android.location.Location;
 import android.os.Bundle;
 import com.android.comp3901.findmeuwi.R;
 import com.android.comp3901.findmeuwi.services.DB_Helper;
-import com.android.comp3901.findmeuwi.ui.mapFragment.mapFragment;
+import com.android.comp3901.findmeuwi.ui.mapFragment.MapFragment;
 import com.android.comp3901.findmeuwi.utils.PhotoScalerAndSaver;
 
 import android.provider.MediaStore;
@@ -29,7 +29,7 @@ import java.util.Date;
  * Created by Kyzer on 5/14/2017.
  */
 
-public class add_landmarks extends Activity {
+public class AddLandmarks extends Activity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final String TAG = "com.android.comp3901.";
     private static DB_Helper db;
@@ -78,10 +78,10 @@ public class add_landmarks extends Activity {
             @Override
             public void onClick(View v) {
 
-            landmark_location = mapFragment.getLocation(getApplication() );
-            //Log.d(TAG, "onClick: GetMy Location "+ mapFragment.my_location);
+            landmark_location = MapFragment.getLocation(getApplication() );
+            //Log.d(TAG, "onClick: GetMy Location "+ MapFragment.my_location);
             if(landmark_location == null){
-                Toast.makeText(add_landmarks.this,"Unable to Obtain Location, Ensure GPS is turned on", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddLandmarks.this,"Unable to Obtain Location, Ensure GPS is turned on", Toast.LENGTH_SHORT).show();
                     return;
             }
             location_text.setText("Latitude "+landmark_location.getLatitude() + " Longitude: " +landmark_location.getLatitude());

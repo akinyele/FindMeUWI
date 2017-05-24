@@ -35,7 +35,7 @@
         android:name="android.support.multidex.MultiDexApplication">
 
         <activity
-            android:name=".activities.SplashScreen"
+            android:name=".ui.splash.SplashScreen"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme" >
@@ -46,7 +46,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.add_landmarks"
+        <activity android:name=".ui.addLandmarks.AddLandmarks"
             android:screenOrientation="portrait">
 
 
