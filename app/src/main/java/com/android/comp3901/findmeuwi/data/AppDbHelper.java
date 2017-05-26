@@ -78,13 +78,11 @@ public class AppDbHelper extends SQLiteOpenHelper implements DbHelper{
     private static AppDbHelper mInstance = null;
 
     public static AppDbHelper getInstance(Context ctx){
-
         if (mInstance == null) {
             mInstance = new AppDbHelper(ctx.getApplicationContext());
         }
         return mInstance;
     }
-
 
     private AppDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -3899,6 +3897,7 @@ public class AppDbHelper extends SQLiteOpenHelper implements DbHelper{
      * @param location
      * @return returns the row/s that math or contains the query string;
      */
+    @Override
     public Cursor findLocation(String location ){
         location.toLowerCase();
         SQLiteDatabase db = this.getWritableDatabase();
@@ -3925,6 +3924,7 @@ public class AppDbHelper extends SQLiteOpenHelper implements DbHelper{
      * @param id
      * @return
      */
+    @Override
     public Cursor findLocation(double lat ,double lng, String id) {
 
        // Log.d(TAG, "findLocation: " + id+" " + lat +" "+ lng);
@@ -3943,6 +3943,7 @@ public class AppDbHelper extends SQLiteOpenHelper implements DbHelper{
 
 
 
+    @Override
     public Cursor getVertices(){
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -3955,6 +3956,7 @@ public class AppDbHelper extends SQLiteOpenHelper implements DbHelper{
     }
 
 
+    @Override
     public Cursor getRooms(){
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -3964,6 +3966,7 @@ public class AppDbHelper extends SQLiteOpenHelper implements DbHelper{
         return res;
     }
 
+    @Override
     public Cursor getBuilding(){
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -3973,22 +3976,10 @@ public class AppDbHelper extends SQLiteOpenHelper implements DbHelper{
         return res;
     }
 
-
-//    public Cursor getBuildings(){
-//        SQLiteDatabase db = this.getWritableDatabase();
-//
-//        Cursor res = db.rawQuery("SELECT * FROM " + BUILDING_TABLE + " WHERE 1 ", null);
-//
-//        res.moveToFirst();
-//        return res;
-//    }
-
-
-
-
     /*
      *  This method returns a list of rooms IDs and names.
      */
+    @Override
     public ArrayList<String> roomList(){
 
         ArrayList<String> rooms = new ArrayList<String>() ;
@@ -4018,6 +4009,7 @@ public class AppDbHelper extends SQLiteOpenHelper implements DbHelper{
 
 
 
+    @Override
     public ArrayList<String> buildingList(){
 
         ArrayList<String> buildings = new ArrayList<String>() ;
@@ -4042,6 +4034,7 @@ public class AppDbHelper extends SQLiteOpenHelper implements DbHelper{
         return buildings;
     }
 
+    @Override
     public  Cursor getEdges(){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -4054,6 +4047,7 @@ public class AppDbHelper extends SQLiteOpenHelper implements DbHelper{
 
 
 
+    @Override
     public void updateRoom(String id, Integer known, double familiarity) {
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -4072,7 +4066,7 @@ public class AppDbHelper extends SQLiteOpenHelper implements DbHelper{
     /**
      *   For debugging purposes to get database.
      */
-     public void writeToSD(Context context) throws IOException {
+    public void writeToSD(Context context) throws IOException {
         File sd = Environment.getExternalStorageDirectory();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -4098,7 +4092,7 @@ public class AppDbHelper extends SQLiteOpenHelper implements DbHelper{
         }
     }
 
-
+    @Override
     public void insertLandmark(double lat, double lng, String name, String desc, String image_id) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues vertices = new ContentValues();

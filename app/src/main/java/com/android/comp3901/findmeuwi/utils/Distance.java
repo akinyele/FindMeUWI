@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.android.comp3901.findmeuwi.ui.mapFragment.MapFrag.path;
-
 /**
  * Created by Kyzer on 3/14/2017.
  * This class will provide all the calculation in regards to the distances between points
@@ -77,66 +75,23 @@ public class Distance {
     }
 
 
-    public static Vertex find_closest_marker(Location location) {
-
-        LatLng LL = new LatLng( location.getLatitude(), location.getLongitude());
-         Vertex start;
-
-        ArrayList<Double> distances = new ArrayList();
-
-        List<Vertex> points = path.getCNodes(); // uses nodes that are connected to an edge
-
-        Integer closest = -1;
-
-        for (int i = 0; i < points.size(); i++) {
-
-            //Marker points Lat & Lng
-            LatLng markerLL = points.get(i).getLL();
-
-
-            double d = find_distance(LL,markerLL);
-            distances.add(d);
-
-            if (closest == -1 || d < distances.get(closest)) {
-                closest = i;
-            }
-        }
-
-        start = points.get(closest);
-        return start;
-    }
-
-    public static Vertex find_closest_marker(LatLng location) {
-
-        LatLng LL = location;
+    public static Vertex find_closest_marker(LatLng LL, List<Vertex> points){
 
         Vertex start;
         ArrayList<Double> distances = new ArrayList();
-
-        List<Vertex> points = path.getCNodes(); // uses nodes that are connected to an edge
-
         Integer closest = -1;
-
         for (int i = 0; i < points.size(); i++) {
-
-            //Marker points Lat & Lng
-            LatLng markerLL = points.get(i).getLL();
-
-
-            double d = find_distance(LL,markerLL);
-            distances.add(d);
-
-            if (closest == -1 || d < distances.get(closest)) {
+        //Marker points Lat & Lng
+        LatLng markerLL = points.get(i).getLL();
+        double d = find_distance(LL,markerLL);
+        distances.add(d);
+        if (closest == -1 || d < distances.get(closest)) {
                 closest = i;
             }
         }
-
         start = points.get(closest);
         return start;
     }
-
-
-
 
     private static double rad(double x) {
         return x * Math.PI / 180;

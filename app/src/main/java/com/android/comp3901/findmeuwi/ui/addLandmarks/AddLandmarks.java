@@ -28,7 +28,7 @@ import butterknife.Unbinder;
  * Created by Kyzer on 5/14/2017.
  */
 
-public class AddLandmarks extends Activity {
+public class AddLandmarks extends Activity implements AddLandMarkView {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final String TAG = "com.android.comp3901.";
     private static AppDbHelper db;

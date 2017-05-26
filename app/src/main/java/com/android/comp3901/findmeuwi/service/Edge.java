@@ -1,4 +1,4 @@
-package com.android.comp3901.findmeuwi.services;
+package com.android.comp3901.findmeuwi.service;
 
 import com.android.comp3901.findmeuwi.locations.Vertex;
 

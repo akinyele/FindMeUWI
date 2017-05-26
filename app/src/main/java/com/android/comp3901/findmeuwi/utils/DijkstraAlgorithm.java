@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.android.comp3901.findmeuwi.services.Edge;
+import com.android.comp3901.findmeuwi.service.Edge;
 import com.android.comp3901.findmeuwi.locations.Vertex;
 
 public class DijkstraAlgorithm {

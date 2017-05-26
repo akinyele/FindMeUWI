@@ -1,4 +1,4 @@
-package com.android.comp3901.findmeuwi.services;
+package com.android.comp3901.findmeuwi.service;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -64,11 +64,8 @@ public class Tracker extends Thread {
     private final Double closeDistance= 5.0;//in meters
 
     public Tracker(Activity instance){
-
-        this.path = MapFrag.path;
+            this.path = MapFrag.path;
         this.instance = instance;
-//        this.knownNodes =  this.getPointsOfInterest();
-        this.mapMarker = MapMarker.getInstance();
         this.learner = new Learner(instance);
         directionsSnackbar = Snackbar.make(instance.findViewById(R.id.app_bar_main), " ", Snackbar.LENGTH_LONG );
     }

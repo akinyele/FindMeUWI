@@ -3,12 +3,13 @@ package com.android.comp3901.findmeuwi.utils;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.android.comp3901.findmeuwi.data.DbHelper;
 import com.android.comp3901.findmeuwi.locations.Building;
 import com.android.comp3901.findmeuwi.locations.Place;
 import com.android.comp3901.findmeuwi.locations.Room;
 import com.android.comp3901.findmeuwi.locations.Vertex;
 import com.android.comp3901.findmeuwi.data.AppDbHelper;
-import com.android.comp3901.findmeuwi.services.Edge;
+import com.android.comp3901.findmeuwi.service.Edge;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -32,11 +33,7 @@ public class Path {
     private List<Vertex> nodes;
     private static List<Vertex> connectedNodes;
     private List<Edge> edges;
-    AppDbHelper dbHelper;
-
-    public static List<Vertex> getConnectedNodes() {
-        return connectedNodes;
-    }
+    private DbHelper dbHelper;
 
     public LinkedList<Vertex> getCurrPath() {
         return currPath;
@@ -52,7 +49,7 @@ public class Path {
     /*
      *  Constructor methods which initializes and creates all the vertices and edges.
      */
-    public Path(AppDbHelper db){
+    public Path(DbHelper db){
 
         this.nodes = new ArrayList<Vertex>();
         this.connectedNodes = new ArrayList<Vertex>();
@@ -154,6 +151,9 @@ public class Path {
         return edges;
     }
 
+    public static List<Vertex> getConnectedNodes() {
+        return connectedNodes;
+    }
 
     //TODO finish implementation
     public List<LatLng> getLatLngs(){
@@ -161,14 +161,11 @@ public class Path {
 
         for(Vertex node: currPath){
 
-
-
-
-
         }
 
      return latLngs;
     }
+
 
 
     /*

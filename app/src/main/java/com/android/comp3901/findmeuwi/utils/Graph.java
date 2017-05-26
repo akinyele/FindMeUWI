@@ -6,7 +6,7 @@ package com.android.comp3901.findmeuwi.utils;
  */
 
 import com.android.comp3901.findmeuwi.locations.Vertex;
-import com.android.comp3901.findmeuwi.services.Edge;
+import com.android.comp3901.findmeuwi.service.Edge;
 
 import java.util.List;
 
